@@ -1,20 +1,25 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import HomeStackNavigator from "./view/navigation/HomeStackNavigator";
+import ProfileStackNavigator from "./view/navigation/ProfileStackNavigator";
+import OrderScreen from "./view/screens/OrderScreen";
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+  const Tab = createBottomTabNavigator();
+
+  return (
+    <NavigationContainer>
+      <Tab.Navigator
+        screenOptions={{
+          headerShown: false
+        }}
+      >
+        <Tab.Screen name="HomeStack" component={HomeStackNavigator} />
+        <Tab.Screen name="Order" component={OrderScreen} />
+        <Tab.Screen name="ProfileStack" component={ProfileStackNavigator} />
+      </Tab.Navigator>
+    </NavigationContainer>
+  );
+
+}
