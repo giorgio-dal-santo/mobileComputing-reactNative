@@ -3,7 +3,7 @@ import ViewModel from "../../viewModel/ViewModel";
 import { useState } from "react";
 import { Button, Text, View } from "react-native";
 import { globalStyle } from "../../styles/GlobalStyle";
-import { useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect } from "@react-navigation/native"; 
 
 export default function ProfileScreen({navigation}) {
     const [user, setUser] = useState(null);

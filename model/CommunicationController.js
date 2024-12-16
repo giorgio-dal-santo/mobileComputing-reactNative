@@ -127,6 +127,6 @@ export default class CommunicationController {
       return await this.genericGetRequest(endpoint, queryParams);
     }
   
-    // todo: Order data management
+    // todo: Order data management 
   }
   

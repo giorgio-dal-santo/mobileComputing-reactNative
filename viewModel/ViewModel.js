@@ -4,6 +4,7 @@ import AsyncStorageManager from "../model/AsyncStorageManager.js";
 import DBManager from "../model/DBManager.js";
 import CommunicationController from "../model/CommunicationController.js";
 import User from "../model/type/User.js";
+import Menu from "../model/type/Menu.js";
 
 export default class ViewModel {
   static #viewModel = null;
@@ -87,14 +88,83 @@ export default class ViewModel {
         Object.entries(userData).filter(([_, value]) => value !== undefined)
       );
 
-      await CommunicationController.putUserData(
-        this.uid,
-        userData
-      );
+      await CommunicationController.putUserData(this.uid, userData);
       await AsyncStorageManager.setIsRegistered(true);
       console.log("Data saved successfully:", userData);
     } catch (error) {
       console.error("Error saving data:", error);
     }
+  }
+
+  async getMenuImage(mid, imageVersion) {
+    try {
+      const imageInStore = await this.dbManager.getImageByImageVersion(
+        mid,
+        imageVersion
+      );
+      if (imageInStore) {
+        return imageInStore;
+      }
+
+      console.log("Image not found in DB, fetching from server...");
+      let imageFromServer = await CommunicationController.getMenuImage(
+        mid,
+        this.sid
+      );
+      if(!imageFromServer.startsWith("data:image/jpeg;base64,")) {
+        imageFromServer = "data:image/jpeg;base64," + imageFromServer;
+      }
+      await this.dbManager.insertMenuImage(mid, imageVersion, imageFromServer);
+      return imageFromServer;
+    } catch (error) {
+      console.error("Error fetching image:", error);
+    }
+  }
+
+  async getNearbyMenus(userLocation) {
+    if (!this.sid) {
+      throw new Error("No sid found");
+    }
+    let fetchedMenus = await CommunicationController.getNearbyMenus(
+      userLocation.lat,
+      userLocation.lng,
+      this.sid
+    );
+    const menus = [];
+    for (let menu of fetchedMenus) {
+      menus.push(
+        new Menu(
+          menu.mid,
+          menu.name,
+          menu.price,
+          menu.location,
+          menu.imageVersion,
+          menu.shortDescription,
+          menu.deliveryTime,
+          await this.getMenuImage(menu.mid, menu.imageVersion)
+        )
+      );
+    }
+    return menus;
+  }
+
+  async getMenuDetail(mid, lat, lng) {
+    const menu = await CommunicationController.getMenuDetail(
+      mid,
+      lat,
+      lng,
+      this.sid
+    );
+    return new Menu(
+      menu.mid,
+      menu.name,
+      menu.price,
+      menu.location,
+      menu.imageVersion,
+      menu.shortDescription,
+      menu.deliveryTime,
+      menu.longDescription,
+      await this.getMenuImage(menu.mid, menu.imageVersion)
+    );
   }
 }
