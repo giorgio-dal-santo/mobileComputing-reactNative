@@ -14,7 +14,6 @@ export default function MenuDetailScreen({ route, navigation }) {
         const fetchMenuDetails = async () => {
             try {
                 const detailedMenu = await viewModel.getMenuDetail(menuid, lat, lng);
-                console.log("Menu Details:", detailedMenu);
                 setDetailedMenu(detailedMenu);
             } catch (error) {
                 console.error("Errore nel caricamento dei dettagli del menu:", error);
@@ -24,7 +23,6 @@ export default function MenuDetailScreen({ route, navigation }) {
         fetchMenuDetails();
     }, [menuid, lat, lng]);
 
-    console.log("Menu Detail Screen", detailedMenu);
 
     return (
         <View style={globalStyle.container}>
