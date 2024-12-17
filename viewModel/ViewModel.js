@@ -133,7 +133,6 @@ export default class ViewModel {
     );
     const menuPromises = fetchedMenus.map(async (menu) => {
       const image = await this.getMenuImage(menu.mid, menu.imageVersion);
-
       return new Menu(
         menu.mid,
         menu.name,
