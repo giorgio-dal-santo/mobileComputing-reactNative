@@ -157,6 +157,7 @@ export default class ViewModel {
       lng,
       this.sid
     );
+    const image = await this.getMenuImage(menu.mid, menu.imageVersion);
     return new Menu(
       menu.mid,
       menu.name,
@@ -166,7 +167,7 @@ export default class ViewModel {
       menu.shortDescription,
       menu.deliveryTime,
       menu.longDescription,
-      await this.getMenuImage(menu.mid, menu.imageVersion)
+      image
     );
   }
 }

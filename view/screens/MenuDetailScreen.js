@@ -1,11 +1,52 @@
-import { Button, Text, View } from "react-native";
+import { Button, Text, View, Image } from "react-native";
+import { useEffect, useState } from "react";
 import { globalStyle } from "../../styles/GlobalStyle";
+import ViewModel from "../../viewModel/ViewModel";
 
-export default function MenuDetailScreen({navigation}) {
+export default function MenuDetailScreen({ route, navigation }) {
+    const { menuid, lat, lng } = route.params || {};
+
+    const viewModel = ViewModel.getViewModel();
+    const [detailedMenu, setDetailedMenu] = useState(null);
+
+    useEffect(() => {
+        // Funzione asincrona per ottenere i dettagli del menu
+        const fetchMenuDetails = async () => {
+            try {
+                const detailedMenu = await viewModel.getMenuDetail(menuid, lat, lng);
+                console.log("Menu Details:", detailedMenu);
+                setDetailedMenu(detailedMenu);
+            } catch (error) {
+                console.error("Errore nel caricamento dei dettagli del menu:", error);
+            }
+        };
+
+        fetchMenuDetails();
+    }, [menuid, lat, lng]);
+
+    console.log("Menu Detail Screen", detailedMenu);
 
     return (
         <View style={globalStyle.container}>
             <Text>Menu Detail</Text>
+            {detailedMenu ? ( // Verifica se detailedMenu è stato caricato
+                <>
+                    <Text>{detailedMenu.name}</Text>
+                    <Image
+                        source={
+                            typeof detailedMenu.image === "string" && detailedMenu.image
+                                ? { uri: detailedMenu.image }
+                                : require("../../assets/icon.png")
+                        }
+                        style={globalStyle.image}
+                    />
+                    <Text>{detailedMenu.price}</Text>
+                    <Text>{detailedMenu.longDescription}</Text>
+                    <Text>{detailedMenu.deliveryTime}</Text>
+                </>
+            ) : (
+                <Text>Caricamento in corso...</Text> // Render di fallback durante il caricamento
+            )}
             <Button
                 title="Back to Home"
                 onPress={() => navigation.goBack()}

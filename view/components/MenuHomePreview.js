@@ -28,7 +28,7 @@ export default function MenuPreview({ menu, navigation }) {
       </Text>
       <Button
         title="Menu Detail"
-        onPress={() => navigation.navigate("MenuDetail")}
+        onPress={() => navigation.navigate("MenuDetail", { menuid: menu.mid, lat: menu.location.lat, lng: menu.location.lng })}
       />
     </View>
   );
