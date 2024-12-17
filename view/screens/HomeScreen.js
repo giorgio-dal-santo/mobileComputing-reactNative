@@ -54,12 +54,8 @@ const MenuList = ({ nearbyMenus, navigation }) => {
     <View style={globalStyle.container}>
       <Text>Nearby Menus</Text>
       {nearbyMenus.map((menu) => (
-        <MenuHomePreview key={menu.mid} menu={menu} />
+        <MenuHomePreview key={menu.mid} menu={menu} navigation={navigation} />
       ))}
-      <Button
-        title="Menu Detail"
-        onPress={() => navigation.navigate("MenuDetail")}
-      />
     </View>
   );
 };

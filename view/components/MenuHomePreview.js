@@ -1,7 +1,7 @@
 import { Button, Text, View, Image } from "react-native";
 import { globalStyle } from "../../styles/GlobalStyle";
 
-export default function MenuPreview({ menu }) {
+export default function MenuPreview({ menu, navigation }) {
   /*
   if (!menu.image) {
     console.log("No image found for menu:");
@@ -26,6 +26,10 @@ export default function MenuPreview({ menu }) {
       <Text style={globalStyle.deliveryTime}>
         Consegna: {menu.deliveryTime} min
       </Text>
+      <Button
+        title="Menu Detail"
+        onPress={() => navigation.navigate("MenuDetail")}
+      />
     </View>
   );
 }
