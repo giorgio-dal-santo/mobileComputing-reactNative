@@ -39,7 +39,7 @@ export default function HomeScreen({ navigation }) {
         <View style={globalStyle.container}>
           <Text>Home Screen</Text>
           {isRegistered ? (
-            <MenuList nearbyMenus={nearbyMenus} navigation={navigation} />
+            <MenuList nearbyMenus={nearbyMenus} userLocation={userLocation} navigation={navigation} />
           ) : (
             <NotRegister navigation={navigation} />
           )}
@@ -49,12 +49,13 @@ export default function HomeScreen({ navigation }) {
   );
 }
 
-const MenuList = ({ nearbyMenus, navigation }) => {
+const MenuList = ({nearbyMenus, userLocation , navigation}) => {
+  
   return (
     <View style={globalStyle.container}>
       <Text>Nearby Menus</Text>
       {nearbyMenus.map((menu) => (
-        <MenuHomePreview key={menu.mid} menu={menu} navigation={navigation} />
+        <MenuHomePreview key={menu.mid} menu={menu} userLocation={userLocation} navigation={navigation}  />
       ))}
     </View>
   );

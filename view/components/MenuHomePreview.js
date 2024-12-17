@@ -1,14 +1,8 @@
 import { Button, Text, View, Image } from "react-native";
 import { globalStyle } from "../../styles/GlobalStyle";
 
-export default function MenuPreview({ menu, navigation }) {
-  /*
-  if (!menu.image) {
-    console.log("No image found for menu:");
-  } else {
-    console.log("Image found for menu:");
-  }
-  */
+export default function MenuPreview({userLocation, menu, navigation}) {
+  //const { menu, userLocation} = route.params || {};
 
   return (
     <View style={globalStyle.card}>
@@ -29,6 +23,10 @@ export default function MenuPreview({ menu, navigation }) {
       <Button
         title="Menu Detail"
         onPress={() => navigation.navigate("MenuDetail", { menuid: menu.mid, lat: menu.location.lat, lng: menu.location.lng })}
+      />
+      <Button
+        title="Buy"
+        onPress={() => navigation.navigate("Order", { menuid: menu.mid, userLocation: userLocation })}
       />
     </View>
   );
