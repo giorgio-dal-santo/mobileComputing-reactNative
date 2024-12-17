@@ -135,20 +135,23 @@ export default class CommunicationController {
     static async buyMenu(sid, userLocation, mid) {
       const endpoint = "/menu/" + mid + "/buy";
       const bodyParams = {sid: sid, deliveryLocation: userLocation};
+      const queryParams = { mid: mid };
       console.log(
         "buyMenu called with endpoint: ",
         endpoint,
         " and bodyParams: ",
-        bodyParams
+        bodyParams,
+        " and queryParams: ",
+        queryParams
       );
-      return await this.genericPostRequest(endpoint, bodyParams);
+      return await this.genericPostRequest(endpoint, bodyParams, queryParams);
     }
 
 
     //Ottenere lo stato di un ordine
-    static async getOrderStatus(sid, oid) {
+    static async getOrderStatus(oid, sid) {
       const endpoint = "/order/" + oid;
-      const queryParams = { sid: sid, oid: oid };
+      const queryParams = { oid: oid, sid: sid};
       console.log(
         "getOrderStatus called with endpoint: ",
         endpoint,

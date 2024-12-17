@@ -5,6 +5,7 @@ import DBManager from "../model/DBManager.js";
 import CommunicationController from "../model/CommunicationController.js";
 import User from "../model/type/User.js";
 import Menu from "../model/type/Menu.js";
+import Order from "../model/type/Order.js";
 
 export default class ViewModel {
   static #viewModel = null;
@@ -170,4 +171,28 @@ export default class ViewModel {
       image
     );
   }
+
+
+  async newOrder (userLocation, mid) {
+    try {
+      console.log("PROBLEMA DA RISOLVERE: SID IS REQUIRED PERCHE??????:", userLocation, this.sid);
+      const order = await CommunicationController.buyMenu(this.sid, userLocation, mid);
+      
+      return new Order(
+        order.oid,
+        order.mid,
+        order.uid,
+        order.creationTimestamp,
+        order.status,
+        order.deliveryLocation,
+        order.deliveryTimestamp,
+        order.expectedDeliveryTimestamp,
+        order.currentPosition
+      );
+    } catch (error) {
+      console.error("Error getting order status:", error);
+    }
+    
+  }
+
 }
