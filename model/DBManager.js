@@ -40,9 +40,14 @@ export default class DBManager {
         try {
             const query = `SELECT image FROM MenuImages WHERE mid = ? AND imageVersion = ?;`;
             const result = await this.db.getFirstAsync(query, [mid, imageVersion]);
-            return result;
+            
+            if (result && result.image) {
+                return result.image; // Restituisce solo il valore della colonna 'image'
+            }
+            return null; // Nessun risultato trovato
         } catch (error) {
             console.error("Error in getImageVersion: ", error);
+            return null; // Gestione errore: restituisce null
         }
     }
 }

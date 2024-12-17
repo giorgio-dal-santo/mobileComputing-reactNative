@@ -116,7 +116,7 @@ export default class ViewModel {
         imageFromServer.base64 = "data:image/png;base64," + imageFromServer.base64;
       }
       await this.dbManager.insertMenuImage(mid, imageVersion, imageFromServer);
-      return imageFromServer;
+      return imageFromServer.base64;
     } catch (error) {
       console.error("Error fetching image:", error);
     }
@@ -133,6 +133,7 @@ export default class ViewModel {
     );
     const menuPromises = fetchedMenus.map(async (menu) => {
       const image = await this.getMenuImage(menu.mid, menu.imageVersion);
+
       return new Menu(
         menu.mid,
         menu.name,
@@ -142,7 +143,7 @@ export default class ViewModel {
         menu.shortDescription,
         menu.deliveryTime,
         null,
-        image.base64
+        image
       );
     });
     const menus = await Promise.all(menuPromises);
