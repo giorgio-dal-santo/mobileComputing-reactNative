@@ -2,11 +2,13 @@ import { Button, Text, View, Image } from "react-native";
 import { globalStyle } from "../../styles/GlobalStyle";
 
 export default function MenuPreview({ menu }) {
+  /*
   if (!menu.image) {
     console.log("No image found for menu:");
   } else {
     console.log("Image found for menu:");
   }
+  */
 
   return (
     <View style={globalStyle.card}>

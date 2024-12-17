@@ -115,8 +115,8 @@ export default class ViewModel {
       if(!imageFromServer.base64.startsWith("data:image")) {
         imageFromServer.base64 = "data:image/png;base64," + imageFromServer.base64;
       }
-      await this.dbManager.insertMenuImage(mid, imageVersion, imageFromServer);
-      console.log("image from server type:", typeof imageFromServer.base64);
+      await this.dbManager.insertMenuImage(mid, imageVersion, imageFromServer.base64);
+      //console.log("image from server type:", typeof imageFromServer.base64);
       return imageFromServer.base64;
     } catch (error) {
       console.error("Error fetching image:", error);
