@@ -41,7 +41,7 @@ export default function HomeScreen({ navigation }) {
           {isRegistered ? (
             <MenuList nearbyMenus={nearbyMenus} navigation={navigation} />
           ) : (
-            <NotRegister />
+            <NotRegister navigation={navigation} />
           )}
         </View>
       </ScrollView>
