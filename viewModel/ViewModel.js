@@ -112,7 +112,7 @@ export default class ViewModel {
         this.sid
       );
 
-      if(!imageFromServer.base64.startsWith("data:image/png;base64,")) {
+      if(!imageFromServer.base64.startsWith("data:image")) {
         imageFromServer.base64 = "data:image/png;base64," + imageFromServer.base64;
       }
       await this.dbManager.insertMenuImage(mid, imageVersion, imageFromServer);
@@ -131,21 +131,21 @@ export default class ViewModel {
       userLocation.lng,
       this.sid
     );
-    const menus = [];
-    for (let menu of fetchedMenus) {
-      menus.push(
-        new Menu(
-          menu.mid,
-          menu.name,
-          menu.price,
-          menu.location,
-          menu.imageVersion,
-          menu.shortDescription,
-          menu.deliveryTime,
-          await this.getMenuImage(menu.mid, menu.imageVersion)
-        )
+    const menuPromises = fetchedMenus.map(async (menu) => {
+      const image = await this.getMenuImage(menu.mid, menu.imageVersion);
+      return new Menu(
+        menu.mid,
+        menu.name,
+        menu.price,
+        menu.location,
+        menu.imageVersion,
+        menu.shortDescription,
+        menu.deliveryTime,
+        null,
+        image.base64
       );
-    }
+    });
+    const menus = await Promise.all(menuPromises);
     return menus;
   }
 
