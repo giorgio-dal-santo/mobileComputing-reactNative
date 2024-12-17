@@ -143,5 +143,19 @@ export default class CommunicationController {
       );
       return await this.genericPostRequest(endpoint, bodyParams);
     }
+
+
+    //Ottenere lo stato di un ordine
+    static async getOrderStatus(sid, oid) {
+      const endpoint = "/order/" + oid;
+      const queryParams = { sid: sid, oid: oid };
+      console.log(
+        "getOrderStatus called with endpoint: ",
+        endpoint,
+        " and queryParams: ",
+        queryParams
+      );
+      return await this.genericGetRequest(endpoint, queryParams);
+    }
   }
   
