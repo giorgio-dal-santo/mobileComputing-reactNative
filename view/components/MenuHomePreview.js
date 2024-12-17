@@ -22,12 +22,9 @@ export default function MenuPreview({userLocation, menu, navigation}) {
       </Text>
       <Button
         title="Menu Detail"
-        onPress={() => navigation.navigate("MenuDetail", { menuid: menu.mid, lat: menu.location.lat, lng: menu.location.lng })}
+        onPress={() => navigation.navigate("MenuDetail", { menuid: menu.mid, lat: menu.location.lat, lng: menu.location.lng, userLocation: userLocation })}
       />
-      <Button
-        title="Buy"
-        onPress={() => navigation.navigate("Order", { menuid: menu.mid, userLocation: userLocation })}
-      />
+      
     </View>
   );
 }

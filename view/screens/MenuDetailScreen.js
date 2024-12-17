@@ -4,7 +4,7 @@ import { globalStyle } from "../../styles/GlobalStyle";
 import ViewModel from "../../viewModel/ViewModel";
 
 export default function MenuDetailScreen({ route, navigation }) {
-    const { menuid, lat, lng } = route.params || {};
+    const { menuid, lat, lng, userLocation } = route.params || {};
 
     const viewModel = ViewModel.getViewModel();
     const [detailedMenu, setDetailedMenu] = useState(null);
@@ -46,9 +46,14 @@ export default function MenuDetailScreen({ route, navigation }) {
                 <Text>Caricamento in corso...</Text> // Render di fallback durante il caricamento
             )}
             <Button
+                title="Buy"
+                onPress={() => navigation.navigate("Order", { menuid: detailedMenu.mid, userLocation: userLocation })}
+            />
+            <Button
                 title="Back to Home"
                 onPress={() => navigation.goBack()}
             />
+
         </View>
     );
 }

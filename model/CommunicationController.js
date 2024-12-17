@@ -69,24 +69,26 @@ export default class CommunicationController {
     static async getUserData(sid, uid) {
       const endpoint = "/user/" + uid;
       const queryParams = { sid: sid };
-      console.log(
+      /*console.log(
         "getUserData called with endpoint: ",
         endpoint,
         " and queryParams: ",
         queryParams
       );
+      */
       return await this.genericGetRequest(endpoint, queryParams);
     }
   
     static async putUserData(uid, updateData) {
       const endpoint = "/user/" + uid;
       const bodyParams = { ...updateData };
-      console.log(
+      /*console.log(
         "putUserData called with endpoint: ",
         endpoint,
         " and bodyParams: ",
         bodyParams
       );
+      */
       return await this.genericPutRequest(endpoint, bodyParams);
     }
   
@@ -94,39 +96,52 @@ export default class CommunicationController {
     static async getNearbyMenus(lat, lng, sid) {
       const endpoint = "/menu/";
       queryParams = { lat: lat, lng: lng, sid: sid };
-      console.log(
+      /*console.log(
         "getNearbyMenus called with endpoint: ",
         endpoint,
         " and queryParams: ",
         queryParams
       );
+      */
       return await this.genericGetRequest(endpoint, queryParams);
     }
   
     static async getMenuImage(mid, sid) {
       const endpoint = "/menu/" + mid + "/image";
       queryParams = { sid: sid };
-      console.log(
+      /*console.log(
         "getMenuImage called with endpoint: ",
         endpoint,
         " and queryParams: ",
         queryParams
-      );
+      );*/
       return await this.genericGetRequest(endpoint, queryParams);
     }
   
     static async getMenuDetail(mid, lat, lng, sid) {
       const endpoint = "/menu/" + mid;
       queryParams = { lat: lat, lng: lng, sid: sid };
-      console.log(
+      /*console.log(
         "getMenuDetail called with endpoint: ",
         endpoint,
         " and queryParams: ",
         queryParams
       );
+      */
       return await this.genericGetRequest(endpoint, queryParams);
     }
   
-    // todo: Order data management 
+    //Comunicare al server che abbiamo acquistato un menu 
+    static async buyMenu(sid, userLocation, mid) {
+      const endpoint = "/menu/" + mid + "/buy";
+      const bodyParams = {sid: sid, deliveryLocation: userLocation};
+      console.log(
+        "buyMenu called with endpoint: ",
+        endpoint,
+        " and bodyParams: ",
+        bodyParams
+      );
+      return await this.genericPostRequest(endpoint, bodyParams);
+    }
   }
   
