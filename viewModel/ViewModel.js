@@ -103,7 +103,6 @@ export default class ViewModel {
         imageVersion
       );
       if (imageInStore) {
-        console.log("Image found in DB:", imageInStore);
         return imageInStore;
       }
 
@@ -113,10 +112,8 @@ export default class ViewModel {
         this.sid
       );
 
-      console.log("Image fetched from server:", imageFromServer.base64);
-      
-      if(!imageFromServer.base64.startsWith("data:image/jpeg;base64,")) {
-        imageFromServer.base64 = "data:image/jpeg;base64," + imageFromServer.base64;
+      if(!imageFromServer.base64.startsWith("data:image/png;base64,")) {
+        imageFromServer.base64 = "data:image/png;base64," + imageFromServer.base64;
       }
       await this.dbManager.insertMenuImage(mid, imageVersion, imageFromServer);
       return imageFromServer;
