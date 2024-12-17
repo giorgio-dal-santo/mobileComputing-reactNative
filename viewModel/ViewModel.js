@@ -175,7 +175,7 @@ export default class ViewModel {
 
   async newOrder (userLocation, mid) {
     try {
-      console.log("PROBLEMA DA RISOLVERE: SID IS REQUIRED PERCHE??????:", userLocation, this.sid);
+      console.log("PROBLEMA DA RISOLVERE: SID IS REQUIRED PERCHE?????:", userLocation, this.sid);
       const order = await CommunicationController.buyMenu(this.sid, userLocation, mid);
       
       return new Order(
