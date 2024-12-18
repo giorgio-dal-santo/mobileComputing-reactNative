@@ -49,9 +49,9 @@ export default class CommunicationController {
       return await this.genericRequest(endpoint, "GET", queryParams, {});
     }
   
-    static async genericPostRequest(endpoint) {
+    static async genericPostRequest(endpoint, queryParams={}, bodyParams={}) {
       console.log("genericPostRequest called");
-      return await this.genericRequest(endpoint, "POST", {}, {});
+      return await this.genericRequest(endpoint, "POST", queryParams, bodyParams);
     }
   
     static async genericPutRequest(endpoint, bodyParams) {
@@ -139,12 +139,12 @@ export default class CommunicationController {
       console.log(
         "buyMenu called with endpoint: ",
         endpoint,
-        " and bodyParams: ",
-        bodyParams,
         " and queryParams: ",
-        queryParams
+        queryParams,
+        " and bodyParams: ",
+        bodyParams
       );
-      return await this.genericPostRequest(endpoint, bodyParams, queryParams);
+      return await this.genericPostRequest(endpoint, queryParams, bodyParams);
     }
 
 

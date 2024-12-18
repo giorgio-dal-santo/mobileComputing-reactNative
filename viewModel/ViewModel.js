@@ -113,11 +113,15 @@ export default class ViewModel {
         this.sid
       );
 
-      if(!imageFromServer.base64.startsWith("data:image")) {
-        imageFromServer.base64 = "data:image/png;base64," + imageFromServer.base64;
+      if (!imageFromServer.base64.startsWith("data:image")) {
+        imageFromServer.base64 =
+          "data:image/png;base64," + imageFromServer.base64;
       }
-      await this.dbManager.insertMenuImage(mid, imageVersion, imageFromServer.base64);
-      //console.log("image from server type:", typeof imageFromServer.base64);
+      await this.dbManager.insertMenuImage(
+        mid,
+        imageVersion,
+        imageFromServer.base64
+      );
       return imageFromServer.base64;
     } catch (error) {
       console.error("Error fetching image:", error);
@@ -172,12 +176,13 @@ export default class ViewModel {
     );
   }
 
-
-  async newOrder (userLocation, mid) {
+  async newOrder(userLocation, mid) {
     try {
-      console.log("PROBLEMA DA RISOLVERE: SID IS REQUIRED PERCHE?????:", userLocation, this.sid);
-      const order = await CommunicationController.buyMenu(this.sid, userLocation, mid);
-      
+      const order = await CommunicationController.buyMenu(
+        this.sid,
+        userLocation,
+        mid
+      );
       return new Order(
         order.oid,
         order.mid,
@@ -192,7 +197,5 @@ export default class ViewModel {
     } catch (error) {
       console.error("Error getting order status:", error);
     }
-    
   }
-
 }
