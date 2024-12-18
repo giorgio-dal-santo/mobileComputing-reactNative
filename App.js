@@ -3,6 +3,9 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeStackNavigator from "./view/navigation/HomeStackNavigator";
 import ProfileStackNavigator from "./view/navigation/ProfileStackNavigator";
 import OrderScreen from "./view/screens/OrderScreen";
+import ViewModel from "./viewModel/ViewModel";
+import { use, useEffect, useState } from "react";
+import { UserContextProvider } from "./view/context/UserContext";
 
 export default function App() {
 
@@ -12,15 +15,35 @@ export default function App() {
   // user data initial value, order data initial value, isRegistered initial value are created by App.js
 
   // create ViewModel instance
+  const viewModel = ViewModel.getViewModel();
 
   // create state: user data, order data, isRegistered
+  const [userData, setUserData] = useState(null)
+  const [orderData, setOrderData] = useState(null)
+  const [isRegistered, setIsRegistered] = useState(false)
 
   // load launch data
+  useEffect( () => {
+    const loadLaunchData = async () => {
+      try {
+        const [userData, orderData, isRegistered] = await viewModel.loadLaunchData();
+        setUserData(userData);
+        setOrderData(orderData);
+        setIsRegistered(isRegistered);
+      } catch (error) {
+        console.error("Error loading launch data: ", error);
+      }
+    };
+
+    loadLaunchData();
+  }, []);
+
 
   const Tab = createBottomTabNavigator();
 
   return (
-    <NavigationContainer>
+    <UserContextProvider userDataInit={userData} orderDataInit={orderData} isRegisteredInit={isRegistered}>
+      <NavigationContainer>
       <Tab.Navigator
         screenOptions={{
           headerShown: false
@@ -31,6 +54,7 @@ export default function App() {
         <Tab.Screen name="ProfileStack" component={ProfileStackNavigator} options={{title: 'Profile'}} />
       </Tab.Navigator>
     </NavigationContainer>
+    </UserContextProvider>
   );
 
 }

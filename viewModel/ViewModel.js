@@ -45,13 +45,19 @@ export default class ViewModel {
       this.sid = await AsyncStorageManager.getSid();
     }
 
+    const isRegistered = await this.isRegistered();
+
     // if not registered return null, null and isRegistered()
+    //if(!isRegistered) return [null, null, isRegistered];
 
     // if registered return user data, order data (lastOid, orderStatus) and isRegistered()
-
     const userData = await this.getUserData();
+    const orderData = new Order(
+      userData.lastOid,
+      userData.orderStatus
+    );
 
-    return userData;
+    return [userData, orderData, isRegistered];
   }
 
   async getUserData() {

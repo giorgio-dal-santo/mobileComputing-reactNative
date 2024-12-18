@@ -1,16 +1,19 @@
 import { Button, SafeAreaView, ScrollView, Text, View } from "react-native";
 import { globalStyle } from "../../styles/GlobalStyle";
-import { useState } from "react";
+import { use, useState } from "react";
 import ViewModel from "../../viewModel/ViewModel";
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback } from "react";
 import MenuHomePreview from "../components/MenuHomePreview";
+import { UserContext } from "../context/UserContext";
+import { useContext } from "react";
 
 export default function HomeScreen({ navigation }) {
   const [nearbyMenus, setNearbyMenus] = useState([]);
 
   // instead of using state we have to use context
-  const [isRegistered, setIsRegistered] = useState(null);
+  const { isRegistered } = useContext(UserContext);
+  //const [isRegistered, setIsRegistered] = useState(null);
 
   // user location is hardcoded for now
   const userLocation = { lat: 45.4642, lng: 9.19 };
@@ -18,9 +21,6 @@ export default function HomeScreen({ navigation }) {
   const loadData = async () => {
     try {
       const viewModel = ViewModel.getViewModel();
-      await viewModel.loadLaunchData();
-      const isRegistered = await viewModel.isRegistered();
-      setIsRegistered(isRegistered);
       if (isRegistered) {
         const nearbyMenus = await viewModel.getNearbyMenus(userLocation);
         setNearbyMenus(nearbyMenus);

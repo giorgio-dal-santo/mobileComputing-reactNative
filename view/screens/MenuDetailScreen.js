@@ -47,7 +47,7 @@ export default function MenuDetailScreen({ route, navigation }) {
             )}
             <Button
                 title="Buy"
-                onPress={() => navigation.navigate("Order", { menuid: detailedMenu.mid, userLocation: userLocation })}
+                onPress={() => navigation.navigate("OrderConfirm", { menuid: detailedMenu.mid, userLocation: userLocation })}
             />
             <Button
                 title="Back to Home"

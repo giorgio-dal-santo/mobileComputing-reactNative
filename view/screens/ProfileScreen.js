@@ -4,13 +4,18 @@ import { useState } from "react";
 import { Button, Text, View } from "react-native";
 import { globalStyle } from "../../styles/GlobalStyle";
 import { useFocusEffect } from "@react-navigation/native"; 
+import { useContext } from "react";
+import { UserContext } from "../context/UserContext";
 
 export default function ProfileScreen({navigation}) {
 
     //instead of using state we have to use context
-    const [user, setUser] = useState(null);
-    const [isRegistered, setIsRegistered] = useState(null);
+    const { isRegistered, userData, orderData } = useContext(UserContext);
 
+    //const [user, setUser] = useState(null);
+    //const [isRegistered, setIsRegistered] = useState(null);
+
+    /*
     const loadData = async () => {
         try {
             const viewModel = ViewModel.getViewModel();
@@ -28,6 +33,7 @@ export default function ProfileScreen({navigation}) {
             loadData();
         }, [])
     );
+    */
 
 
     if (!isRegistered) {
@@ -37,7 +43,7 @@ export default function ProfileScreen({navigation}) {
                 <Text>User not registered</Text>
                 <Button
                     title="Register"
-                    onPress={() => navigation.navigate("EditProfile", {userData: user, isRegistered: isRegistered})}
+                    onPress={() => navigation.navigate("EditProfile")}
                 />
             </View>
         );
@@ -46,18 +52,27 @@ export default function ProfileScreen({navigation}) {
 
     return (
         <View style={globalStyle.container}>
+            <View>
             <Text>Profile Screen</Text>
-            <Text>First Name: {user.firstName}</Text>
-            <Text>Last Name: {user.lastName}</Text>
-            <Text>Card Full Name: {user.cardFullName}</Text>
-            <Text>Card Number: {user.cardNumber}</Text>
-            <Text>Card Expire Month: {user.cardExpireMonth}</Text>
-            <Text>Card Expire Year: {user.cardExpireYear}</Text>
-            <Text>Card CVV: {user.cardCVV}</Text>
+            <Text>First Name: {userData.firstName}</Text>
+            <Text>Last Name: {userData.lastName}</Text>
+            <Text>Card Full Name: {userData.cardFullName}</Text>
+            <Text>Card Number: {userData.cardNumber}</Text>
+            <Text>Card Expire Month: {userData.cardExpireMonth}</Text>
+            <Text>Card Expire Year: {userData.cardExpireYear}</Text>
+            <Text>Card CVV: {userData.cardCVV}</Text>
             <Button
                 title="Edit Profile"
-                onPress={() => navigation.navigate("EditProfile", {userData: user, isRegistered: isRegistered})}
+                onPress={() => navigation.navigate("EditProfile")}
             />
+            </View>
+
+            <View>
+                <Text>Last Order</Text>
+                <Text>Order ID: {orderData.oid}</Text>
+                <Text>Order Status: {orderData.status}</Text>
+            </View>
         </View>
+        
     );
 }
