@@ -193,7 +193,7 @@ export default class ViewModel {
         userLocation,
         mid
       );
-      return new Order(
+      ProvaOrdine = new Order(
         order.oid,
         order.mid,
         order.uid,
@@ -204,8 +204,11 @@ export default class ViewModel {
         order.expectedDeliveryTimestamp,
         order.currentPosition
       );
+      console.log("ProvaOrdine = ", ProvaOrdine);
+      return ProvaOrdine;
     } catch (error) {
       console.error("Error getting order status:", error);
     }
+    
   }
 }
