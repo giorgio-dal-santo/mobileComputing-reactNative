@@ -6,6 +6,8 @@ import { globalStyle } from "../../styles/GlobalStyle";
 import { useFocusEffect } from "@react-navigation/native"; 
 
 export default function ProfileScreen({navigation}) {
+
+    //instead of using state we have to use context
     const [user, setUser] = useState(null);
     const [isRegistered, setIsRegistered] = useState(null);
 

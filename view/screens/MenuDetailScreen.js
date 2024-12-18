@@ -27,7 +27,7 @@ export default function MenuDetailScreen({ route, navigation }) {
     return (
         <View style={globalStyle.container}>
             <Text>Menu Detail</Text>
-            {detailedMenu ? ( // Verifica se detailedMenu è stato caricato
+            {detailedMenu ? (
                 <View>
                     <Text>{detailedMenu.name}</Text>
                     <Image
@@ -43,7 +43,7 @@ export default function MenuDetailScreen({ route, navigation }) {
                     <Text>{detailedMenu.deliveryTime}</Text>
                 </View>
             ) : (
-                <Text>Caricamento in corso...</Text> // Render di fallback durante il caricamento
+                <Text>Caricamento in corso...</Text>
             )}
             <Button
                 title="Buy"

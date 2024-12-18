@@ -9,6 +9,7 @@ export default function EditProfileScreen({ route, navigation }) {
   const { isRegistered } = route.params || false;
   const [errors, setErrors] = useState({});
 
+  // instead of using state we have to use context
   const [user, setUser] = useState(() => {
     return userData instanceof User
       ? userData
@@ -42,8 +43,6 @@ export default function EditProfileScreen({ route, navigation }) {
       )
     );
   };
-
-
 
   const viewModel = ViewModel.getViewModel();
 
