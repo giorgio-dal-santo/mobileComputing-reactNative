@@ -3,38 +3,25 @@ import ViewModel from "../../viewModel/ViewModel";
 import { useState } from "react";
 import { Button, Text, View } from "react-native";
 import { globalStyle } from "../../styles/GlobalStyle";
-import { useFocusEffect } from "@react-navigation/native"; 
 import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
+import { useEffect } from "react";
 
 export default function ProfileScreen({navigation}) {
 
     //instead of using state we have to use context
     const { isRegistered, userData, orderData } = useContext(UserContext);
 
-    //const [user, setUser] = useState(null);
-    //const [isRegistered, setIsRegistered] = useState(null);
-
-    /*
-    const loadData = async () => {
-        try {
-            const viewModel = ViewModel.getViewModel();
-            const user = await viewModel.loadLaunchData();
-            const isRegistered = await viewModel.isRegistered();
-            setIsRegistered(isRegistered);
-            setUser(user);
-        } catch (error) {
-            console.error("Error during ViewModel initialization:", error);
-        }
-    };
-
-    useFocusEffect(
-        useCallback(() => {
-            loadData();
-        }, [])
-    );
-    */
-
+    const [orderStatus, setOrderStatus] = useState(null);
+    
+    //PER AGGIORANRE LO STATO DELL'ORDINE, MA NON FUNZIONA
+    useEffect(() => {
+            const fetchOrderStatus = async () => {
+                setOrderStatus(orderData.status);
+              };
+              fetchOrderStatus();
+    }, [orderData.status]);
+    
 
     if (!isRegistered) {
         return (
@@ -70,7 +57,7 @@ export default function ProfileScreen({navigation}) {
             <View>
                 <Text>Last Order</Text>
                 <Text>Order ID: {orderData.oid}</Text>
-                <Text>Order Status: {orderData.status}</Text>
+                <Text>Order Status: {orderStatus}</Text>
             </View>
         </View>
         

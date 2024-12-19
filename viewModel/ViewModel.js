@@ -195,16 +195,15 @@ export default class ViewModel {
       );
       ProvaOrdine = new Order(
         order.oid,
+        order.status,
         order.mid,
         order.uid,
         order.creationTimestamp,
-        order.status,
         order.deliveryLocation,
         order.deliveryTimestamp,
         order.expectedDeliveryTimestamp,
         order.currentPosition
       );
-      console.log("ProvaOrdine = ", ProvaOrdine);
       return ProvaOrdine;
     } catch (error) {
       console.error("Error getting order status:", error);

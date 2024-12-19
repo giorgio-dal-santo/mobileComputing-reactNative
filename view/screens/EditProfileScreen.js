@@ -7,7 +7,7 @@ import { UserContext } from "../context/UserContext";
 
 export default function EditProfileScreen({ navigation }) {
   const { userData, setUserData, isRegistered, setIsRegistered } = useContext(UserContext);
-  console.log("userData", userData);
+  //console.log("userData", userData);
 
   //const { userData } = route.params || {};
   //const { isRegistered } = route.params || false;
