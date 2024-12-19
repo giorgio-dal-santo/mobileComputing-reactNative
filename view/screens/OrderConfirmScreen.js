@@ -5,8 +5,6 @@ import ViewModel from "../../viewModel/ViewModel";
 import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
 import { Button } from "@react-navigation/elements";
-import { useFocusEffect } from "@react-navigation/native";
-import { useCallback } from "react";
 
 export default function OrderConfirmScreen({ route, navigation }) {
   
@@ -15,7 +13,6 @@ export default function OrderConfirmScreen({ route, navigation }) {
   const { orderData, setOrderData } = useContext(UserContext);
   
   useEffect(() => {
-      console.log("Prova entrata Callback");
       const viewModel = ViewModel.getViewModel();
       const fetchNewOrder = async () => {
         try {
