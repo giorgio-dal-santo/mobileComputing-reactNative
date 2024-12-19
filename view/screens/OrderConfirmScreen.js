@@ -12,11 +12,9 @@ export default function OrderConfirmScreen({ route, navigation }) {
   
   const { menuid, userLocation } = route.params || {};
   
-
-  //const [newOrder, setNewOrder] = useState(null);
+  const { orderData, setOrderData } = useContext(UserContext);
   
-  useFocusEffect(
-    useCallback(() => {
+  useEffect(() => {
       console.log("Prova entrata Callback");
       const viewModel = ViewModel.getViewModel();
       const fetchNewOrder = async () => {
@@ -30,7 +28,6 @@ export default function OrderConfirmScreen({ route, navigation }) {
       };
       fetchNewOrder();
     }, [userLocation, menuid])
-  );
 
   console.log("order data", orderData);
 
@@ -39,7 +36,7 @@ export default function OrderConfirmScreen({ route, navigation }) {
       <ScrollView>
         <View style={globalStyle.container}>
           <Text>Order</Text>
-          {orderData ? (
+          {orderData?.creationTimestamp ? (
             <View>
               <Text>Order Confirmed, Congrats!</Text>
               <Text>Oid: {orderData.oid}</Text>
