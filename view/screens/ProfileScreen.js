@@ -6,21 +6,68 @@ import { globalStyle } from "../../styles/GlobalStyle";
 import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
 import { useEffect } from "react";
+import { useIsFocused } from "@react-navigation/native";
+import { useRef } from "react";
 
 export default function ProfileScreen({navigation}) {
 
     //instead of using state we have to use context
-    const { isRegistered, userData, orderData } = useContext(UserContext);
+    const { isRegistered, userData, orderData, setOrderData } = useContext(UserContext);
 
-    const [orderStatus, setOrderStatus] = useState(null);
+    const viewModel = ViewModel.getViewModel();
     
-    //PER AGGIORANRE LO STATO DELL'ORDINE, MA NON FUNZIONA
+    const fetchLastOrder = async () => {
+        console.log("Executing Fetch")
+        try {
+            const orderDetails = await viewModel.getOrderDetail(orderData.oid);
+            setOrderData(orderDetails);
+            //console.log("Order Details:", orderDetails);
+            //console.log("Order Data Aggiornato:", orderData);
+        } catch (err) {
+            console.error("Error fetching the last order details:", err);
+        }
+    }
+
+    const fetchData = async () => {
+        if (orderData && orderData.oid)
+            await fetchLastOrder();
+    };
+
+
+    // Auto - Reload every 5 seconds
+    const isFocused = useIsFocused(); // Tracks if the screen is currently focused
+    const intervalId = useRef(null);
+
     useEffect(() => {
+        if (isFocused) {
+            console.log("Screen is focused, starting timer");
+            intervalId.current = setInterval(fetchData, 5000);
+        } else {
+            console.log("Screen is not focused, stopping timer");
+            if (intervalId.current) {
+                clearInterval(intervalId.current);
+                intervalId.current = null;
+            }
+        }
+
+        // Cleanup function to stop the timer when the component unmounts
+        return () => {
+            if (intervalId.current) {
+                clearInterval(intervalId.current);
+                intervalId.current = null;
+            }
+        };
+    }, [isFocused]);
+
+
+    //PER AGGIORANRE LO STATO DELL'ORDINE, MA NON FUNZIONA
+    /*useEffect(() => {
             const fetchOrderStatus = async () => {
                 setOrderStatus(orderData.status);
               };
               fetchOrderStatus();
     }, [orderData.status]);
+    */
     
 
     if (!isRegistered) {
@@ -57,7 +104,7 @@ export default function ProfileScreen({navigation}) {
             <View>
                 <Text>Last Order</Text>
                 <Text>Order ID: {orderData.oid}</Text>
-                <Text>Order Status: {orderStatus}</Text>
+                <Text>Order Status: {orderData.status}</Text>
             </View>
         </View>
         

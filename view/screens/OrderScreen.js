@@ -5,6 +5,10 @@ import ViewModel from "../../viewModel/ViewModel";
 
 //Visualizza l'ordine in corso o l'ultimo
 export default function OrderScreen({ route }) {
+  
+  
+  
+  
   return (
     <SafeAreaView style={globalStyle.container}>
         <View style={globalStyle.container}>

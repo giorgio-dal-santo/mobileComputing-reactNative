@@ -149,11 +149,11 @@ export default class CommunicationController {
 
 
     //Ottenere lo stato di un ordine
-    static async getOrderStatus(oid, sid) {
+    static async getOrderDetail(oid, sid) {
       const endpoint = "/order/" + oid;
       const queryParams = { oid: oid, sid: sid};
       console.log(
-        "getOrderStatus called with endpoint: ",
+        "getOrderDetail called with endpoint: ",
         endpoint,
         " and queryParams: ",
         queryParams

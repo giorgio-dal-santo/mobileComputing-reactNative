@@ -208,6 +208,15 @@ export default class ViewModel {
     } catch (error) {
       console.error("Error getting order status:", error);
     }
-    
+
+  }
+
+
+  async getOrderDetail(oid) {
+    const orderDetail = await CommunicationController.getOrderDetail(
+      oid,
+      this.sid
+    );
+    return orderDetail;
   }
 }
