@@ -29,7 +29,7 @@ export default class DBManager {
                 VALUES (?, ?, ?);
             `;
             await this.db.runAsync(query, [mid, imageVersion, image]);
-            console.log("Image inserted or replaced in DB successfully.");
+            //console.log("Image inserted or replaced in DB successfully.");
         } catch (error) {
             console.error("Error in insertMenuImage: ", error);
         }
