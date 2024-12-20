@@ -1,7 +1,7 @@
 import { Button, Text, View, Image } from "react-native";
 import { globalStyle } from "../../styles/GlobalStyle";
 
-export default function MenuPreview({userLocation, menu, navigation}) {
+export default function MenuHomePreview({userLocation, menu, navigation}) {
   //const { menu, userLocation} = route.params || {};
 
   return (
