@@ -1,6 +1,6 @@
 import { Button, SafeAreaView, ScrollView, Text, View } from "react-native";
 import { globalStyle } from "../../styles/GlobalStyle";
-import { use, useState } from "react";
+import { useState } from "react";
 import ViewModel from "../../viewModel/ViewModel";
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback } from "react";
