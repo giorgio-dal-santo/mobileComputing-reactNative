@@ -68,7 +68,6 @@ export default function OrderScreen({ route }) {
   return (
     <SafeAreaView style={globalStyle.container}>
       <ScrollView>
-        <Text style={globalStyle.title} >Order Status</Text>
         {isRegistered ? (
           <OrderStatus orderData={orderData} menu={menu} />
         ) : (
@@ -81,9 +80,11 @@ export default function OrderScreen({ route }) {
 
 const OrderStatus = ({ menu, orderData }) => {
 
+  console.log("OrderData:", orderData);
+
   return (
     <View style={globalStyle.container}>
-      {orderData.status === "ON_DELIVERY" ? (
+      {(orderData.status === "ON_DELIVERY") ? (
         <View>
           <Text>Your order will arrive in: </Text>
           <Text style={globalStyle.deliveryTime}>
@@ -92,14 +93,11 @@ const OrderStatus = ({ menu, orderData }) => {
           <Text>MAPPA</Text>
           <MenuCardPreview menu={menu} />
         </View>
-      ) : orderData.status === "COMPLETED" ? (
+      ) : (orderData.status === "COMPLETED") ? (
         <View>
           <Text>Your order has been delivered</Text>
           <Text>MAPPA</Text>
           <MenuCardPreview menu={menu} />
-        <Text>Your order is ready for pickup</Text>
-        <Text>MAPPA</Text>
-        <MenuCardPreview menu={menu} />
         </View>
       ) : (
         <View>
@@ -107,7 +105,7 @@ const OrderStatus = ({ menu, orderData }) => {
           <Text>bottone per home</Text>
         </View>
       )}
-      
+
     </View>
   );
 };
