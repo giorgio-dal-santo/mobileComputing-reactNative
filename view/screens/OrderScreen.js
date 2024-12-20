@@ -89,17 +89,25 @@ const OrderStatus = ({ menu, orderData }) => {
           <Text style={globalStyle.deliveryTime}>
             Consegna: {menu?.deliveryTime} min
           </Text>
+          <Text>MAPPA</Text>
+          <MenuCardPreview menu={menu} />
         </View>
       ) : orderData.status === "COMPLETED" ? (
+        <View>
+          <Text>Your order has been delivered</Text>
+          <Text>MAPPA</Text>
+          <MenuCardPreview menu={menu} />
         <Text>Your order is ready for pickup</Text>
+        <Text>MAPPA</Text>
+        <MenuCardPreview menu={menu} />
+        </View>
       ) : (
         <View>
           <Text>No order yet</Text>
           <Text>bottone per home</Text>
         </View>
       )}
-      <Text>MAPPA</Text>
-      <MenuCardPreview menu={menu} />
+      
     </View>
   );
 };
