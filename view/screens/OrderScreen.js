@@ -85,7 +85,7 @@ const OrderStatus = ({ orderData, menu }) => {
     <View style={globalStyle.container}>
       <Text>Your order will arrive in: </Text>
       <Text style={globalStyle.deliveryTime}>
-        Consegna: {orderData?.expectedDeliveryTimestamp} min
+        Consegna: {menu.deliveryTime} min
       </Text>
       <Text>MAPPA</Text>
       <MenuCardPreview menu={menu} />
