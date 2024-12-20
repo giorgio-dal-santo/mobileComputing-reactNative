@@ -50,7 +50,7 @@ export default function App() {
         }}
       >
         <Tab.Screen name="HomeStack" component={HomeStackNavigator} options={{title: 'Home'}} />
-        <Tab.Screen name="Order" component={OrderScreen} />
+        <Tab.Screen name="Order" component={OrderScreen} options={{title: "Order"}} />
         <Tab.Screen name="ProfileStack" component={ProfileStackNavigator} options={{title: 'Profile'}} />
       </Tab.Navigator>
     </NavigationContainer>
