@@ -67,26 +67,37 @@ export default function OrderScreen({ route }) {
 
   return (
     <SafeAreaView style={globalStyle.container}>
-      <View style={globalStyle.container}>
+      <ScrollView>
         <Text style={globalStyle.title} >Order Status</Text>
         {isRegistered ? (
           <OrderStatus orderData={orderData} menu={menu} />
         ) : (
           <NotRegister navigation={navigation} />
         )}
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
 
-const OrderStatus = ({ orderData, menu }) => {
+const OrderStatus = ({ menu, orderData }) => {
 
   return (
     <View style={globalStyle.container}>
-      <Text>Your order will arrive in: </Text>
-      <Text style={globalStyle.deliveryTime}>
-        Consegna: {menu?.deliveryTime} min
-      </Text>
+      {orderData.status === "ON_DELIVERY" ? (
+        <View>
+          <Text>Your order will arrive in: </Text>
+          <Text style={globalStyle.deliveryTime}>
+            Consegna: {menu?.deliveryTime} min
+          </Text>
+        </View>
+      ) : orderData.status === "COMPLETED" ? (
+        <Text>Your order is ready for pickup</Text>
+      ) : (
+        <View>
+          <Text>No order yet</Text>
+          <Text>bottone per home</Text>
+        </View>
+      )}
       <Text>MAPPA</Text>
       <MenuCardPreview menu={menu} />
     </View>
