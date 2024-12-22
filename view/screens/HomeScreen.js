@@ -40,7 +40,6 @@ export default function HomeScreen({ navigation }) {
     <SafeAreaView style={globalStyle.container}>
       <ScrollView>
         <View style={globalStyle.container}>
-          <Text>Home Screen</Text>
           {isRegistered ? (
             <MenuList nearbyMenus={nearbyMenus} userLocation={userLocation} navigation={navigation} />
           ) : (
@@ -56,7 +55,7 @@ const MenuList = ({nearbyMenus, userLocation , navigation}) => {
   
   return (
     <View style={globalStyle.container}>
-      <Text>Nearby Menus</Text>
+      <Text style={globalStyle.title}>Nearby Menus</Text>
       {nearbyMenus.map((menu) => (
         <MenuHomePreview key={menu.mid} menu={menu} userLocation={userLocation} navigation={navigation}  />
       ))}

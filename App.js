@@ -6,6 +6,11 @@ import OrderScreen from "./view/screens/OrderScreen";
 import ViewModel from "./viewModel/ViewModel";
 import { use, useEffect, useState } from "react";
 import { UserContextProvider } from "./view/context/UserContext";
+import * as Font from "expo-font";
+import { useFonts } from "expo-font";
+import { View, ActivityIndicator } from "react-native";
+import { globalStyle } from "./styles/GlobalStyle";
+
 
 export default function App() {
 
@@ -13,6 +18,23 @@ export default function App() {
   // create app context: user data, order data, isRegistered
   // app context provider has 4 parameters: user data initial value, order data initial value, isRegistered initial value, children
   // user data initial value, order data initial value, isRegistered initial value are created by App.js
+
+  //FONTS LOADING
+  // State per il caricamento dei font
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+
+  // Carica i font
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        Poppins: require("./assets/fonts/Poppins-Black.ttf"),
+      });
+      setFontsLoaded(true);
+    };
+
+    loadFonts();
+  }, []);
+
 
   // create ViewModel instance
   const viewModel = ViewModel.getViewModel();
@@ -41,6 +63,15 @@ export default function App() {
 
   const Tab = createBottomTabNavigator();
 
+  // Rendi il caricamento dei font
+  if (!fontsLoaded) {
+    return (
+      <View style={globalStyle.container}>
+        <ActivityIndicator size="large" color="#007BFF" />
+      </View>
+    );
+  }
+  
   return (
     <UserContextProvider userDataInit={userData} orderDataInit={orderData} isRegisteredInit={isRegistered}>
       <NavigationContainer>

@@ -29,8 +29,8 @@ export const globalStyle = StyleSheet.create({
   card: {
     backgroundColor: "#fff",
     borderRadius: 8,
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
+    shadowColor: "#333",
+    shadowOpacity: 0.3,
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
     elevation: 3,
@@ -45,10 +45,12 @@ export const globalStyle = StyleSheet.create({
     marginBottom: 12,
   },
   title: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "bold",
+    fontFamily: "Poppins",
     marginBottom: 8,
     color: "#333",
+    textAlign: "left",
   },
   price: {
     fontSize: 16,
@@ -64,5 +66,36 @@ export const globalStyle = StyleSheet.create({
   deliveryTime: {
     fontSize: 14,
     color: "#888",
+  },
+  button: {
+    backgroundColor: "#ffffff",
+    color: "#00A86B",
+    borderRadius: 50,
+    borderWidth: 1,
+    borderColor: "#000",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    alignItems: "center",
+    marginVertical: 8,
+  },
+  buttonText: {
+    color: "#000",
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  outlinedButton: {
+    borderWidth: 1,
+    borderColor: "#007BFF",
+    borderRadius: 25,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    alignItems: "center",
+    marginVertical: 8,
+    backgroundColor: "transparent",
+  },
+  outlinedButtonText: {
+    color: "#007BFF",
+    fontSize: 16,
+    fontWeight: "600",
   },
 });

@@ -86,22 +86,22 @@ const OrderStatus = ({ menu, orderData }) => {
     <View style={globalStyle.container}>
       {(orderData.status === "ON_DELIVERY") ? (
         <View>
-          <Text>Your order will arrive in: </Text>
+          <Text style={globalStyle.title}>Your order will arrive in: </Text>
           <Text style={globalStyle.deliveryTime}>
             Consegna: {menu?.deliveryTime} min
           </Text>
-          <Text>MAPPA</Text>
+          <Text style={globalStyle.title}>MAPPA</Text>
           <MenuCardPreview menu={menu} />
         </View>
       ) : (orderData.status === "COMPLETED") ? (
         <View>
-          <Text>Your order has been delivered</Text>
-          <Text>MAPPA</Text>
+          <Text style={globalStyle.title}>Your order has been delivered</Text>
+          <Text style={globalStyle.title}>MAPPA</Text>
           <MenuCardPreview menu={menu} />
         </View>
       ) : (
         <View>
-          <Text>No order yet</Text>
+          <Text style={globalStyle.title}>No order yet</Text>
           <Text>bottone per home</Text>
         </View>
       )}
@@ -113,7 +113,7 @@ const OrderStatus = ({ menu, orderData }) => {
 const NotRegister = ({ navigation }) => {
   return (
     <View style={globalStyle.container}>
-      <Text>User not registered</Text>
+      <Text style={globalStyle.title}>User not registered</Text>
       <Button
         title="Register"
         onPress={() => navigation.navigate("ProfileStack")}
