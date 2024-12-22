@@ -9,6 +9,8 @@ import { useEffect } from "react";
 import { useIsFocused } from "@react-navigation/native";
 import { useRef } from "react";
 import MenuCardPreview from "../components/MenuCardPreview";
+import { userLocation } from "../components/MenuHomePreview";
+
 
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { TouchableOpacity } from "react-native";
@@ -121,7 +123,7 @@ export default function ProfileScreen({ navigation }) {
                 Expire Date: {userData.cardExpireMonth}/{userData.cardExpireYear}
               </Text>
               <Text style={globalStyle.profileDetailText}>CVV: ***</Text>
-              
+
               <TouchableOpacity
                 style={globalStyle.button}
                 onPress={() => navigation.navigate("EditProfile")}
@@ -132,14 +134,22 @@ export default function ProfileScreen({ navigation }) {
           </View>
 
 
-          <View>
-            <Text style={globalStyle.title}> Last Order: </Text>
-            {orderData.oid ? (
-              <MenuCardPreview menu={menu} />
-            ) : (
-              <Text>No order data available</Text>
-            )}
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+            <Text style={[globalStyle.title, { marginLeft: 20 }]}>Last Order: </Text> 
+            <TouchableOpacity
+              style={[globalStyle.button, { paddingHorizontal: 15, backgroundColor: '#fff', marginRight: 20 }]} 
+              onPress={() => navigation.navigate("MenuDetail", { menuid: menu.mid, lat: menu.location.lat, lng: menu.location.lng, userLocation: userLocation })}
+            >
+              <Text style={globalStyle.buttonText}>Go to the Menu Details</Text>
+            </TouchableOpacity>
           </View>
+
+          {orderData.oid ? (
+            <MenuCardPreview menu={menu} />
+          ) : (
+            <Text>No order data available</Text>
+          )}
+
         </View>
       </ScrollView>
     </SafeAreaView>

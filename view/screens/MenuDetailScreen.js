@@ -63,7 +63,7 @@ export default function MenuDetailScreen({ route, navigation }) {
                 style={globalStyle.button}
                 onPress={() => navigation.goBack()}
               >
-                <Text style={globalStyle.buttonText}>Back to Home</Text>
+                <Text style={globalStyle.buttonText}>Back</Text>
               </TouchableOpacity>
             </>
           ) : (
