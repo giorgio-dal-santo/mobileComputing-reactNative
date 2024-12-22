@@ -13,7 +13,9 @@ export const globalStyle = StyleSheet.create({
     fontSize: 16,
     marginBottom: 8,
     color: "#333",
+    fontWeight: "bold",
   },
+
   input: {
     borderWidth: 1,
     borderColor: "gray",
@@ -21,6 +23,30 @@ export const globalStyle = StyleSheet.create({
     padding: 10,
     marginBottom: 10,
     height: 40,
+  },
+
+  inputContainer: {
+    borderWidth: 1,
+    borderColor: "gray",
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    marginBottom: 10,
+    height: 40,
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: 'row',
+},
+
+picker: {
+    width: '100%',
+    fontSize: 16,
+    color: '#333',
+    justifyContent: "center",
+    alignItems: "center",
+},
+
+  errorInputContainer: {
+    borderColor: 'red',
   },
   errorInput: {
     borderColor: "red",
@@ -85,7 +111,7 @@ export const globalStyle = StyleSheet.create({
     fontSize: 16,
     fontWeight: "500",
   },
-  
+
   profileContainer: {
     alignItems: "center",
     marginVertical: 20,
@@ -97,7 +123,7 @@ export const globalStyle = StyleSheet.create({
     alignItems: "center",
     marginBottom: 10,
   },
-  
+
   profileName: {
     fontSize: 24,
     fontWeight: "bold",
@@ -121,4 +147,7 @@ export const globalStyle = StyleSheet.create({
     color: "#555",
     marginBottom: 10,
   },
+
+
+
 });

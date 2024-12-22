@@ -4,6 +4,8 @@ import { useContext, useState } from "react";
 import ViewModel from "../../viewModel/ViewModel";
 import User from "../../model/type/User";
 import { UserContext } from "../context/UserContext";
+import { TouchableOpacity } from "react-native";
+import { Picker } from '@react-native-picker/picker';  // Importa il Picker
 
 export default function EditProfileScreen({ navigation }) {
   const { userData, setUserData, isRegistered, setIsRegistered } = useContext(UserContext);
@@ -115,7 +117,7 @@ export default function EditProfileScreen({ navigation }) {
 
   return (
     <View style={globalStyle.container}>
-      <Text>{isRegistered ? "Your Profile" : "New Profile"}</Text>
+      <Text style={globalStyle.title}>{isRegistered ? "Your Profile:" : "New Profile"}</Text>
 
       <Text style={globalStyle.label}>First Name</Text>
       <TextInput
@@ -179,42 +181,66 @@ export default function EditProfileScreen({ navigation }) {
       ) : null}
 
       <Text style={globalStyle.label}>Card Expire Month</Text>
-      <TextInput
+      <View
         style={[
-          globalStyle.input,
-          errors.cardExpireMonth ? globalStyle.errorInput : null,
+          globalStyle.inputContainer,  
+          errors.cardExpireMonth ? globalStyle.errorInputContainer : null,  // Contenitore errore
         ]}
-        placeholder="Card Expire Month"
-        value={
-          userData?.cardExpireMonth ? userData.cardExpireMonth.toString() : ""
-        }
-        onChangeText={(text) => updateUserField("cardExpireMonth", text)}
-        keyboardType="numeric"
-        onBlur={() =>
-          validateField("cardExpireMonth", userData?.cardExpireMonth)
-        }
-      />
+      >
+        <Picker
+          selectedValue={userData?.cardExpireMonth}
+          onValueChange={(itemValue) => updateUserField("cardExpireMonth", itemValue)}
+          style={[
+            globalStyle.picker,  // Stile personalizzato per il Picker
+            errors.cardExpireMonth ? globalStyle.errorInput : null,  // Applicare stile errore se necessario
+          ]}
+        >
+          <Picker.Item label="Select Month" value="" />
+          <Picker.Item label="January" value="01" />
+          <Picker.Item label="February" value="02" />
+          <Picker.Item label="March" value="03" />
+          <Picker.Item label="April" value="04" />
+          <Picker.Item label="May" value="05" />
+          <Picker.Item label="June" value="06" />
+          <Picker.Item label="July" value="07" />
+          <Picker.Item label="August" value="08" />
+          <Picker.Item label="September" value="09" />
+          <Picker.Item label="October" value="10" />
+          <Picker.Item label="November" value="11" />
+          <Picker.Item label="December" value="12" />
+        </Picker>
+      </View>
       {errors.cardExpireMonth ? (
         <Text style={globalStyle.errorText}>{errors.cardExpireMonth}</Text>
       ) : null}
 
       <Text style={globalStyle.label}>Card Expire Year</Text>
-      <TextInput
+      <View
         style={[
-          globalStyle.input,
-          errors.cardExpireYear ? globalStyle.errorInput : null,
+          globalStyle.inputContainer,  
+          errors.cardExpireYear ? globalStyle.errorInputContainer : null,  // Contenitore errore
         ]}
-        placeholder="Card Expire Year"
-        value={
-          userData?.cardExpireYear ? userData.cardExpireYear.toString() : ""
-        }
-        onChangeText={(text) => updateUserField("cardExpireYear", text)}
-        keyboardType="numeric"
-        onBlur={() => validateField("cardExpireYear", userData?.cardExpireYear)}
-      />
+      >
+        <Picker
+          selectedValue={userData?.cardExpireYear}
+          onValueChange={(itemValue) => updateUserField("cardExpireYear", itemValue)}
+          style={[
+            globalStyle.picker,  // Stile personalizzato per il Picker
+            errors.cardExpireYear ? globalStyle.errorInput : null,  // Applicare stile errore se necessario
+          ]}
+        >
+          <Picker.Item label="Select Year" value="" />
+          {/* Aggiungi gli anni disponibili */}
+          {Array.from(new Array(20), (x, i) => {
+            const year = new Date().getFullYear() + i; // Anni da oggi in avanti
+            return <Picker.Item key={year} label={year.toString()} value={year.toString()} />;
+          })}
+        </Picker>
+      </View>
       {errors.cardExpireYear ? (
         <Text style={globalStyle.errorText}>{errors.cardExpireYear}</Text>
       ) : null}
+
 
       <Text style={globalStyle.label}>Card CVV</Text>
       <TextInput
@@ -232,10 +258,18 @@ export default function EditProfileScreen({ navigation }) {
         <Text style={globalStyle.errorText}>{errors.cardCVV}</Text>
       ) : null}
 
-      <Button
-        title={isRegistered ? "Save" : "Register"}
+      <TouchableOpacity
+        style={[
+          globalStyle.button,
+          { backgroundColor: "green", borderColor: "green" },
+        ]}
         onPress={handleSubmit}
-      />
+      >
+        <Text style={[globalStyle.buttonText, { color: "#fff" }]}>
+          {isRegistered ? "Save" : "Register"}
+        </Text>
+      </TouchableOpacity>
+
     </View>
   );
 }
