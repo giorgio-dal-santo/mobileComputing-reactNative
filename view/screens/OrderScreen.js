@@ -131,10 +131,12 @@ const NotRegister = ({ navigation }) => {
   return (
     <View style={globalStyle.container}>
       <Text style={globalStyle.title}>User not registered</Text>
-      <Button
-        title="Register"
+      <TouchableOpacity
+        style={globalStyle.button}
         onPress={() => navigation.navigate("ProfileStack")}
-      />
+      >
+        <Text style={globalStyle.buttonText}>Register</Text>
+      </TouchableOpacity>
     </View>
   );
 };

@@ -79,10 +79,12 @@ export default function ProfileScreen({ navigation }) {
       <View style={globalStyle.container}>
         <Text>Profile Screen</Text>
         <Text>User not registered</Text>
-        <Button
-          title="Register"
+        <TouchableOpacity
+          style={globalStyle.button}
           onPress={() => navigation.navigate("EditProfile")}
-        />
+        >
+          <Text style={globalStyle.buttonText}>Register</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -133,9 +135,9 @@ export default function ProfileScreen({ navigation }) {
 
 
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-            <Text style={[globalStyle.title, { marginLeft: 20 }]}>Last Order: </Text> 
+            <Text style={[globalStyle.title, { marginLeft: 20 }]}>Last Order: </Text>
             <TouchableOpacity
-              style={[globalStyle.button, { paddingHorizontal: 15, backgroundColor: '#fff', marginRight: 20 }]} 
+              style={[globalStyle.button, { paddingHorizontal: 15, backgroundColor: '#fff', marginRight: 20 }]}
               onPress={() => navigation.navigate("MenuDetail", { menuid: menu.mid, lat: menu.location.lat, lng: menu.location.lng, userLocation: userLocation })}
             >
               <Text style={globalStyle.buttonText}>Go to the Menu Details</Text>

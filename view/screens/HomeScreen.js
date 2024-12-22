@@ -7,6 +7,7 @@ import { useCallback } from "react";
 import MenuHomePreview from "../components/MenuHomePreview";
 import { UserContext } from "../context/UserContext";
 import { useContext } from "react";
+import { TouchableOpacity } from "react-native";
 
 export default function HomeScreen({ navigation }) {
   const [nearbyMenus, setNearbyMenus] = useState([]);
@@ -51,26 +52,28 @@ export default function HomeScreen({ navigation }) {
   );
 }
 
-const MenuList = ({nearbyMenus, userLocation , navigation}) => {
-  
+const MenuList = ({ nearbyMenus, userLocation, navigation }) => {
+
   return (
     <View style={globalStyle.container}>
       <Text style={globalStyle.title}>Nearby Menus</Text>
       {nearbyMenus.map((menu) => (
-        <MenuHomePreview key={menu.mid} menu={menu} userLocation={userLocation} navigation={navigation}  />
+        <MenuHomePreview key={menu.mid} menu={menu} userLocation={userLocation} navigation={navigation} />
       ))}
     </View>
   );
 };
 
-const NotRegister = ({navigation}) => {
+const NotRegister = ({ navigation }) => {
   return (
     <View style={globalStyle.container}>
       <Text>User not registered</Text>
-      <Button
-        title="Register"
+      <TouchableOpacity
+        style={globalStyle.button}
         onPress={() => navigation.navigate("ProfileStack")}
-      />
+      >
+        <Text style={globalStyle.buttonText}>Register</Text>
+      </TouchableOpacity>
     </View>
   );
 };
