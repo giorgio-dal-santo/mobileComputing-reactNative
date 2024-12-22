@@ -196,18 +196,18 @@ export default function EditProfileScreen({ navigation }) {
           ]}
         >
           <Picker.Item label="Select Month" value="" />
-          <Picker.Item label="January" value="01" />
-          <Picker.Item label="February" value="02" />
-          <Picker.Item label="March" value="03" />
-          <Picker.Item label="April" value="04" />
-          <Picker.Item label="May" value="05" />
-          <Picker.Item label="June" value="06" />
-          <Picker.Item label="July" value="07" />
-          <Picker.Item label="August" value="08" />
-          <Picker.Item label="September" value="09" />
-          <Picker.Item label="October" value="10" />
-          <Picker.Item label="November" value="11" />
-          <Picker.Item label="December" value="12" />
+          <Picker.Item label="1" value="01" />
+          <Picker.Item label="2" value="02" />
+          <Picker.Item label="3" value="03" />
+          <Picker.Item label="4" value="04" />
+          <Picker.Item label="5" value="05" />
+          <Picker.Item label="6" value="06" />
+          <Picker.Item label="7" value="07" />
+          <Picker.Item label="8" value="08" />
+          <Picker.Item label="9" value="09" />
+          <Picker.Item label="10" value="10" />
+          <Picker.Item label="11" value="11" />
+          <Picker.Item label="12" value="12" />
         </Picker>
       </View>
       {errors.cardExpireMonth ? (
