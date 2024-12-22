@@ -137,20 +137,27 @@ export default function ProfileScreen({ navigation }) {
           </View>
 
 
-          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-            <Text style={[globalStyle.title, { marginLeft: 20 }]}>Last Order: </Text>
-            <TouchableOpacity
-              style={[globalStyle.button, { paddingHorizontal: 15, backgroundColor: '#fff', marginRight: 20 }]}
-              onPress={() => navigation.navigate("MenuDetail", { menuid: menu.mid, lat: menu.location.lat, lng: menu.location.lng, userLocation: userLocation })}
-            >
-              <Text style={globalStyle.buttonText}>Go to the Menu Details</Text>
-            </TouchableOpacity>
-          </View>
-
           {orderData.oid ? (
-            <MenuCardPreview menu={menu} />
+            <View style={globalStyle.container}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+              <Text style={[globalStyle.title, { marginLeft: 20 }]}>Last Order: </Text>
+              <TouchableOpacity
+                style={[globalStyle.button, { paddingHorizontal: 15, backgroundColor: '#fff', marginRight: 20 }]}
+                onPress={() => navigation.navigate("MenuDetail", { menuid: menu.mid, lat: menu.location.lat, lng: menu.location.lng, userLocation: userLocation })}
+              >
+                <Text style={globalStyle.buttonText}>Go to the Menu Details</Text>
+              </TouchableOpacity>
+            </View>
+            <View>
+              <MenuCardPreview menu={menu} />
+            </View>
+          </View>
+          
           ) : (
-            <Text>No order data available</Text>
+            <View style={{alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+              <Text style={[{ marginLeft: 20 }]}>No order yet</Text>
+              <Text style={[{ marginRight: 20 }]}>Order Now Bottone</Text>
+            </View>
           )}
 
         </View>
