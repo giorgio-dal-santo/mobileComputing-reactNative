@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import ViewModel from "../../viewModel/ViewModel";
 import { useState } from "react";
-import { Button, Text, View, Image } from "react-native";
+import { Button, Text, View, Image, ScrollView, SafeAreaView } from "react-native";
 import { globalStyle } from "../../styles/GlobalStyle";
 import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
@@ -9,6 +9,10 @@ import { useEffect } from "react";
 import { useIsFocused } from "@react-navigation/native";
 import { useRef } from "react";
 import MenuCardPreview from "../components/MenuCardPreview";
+
+import Ionicons from "react-native-vector-icons/Ionicons";
+import { TouchableOpacity } from "react-native";
+
 
 export default function ProfileScreen({ navigation }) {
   //instead of using state we have to use context
@@ -94,31 +98,51 @@ export default function ProfileScreen({ navigation }) {
     */
 
   return (
-    <View style={globalStyle.container}>
-      <View>
-        <Text>Profile Screen</Text>
-        <Text>First Name: {userData.firstName}</Text>
-        <Text>Last Name: {userData.lastName}</Text>
-        <Text>Card Full Name: {userData.cardFullName}</Text>
-        <Text>Card Number: {userData.cardNumber}</Text>
-        <Text>Card Expire Month: {userData.cardExpireMonth}</Text>
-        <Text>Card Expire Year: {userData.cardExpireYear}</Text>
-        <Text>Card CVV: {userData.cardCVV}</Text>
-        <Button
-          title="Edit Profile"
-          onPress={() => navigation.navigate("EditProfile")}
-        />
-      </View>
+    <SafeAreaView style={globalStyle.container}>
+      <ScrollView>
+        <View style={globalStyle.container}>
+          <View style={globalStyle.profileContainer}>
+            <View style={globalStyle.profileImage}>
+              <Ionicons name="person-circle-outline" size={70} color="#444" />
+            </View>
 
-      <View>
-        <Text style={globalStyle.title}> Last Order: </Text>
-        {orderData.oid ? (
-          <MenuCardPreview menu={menu} />
-        ) : (
-          <Text>No order data available</Text>
-        )}
-      </View>
-    </View>
+            <Text style={globalStyle.profileName}>
+              {userData.firstName} {userData.lastName}
+            </Text>
+
+            <View style={globalStyle.profileDetails}>
+              <Text style={globalStyle.profileDetailText}>
+                Card Full Name: {userData.cardFullName}
+              </Text>
+              <Text style={globalStyle.profileDetailText}>
+                Card Number: **** **** **** {userData.cardNumber.slice(-4)}
+              </Text>
+              <Text style={globalStyle.profileDetailText}>
+                Expire Date: {userData.cardExpireMonth}/{userData.cardExpireYear}
+              </Text>
+              <Text style={globalStyle.profileDetailText}>CVV: ***</Text>
+              
+              <TouchableOpacity
+                style={globalStyle.button}
+                onPress={() => navigation.navigate("EditProfile")}
+              >
+                <Text style={globalStyle.buttonText}>Edit Profile</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+
+          <View>
+            <Text style={globalStyle.title}> Last Order: </Text>
+            {orderData.oid ? (
+              <MenuCardPreview menu={menu} />
+            ) : (
+              <Text>No order data available</Text>
+            )}
+          </View>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 

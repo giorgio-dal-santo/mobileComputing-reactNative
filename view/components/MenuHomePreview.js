@@ -1,7 +1,8 @@
 import { Button, Text, View, Image } from "react-native";
 import { globalStyle } from "../../styles/GlobalStyle";
+import { TouchableOpacity } from "react-native";
 
-export default function MenuHomePreview({userLocation, menu, navigation}) {
+export default function MenuHomePreview({ userLocation, menu, navigation }) {
   //const { menu, userLocation} = route.params || {};
 
   return (
@@ -20,10 +21,12 @@ export default function MenuHomePreview({userLocation, menu, navigation}) {
       <Text style={globalStyle.deliveryTime}>
         Delivery in : {menu.deliveryTime} min
       </Text>
-      <Button
-        title="Menu Detail"
+      <TouchableOpacity
+        style={globalStyle.button}
         onPress={() => navigation.navigate("MenuDetail", { menuid: menu.mid, lat: menu.location.lat, lng: menu.location.lng, userLocation: userLocation })}
-      />
+      >
+        <Text style={globalStyle.buttonText}>Menu Detail</Text>
+      </TouchableOpacity>
       
     </View>
   );

@@ -1,9 +1,12 @@
 import { StyleSheet } from "react-native";
 
 export const globalStyle = StyleSheet.create({
+  text: {
+    fontFamily: 'Poppins',
+  },
   container: {
     flex: 1,
-    padding: 5,
+    padding: 10,
     backgroundColor: "#ffffff",
   },
   label: {
@@ -60,7 +63,7 @@ export const globalStyle = StyleSheet.create({
   },
   description: {
     fontSize: 14,
-    color: "#555",
+    color: "#000",
     marginBottom: 8,
   },
   deliveryTime: {
@@ -68,34 +71,54 @@ export const globalStyle = StyleSheet.create({
     color: "#888",
   },
   button: {
-    backgroundColor: "#ffffff",
-    color: "#00A86B",
-    borderRadius: 50,
-    borderWidth: 1,
-    borderColor: "#000",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+    backgroundColor: "#ffffff", // white background
+    borderRadius: 15,
+    borderWidth: 1, // aumento lo spessore del bordo
+    borderColor: "#000", // black border
+    paddingVertical: 8, // riduco il padding verticale per meno margine interno
+    paddingHorizontal: 20, // riduco il padding orizzontale per meno margine interno
     alignItems: "center",
-    marginVertical: 8,
+    marginVertical: 10,
   },
   buttonText: {
-    color: "#000",
+    color: "#000", // black text
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: "500",
   },
-  outlinedButton: {
-    borderWidth: 1,
-    borderColor: "#007BFF",
-    borderRadius: 25,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+  
+  profileContainer: {
     alignItems: "center",
-    marginVertical: 8,
-    backgroundColor: "transparent",
+    marginVertical: 20,
+    justifyContent: "center",
+    flex: 1,
   },
-  outlinedButtonText: {
-    color: "#007BFF",
+  profileImage: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  
+  profileName: {
+    fontSize: 24,
+    fontWeight: "bold",
+    fontFamily: "Poppins",
+    color: "#333",
+    marginBottom: 20,
+  },
+  profileDetails: {
+    backgroundColor: "#f9f9f9",
+    borderRadius: 10,
+    padding: 15,
+    width: "90%",
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 1 },
+    shadowRadius: 5,
+    elevation: 2,
+  },
+  profileDetailText: {
     fontSize: 16,
-    fontWeight: "600",
+    color: "#555",
+    marginBottom: 10,
   },
 });

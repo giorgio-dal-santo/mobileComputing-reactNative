@@ -5,26 +5,27 @@ import ViewModel from "../../viewModel/ViewModel";
 import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
 import { Button } from "@react-navigation/elements";
+import { TouchableOpacity } from "react-native";
 
 export default function OrderConfirmScreen({ route, navigation }) {
-  
+
   const { menuid, userLocation } = route.params || {};
-  
+
   const { orderData, setOrderData } = useContext(UserContext);
-  
+
   useEffect(() => {
-      const viewModel = ViewModel.getViewModel();
-      const fetchNewOrder = async () => {
-        try {
-          const newOrder = await viewModel.newOrder(userLocation, menuid);
-          //console.log("newOrder", newOrder);
-          setOrderData(newOrder);
-        } catch (error) {
-          console.error("Errore nel caricamento del nuovo ordine:", error);
-        }
-      };
-      fetchNewOrder();
-    }, [userLocation, menuid])
+    const viewModel = ViewModel.getViewModel();
+    const fetchNewOrder = async () => {
+      try {
+        const newOrder = await viewModel.newOrder(userLocation, menuid);
+        //console.log("newOrder", newOrder);
+        setOrderData(newOrder);
+      } catch (error) {
+        console.error("Errore nel caricamento del nuovo ordine:", error);
+      }
+    };
+    fetchNewOrder();
+  }, [userLocation, menuid])
 
   //console.log("order data", orderData);
 
@@ -52,10 +53,14 @@ export default function OrderConfirmScreen({ route, navigation }) {
               </Text>
               <Text>currentPosition lat:{orderData.currentPosition.lat}</Text>
               <Text>currentPosition lng:{orderData.currentPosition.lng}</Text>
-              <Button
-                title="Order Status"
+
+              <TouchableOpacity
+                style={globalStyle.button}
                 onPress={() => navigation.navigate("Order")}
-              />
+              >
+                <Text style={globalStyle.buttonText}>Order Status</Text>
+              </TouchableOpacity>
+
             </View>
           ) : (
             <Text>Loading...</Text>

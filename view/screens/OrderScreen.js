@@ -7,6 +7,7 @@ import { useRef } from "react";
 import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
 import MenuCardPreview from "../components/MenuCardPreview";
+import { TouchableOpacity } from "react-native";
 
 
 //Visualizza l'ordine in corso o l'ultimo
@@ -102,7 +103,13 @@ const OrderStatus = ({ menu, orderData }) => {
       ) : (
         <View>
           <Text style={globalStyle.title}>No order yet</Text>
-          <Text>bottone per home</Text>
+         
+          <TouchableOpacity
+            style={globalStyle.button}
+            onPress={() => navigation.navigate("HomeScreen")}
+          >
+            <Text style={globalStyle.buttonText}>Go Order!</Text>
+          </TouchableOpacity>
         </View>
       )}
 

@@ -2,6 +2,9 @@ import { Button, Text, View, Image } from "react-native";
 import { useEffect, useState } from "react";
 import { globalStyle } from "../../styles/GlobalStyle";
 import ViewModel from "../../viewModel/ViewModel";
+import { TouchableOpacity } from "react-native";
+import MenuCardPreview from "../components/MenuCardPreview";
+
 
 export default function MenuDetailScreen({ route, navigation }) {
     const { menuid, lat, lng, userLocation } = route.params || {};
@@ -25,35 +28,48 @@ export default function MenuDetailScreen({ route, navigation }) {
 
 
     return (
-        <View style={globalStyle.container}>
-            <Text>Menu Detail</Text>
-            {detailedMenu ? (
-                <View>
-                    <Text>{detailedMenu.name}</Text>
-                    <Image
-                        source={
-                            typeof detailedMenu.image === "string" && detailedMenu.image
-                                ? { uri: detailedMenu.image }
-                                : require("../../assets/icon.png")
-                        }
-                        style={globalStyle.image}
-                    />
-                    <Text>{detailedMenu.price}</Text>
-                    <Text>{detailedMenu.longDescription}</Text>
-                    <Text>{detailedMenu.deliveryTime}</Text>
-                </View>
-            ) : (
-                <Text>Loading...</Text>
-            )}
-            <Button
-                title="Buy"
-                onPress={() => navigation.navigate("OrderConfirm", { menuid: detailedMenu.mid, userLocation: userLocation })}
-            />
-            <Button
-                title="Back to Home"
+        <View style={globalStyle.card}>
+          {/* Controlla se detailedMenu è null */}
+          {detailedMenu ? (
+            <>
+              <Image
+                source={
+                  typeof detailedMenu.image === "string" && detailedMenu.image
+                    ? { uri: detailedMenu.image }
+                    : require("../../assets/icon.png")
+                }
+                style={globalStyle.image}
+              />
+              <Text style={globalStyle.title}>{detailedMenu.name}</Text>
+              <Text style={globalStyle.price}>€{detailedMenu.price.toFixed(2)}</Text>
+              <Text style={globalStyle.description}>{detailedMenu.shortDescription}</Text>
+              <Text style={globalStyle.deliveryTime}>
+                Delivery in : {detailedMenu.deliveryTime} min
+              </Text>
+      
+              <TouchableOpacity
+                style={globalStyle.button}
+                onPress={() =>
+                  navigation.navigate("OrderConfirm", {
+                    menuid: detailedMenu.mid,
+                    userLocation: userLocation,
+                  })
+                }
+              >
+                <Text style={globalStyle.buttonText}>Buy</Text>
+              </TouchableOpacity>
+      
+              <TouchableOpacity
+                style={globalStyle.button}
                 onPress={() => navigation.goBack()}
-            />
-
+              >
+                <Text style={globalStyle.buttonText}>Back to Home</Text>
+              </TouchableOpacity>
+            </>
+          ) : (
+            // Se detailedMenu è null, mostriamo un messaggio di caricamento
+            <Text>Loading or Menu not available...</Text>
+          )}
         </View>
-    );
+      );      
 }
