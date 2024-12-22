@@ -35,7 +35,12 @@ export default function OrderConfirmScreen({ route, navigation }) {
         <View style={globalStyle.container}>
           {orderData?.creationTimestamp ? (
             <View>
-              <Text style={globalStyle.title}>Thank you for your purchase!</Text>
+              <Text style={[globalStyle.title, { textAlign: 'center', width: '100%' }]}>
+                Thank you for your purchase!
+          
+              </Text>
+              <Text>MAPPA QUI</Text>
+              {/* 
               <Text>Oid: {orderData.oid}</Text>
               <Text>Mid: {orderData.mid}</Text>
               <Text>Uid: {orderData.uid}</Text>
@@ -53,12 +58,12 @@ export default function OrderConfirmScreen({ route, navigation }) {
               </Text>
               <Text>currentPosition lat:{orderData.currentPosition.lat}</Text>
               <Text>currentPosition lng:{orderData.currentPosition.lng}</Text>
-
+                */}
               <TouchableOpacity
                 style={globalStyle.button}
                 onPress={() => navigation.navigate("Order")}
               >
-                <Text style={globalStyle.buttonText}>Order Status</Text>
+                <Text style={globalStyle.buttonText}>Go to Your Order Status</Text>
               </TouchableOpacity>
 
             </View>

@@ -114,16 +114,18 @@ picker: {
 
   profileContainer: {
     alignItems: "center",
-    marginVertical: 20,
+    marginVertical: 0,  
+    marginBottom: 20,
     justifyContent: "center",
     flex: 1,
   },
   profileImage: {
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 10,
+    marginBottom: 0,
+    marginTop: 0,  
   },
-
+  
   profileName: {
     fontSize: 24,
     fontWeight: "bold",
