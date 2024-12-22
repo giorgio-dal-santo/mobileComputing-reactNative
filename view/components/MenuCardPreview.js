@@ -13,7 +13,7 @@ export default function MenuCardPreview({menu}) {
         }
         style={globalStyle.image}
       />
-      <Text style={globalStyle.title}>{menu ? menu.name : "Menu name è null"}</Text>
+      <Text style={globalStyle.title}>{menu ? menu.name : "Menu name is null"}</Text>
       <Text style={globalStyle.price}>€{menu?.price.toFixed(2)}</Text>
       <Text style={globalStyle.description}>{menu?.shortDescription}</Text>      
     </View>

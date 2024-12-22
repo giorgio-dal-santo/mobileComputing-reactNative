@@ -96,7 +96,7 @@ const OrderStatus = ({ menu, orderData }) => {
       ) : (orderData.status === "COMPLETED") ? (
         <View>
           <Text style={globalStyle.title}>Your order has been delivered</Text>
-          <Text style={globalStyle.title}>MAPPA</Text>
+          <Text>MAPPA</Text>
           <MenuCardPreview menu={menu} />
         </View>
       ) : (

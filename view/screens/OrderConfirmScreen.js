@@ -32,10 +32,9 @@ export default function OrderConfirmScreen({ route, navigation }) {
     <SafeAreaView style={globalStyle.container}>
       <ScrollView>
         <View style={globalStyle.container}>
-          <Text>Order</Text>
           {orderData?.creationTimestamp ? (
             <View>
-              <Text>Order Confirmed, Congrats!</Text>
+              <Text style={globalStyle.title}>Thank you for your purchase!</Text>
               <Text>Oid: {orderData.oid}</Text>
               <Text>Mid: {orderData.mid}</Text>
               <Text>Uid: {orderData.uid}</Text>
@@ -59,7 +58,7 @@ export default function OrderConfirmScreen({ route, navigation }) {
               />
             </View>
           ) : (
-            <Text>Caricamento in corso...</Text>
+            <Text>Loading...</Text>
           )}
         </View>
       </ScrollView>

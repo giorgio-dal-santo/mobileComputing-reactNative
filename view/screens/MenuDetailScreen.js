@@ -43,7 +43,7 @@ export default function MenuDetailScreen({ route, navigation }) {
                     <Text>{detailedMenu.deliveryTime}</Text>
                 </View>
             ) : (
-                <Text>Caricamento in corso...</Text>
+                <Text>Loading...</Text>
             )}
             <Button
                 title="Buy"
