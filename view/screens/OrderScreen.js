@@ -87,10 +87,8 @@ const OrderStatus = ({ menu, orderData }) => {
     <View style={globalStyle.container}>
       {(orderData.status === "ON_DELIVERY") ? (
         <View>
-          <Text style={globalStyle.title}>Your order will arrive in: </Text>
-          <Text style={globalStyle.deliveryTime}>
-            Delivery in: {menu?.deliveryTime} min
-          </Text>
+          <Text style={globalStyle.title}>Your order will arrive in: {menu?.deliveryTime} min</Text>
+        
           <Text style={globalStyle.title}>MAPPA</Text>
           <MenuCardPreview menu={menu} />
         </View>
