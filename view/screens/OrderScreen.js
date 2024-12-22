@@ -89,7 +89,7 @@ const OrderStatus = ({ menu, orderData }) => {
         <View>
           <Text style={globalStyle.title}>Your order will arrive in: </Text>
           <Text style={globalStyle.deliveryTime}>
-            Consegna: {menu?.deliveryTime} min
+            Delivery in: {menu?.deliveryTime} min
           </Text>
           <Text style={globalStyle.title}>MAPPA</Text>
           <MenuCardPreview menu={menu} />
@@ -99,6 +99,12 @@ const OrderStatus = ({ menu, orderData }) => {
           <Text style={globalStyle.title}>Your order has been delivered</Text>
           <Text>MAPPA</Text>
           <MenuCardPreview menu={menu} />
+          <TouchableOpacity
+            style={globalStyle.button}
+            onPress={() => navigation.navigate("HomeScreen")}
+          >
+            <Text style={globalStyle.buttonText}>Order Again</Text>
+          </TouchableOpacity>
         </View>
       ) : (
         <View>
@@ -108,7 +114,7 @@ const OrderStatus = ({ menu, orderData }) => {
             style={globalStyle.button}
             onPress={() => navigation.navigate("HomeScreen")}
           >
-            <Text style={globalStyle.buttonText}>Go Order!</Text>
+            <Text style={globalStyle.buttonText}>Order</Text>
           </TouchableOpacity>
         </View>
       )}
