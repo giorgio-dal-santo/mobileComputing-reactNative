@@ -69,10 +69,13 @@ const NotRegister = ({ navigation }) => {
     <View style={globalStyle.container}>
       <Text>User not registered</Text>
       <TouchableOpacity
-        style={globalStyle.button}
+        style={[
+          globalStyle.button,
+          { backgroundColor: "green", borderColor: "green" },
+        ]}
         onPress={() => navigation.navigate("ProfileStack")}
       >
-        <Text style={globalStyle.buttonText}>Register</Text>
+        <Text style={[globalStyle.buttonText, { color: "#fff" }]}>Register</Text>
       </TouchableOpacity>
     </View>
   );

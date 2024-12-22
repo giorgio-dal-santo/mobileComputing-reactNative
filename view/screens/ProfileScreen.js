@@ -80,10 +80,13 @@ export default function ProfileScreen({ navigation }) {
         <Text>Profile Screen</Text>
         <Text>User not registered</Text>
         <TouchableOpacity
-          style={globalStyle.button}
+          style={[
+            globalStyle.button,
+            { backgroundColor: "green", borderColor: "green" },
+          ]}
           onPress={() => navigation.navigate("EditProfile")}
         >
-          <Text style={globalStyle.buttonText}>Register</Text>
+          <Text style={[globalStyle.buttonText, { color: "#fff" }]}>Register</Text>
         </TouchableOpacity>
       </View>
     );
