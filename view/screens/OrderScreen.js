@@ -8,6 +8,8 @@ import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
 import MenuCardPreview from "../components/MenuCardPreview";
 import { TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+
 
 
 //Visualizza l'ordine in corso o l'ultimo
@@ -83,12 +85,13 @@ const OrderStatus = ({ menu, orderData }) => {
 
   console.log("OrderData:", orderData);
 
+  const navigation = useNavigation();  // Ottieni l'oggetto navigation
   return (
     <View style={globalStyle.container}>
       {(orderData.status === "ON_DELIVERY") ? (
         <View>
           <Text style={globalStyle.title}>Your order will arrive in: {menu?.deliveryTime} min</Text>
-        
+
           <Text style={globalStyle.title}>MAPPA</Text>
           <MenuCardPreview menu={menu} />
         </View>
@@ -97,20 +100,22 @@ const OrderStatus = ({ menu, orderData }) => {
           <Text style={globalStyle.title}>Your order has been delivered</Text>
           <Text>MAPPA</Text>
           <MenuCardPreview menu={menu} />
+          
           <TouchableOpacity
             style={globalStyle.button}
-            onPress={() => navigation.navigate("HomeScreen")}
+            onPress={() => navigation.navigate("Home")}
           >
             <Text style={globalStyle.buttonText}>Order Again</Text>
           </TouchableOpacity>
+
         </View>
       ) : (
         <View>
           <Text style={globalStyle.title}>No order yet</Text>
-         
+
           <TouchableOpacity
             style={globalStyle.button}
-            onPress={() => navigation.navigate("HomeScreen")}
+            onPress={() => navigation.navigate("Home")}
           >
             <Text style={globalStyle.buttonText}>Order</Text>
           </TouchableOpacity>
@@ -122,6 +127,7 @@ const OrderStatus = ({ menu, orderData }) => {
 };
 
 const NotRegister = ({ navigation }) => {
+  
   return (
     <View style={globalStyle.container}>
       <Text style={globalStyle.title}>User not registered</Text>

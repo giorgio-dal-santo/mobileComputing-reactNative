@@ -1,4 +1,3 @@
-import { useCallback } from "react";
 import ViewModel from "../../viewModel/ViewModel";
 import { useState } from "react";
 import { Button, Text, View, Image, ScrollView, SafeAreaView } from "react-native";
@@ -10,7 +9,6 @@ import { useIsFocused } from "@react-navigation/native";
 import { useRef } from "react";
 import MenuCardPreview from "../components/MenuCardPreview";
 import { userLocation } from "../components/MenuHomePreview";
-
 
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { TouchableOpacity } from "react-native";
