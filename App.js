@@ -10,6 +10,8 @@ import * as Font from "expo-font";
 import { useFonts } from "expo-font";
 import { View, ActivityIndicator } from "react-native";
 import { globalStyle } from "./styles/GlobalStyle";
+import { Ionicons } from 'react-native-vector-icons';
+
 
 
 export default function App() {
@@ -45,7 +47,7 @@ export default function App() {
   const [isRegistered, setIsRegistered] = useState(false)
 
   // load launch data
-  useEffect( () => {
+  useEffect(() => {
     const loadLaunchData = async () => {
       try {
         const [userData, orderData, isRegistered] = await viewModel.loadLaunchData();
@@ -71,20 +73,35 @@ export default function App() {
       </View>
     );
   }
-  
+
   return (
     <UserContextProvider userDataInit={userData} orderDataInit={orderData} isRegisteredInit={isRegistered}>
       <NavigationContainer>
-      <Tab.Navigator
-        screenOptions={{
-          headerShown: false
-        }}
-      >
-        <Tab.Screen name="HomeStack" component={HomeStackNavigator} options={{title: 'Home'}} />
-        <Tab.Screen name="Order" component={OrderScreen} options={{title: "Order", headerShown: true}} />
-        <Tab.Screen name="ProfileStack" component={ProfileStackNavigator} options={{title: 'Profile'}} />
-      </Tab.Navigator>
-    </NavigationContainer>
+        <Tab.Navigator
+          screenOptions={({ route }) => ({
+            tabBarIcon: ({ focused, color, size }) => {
+              let iconName;
+
+              if (route.name === 'HomeStack') {
+                iconName = focused ? 'home' : 'home-outline';  // Icona per la Home
+              } else if (route.name === 'ProfileStack') {
+                iconName = focused ? 'person' : 'person-outline';  // Icona per il Profilo
+              } else if (route.name === 'Order') {
+                iconName = focused ? 'cart' : 'cart-outline';  // Icona per il Carrello
+              }
+
+              return <Ionicons name={iconName} size={size} color={color} />;
+            },
+            tabBarActiveTintColor: 'black',  // Colore per la voce attiva
+            tabBarInactiveTintColor: 'gray',  // Colore per la voce inattiva
+            headerShown: false,  
+          })}
+        >
+          <Tab.Screen name="HomeStack" component={HomeStackNavigator} options={{ title: 'Home' }} />
+          <Tab.Screen name="Order" component={OrderScreen} options={{ title: 'Order', headerShown: true }} />
+          <Tab.Screen name="ProfileStack" component={ProfileStackNavigator} options={{ title: 'Profile' }} />
+        </Tab.Navigator>
+      </NavigationContainer>
     </UserContextProvider>
   );
 
