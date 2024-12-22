@@ -6,7 +6,7 @@ export const globalStyle = StyleSheet.create({
   },
   container: {
     flex: 1,
-    padding: 10,
+    padding: 7,
     backgroundColor: "#ffffff",
   },
   label: {
