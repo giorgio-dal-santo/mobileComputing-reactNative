@@ -28,7 +28,7 @@ export default function ProfileScreen({ navigation }) {
     try {
       const orderDetails = await viewModel.getOrderDetail(orderData.oid);
       setOrderData(orderDetails);
-      console.log("Settato order data 3");
+      //console.log("Settato order data 3");
       const menu = await viewModel.getMenuDetail(
         orderData.mid,
         orderData.deliveryLocation.lat,
@@ -139,22 +139,36 @@ export default function ProfileScreen({ navigation }) {
 
           {orderData.oid ? (
             <View style={globalStyle.container}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-              <Text style={[globalStyle.title, { marginLeft: 20 }]}>Last Order: </Text>
-              <TouchableOpacity
-                style={[globalStyle.button, { paddingHorizontal: 15, backgroundColor: '#fff', marginRight: 20 }]}
-                onPress={() => navigation.navigate("MenuDetail", { menuid: menu.mid, lat: menu.location.lat, lng: menu.location.lng, userLocation: userLocation })}
-              >
-                <Text style={globalStyle.buttonText}>Go to the Menu Details</Text>
-              </TouchableOpacity>
+              <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+                <Text style={[globalStyle.title, { marginLeft: 20 }]}>Last Order: </Text>
+                <TouchableOpacity
+                  style={[
+                    globalStyle.button,
+                    { paddingHorizontal: 15, backgroundColor: '#fff', marginRight: 20 },
+                  ]}
+                  onPress={() =>
+                    navigation.navigate("HomeStack", {
+                      screen: "MenuDetail", // Specifica la schermata nidificata
+                      params: {
+                        menuid: menu.mid,
+                        lat: menu.location.lat,
+                        lng: menu.location.lng,
+                        userLocation: userLocation,
+                      },
+                    })
+                  }
+                >
+                  <Text style={globalStyle.buttonText}>Go to the Menu Details</Text>
+                </TouchableOpacity>
+
+              </View>
+              <View>
+                <MenuCardPreview menu={menu} />
+              </View>
             </View>
-            <View>
-              <MenuCardPreview menu={menu} />
-            </View>
-          </View>
-          
+
           ) : (
-            <View style={{alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+            <View style={{ alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
               <Text style={[{ marginLeft: 20 }]}>No order yet</Text>
               <Text style={[{ marginRight: 20 }]}>Order Now Bottone</Text>
             </View>

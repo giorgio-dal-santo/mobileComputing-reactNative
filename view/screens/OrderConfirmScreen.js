@@ -39,7 +39,7 @@ export default function OrderConfirmScreen({ route, navigation }) {
                 Thank you for your purchase!
           
               </Text>
-              <Text>MAPPA QUI</Text>
+              <Text>MAPPA QUI (dove si trova il menu)</Text>
               {/* 
               <Text>Oid: {orderData.oid}</Text>
               <Text>Mid: {orderData.mid}</Text>

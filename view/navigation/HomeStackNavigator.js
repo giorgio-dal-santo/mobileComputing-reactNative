@@ -2,17 +2,15 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "../screens/HomeScreen";
 import MenuDetailScreen from "../screens/MenuDetailScreen";
 import OrderConfirmScreen from "../screens/OrderConfirmScreen";
-import OrderScreen from "../screens/OrderScreen";
 
 const HomeStack = createNativeStackNavigator();
 
 export default function HomeStackNavigator() {
     return (
-        <HomeStack.Navigator>
+        <HomeStack.Navigator initialRouteName="Home">
             <HomeStack.Screen name="Home" component={HomeScreen} />
             <HomeStack.Screen name="MenuDetail" component={MenuDetailScreen} />
             <HomeStack.Screen name="OrderConfirm" component={OrderConfirmScreen} />
-            <HomeStack.Screen name="Order" component={OrderScreen} />
         </HomeStack.Navigator>
     );
 }

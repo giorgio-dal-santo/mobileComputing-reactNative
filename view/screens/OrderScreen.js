@@ -12,8 +12,9 @@ import { useNavigation } from "@react-navigation/native";
 
 
 
+
 //Visualizza l'ordine in corso o l'ultimo
-export default function OrderScreen({ route }) {
+export default function OrderScreen({ route, navigation }) {
 
   const { isRegistered, userData, orderData, setOrderData } = useContext(UserContext);
 
@@ -83,7 +84,7 @@ export default function OrderScreen({ route }) {
 
 const OrderStatus = ({ menu, orderData }) => {
 
-  console.log("OrderData:", orderData);
+  //console.log("OrderData:", orderData);
 
   const navigation = useNavigation();  // Ottieni l'oggetto navigation
   return (
@@ -100,13 +101,19 @@ const OrderStatus = ({ menu, orderData }) => {
           <Text style={globalStyle.title}>Your order has been delivered</Text>
           <Text>MAPPA</Text>
           <MenuCardPreview menu={menu} />
-          
+
           <TouchableOpacity
             style={globalStyle.button}
-            onPress={() => navigation.navigate("Home")}
+            onPress={() =>
+              navigation.reset({
+                index: 0, // Index of the route to reset to (0 bc is Home)
+                routes: [{ name: "HomeStack", params: { screen: "Home" } }],
+              })
+            }
           >
             <Text style={globalStyle.buttonText}>Order Again</Text>
           </TouchableOpacity>
+
 
         </View>
       ) : (
@@ -115,7 +122,7 @@ const OrderStatus = ({ menu, orderData }) => {
 
           <TouchableOpacity
             style={globalStyle.button}
-            onPress={() => navigation.navigate("Home")}
+            onPress={() => navigation.navigate("HomeStack")}
           >
             <Text style={globalStyle.buttonText}>Order</Text>
           </TouchableOpacity>
@@ -127,7 +134,7 @@ const OrderStatus = ({ menu, orderData }) => {
 };
 
 const NotRegister = ({ navigation }) => {
-  
+
   return (
     <View style={globalStyle.container}>
       <Text style={globalStyle.title}>User not registered</Text>
