@@ -11,6 +11,7 @@ import { useFonts } from "expo-font";
 import { View, ActivityIndicator } from "react-native";
 import { globalStyle } from "./styles/GlobalStyle";
 import { Ionicons } from 'react-native-vector-icons';
+import LocationViewModel from "./viewModel/LocationViewModel";
 
 
 
@@ -40,11 +41,14 @@ export default function App() {
 
   // create ViewModel instance
   const viewModel = ViewModel.getViewModel();
+  const locationViewModel = LocationViewModel.getViewModel();
 
   // create state: user data, order data, isRegistered
   const [userData, setUserData] = useState(null)
   const [orderData, setOrderData] = useState(null)
   const [isRegistered, setIsRegistered] = useState(false)
+  const [userLocation, setUserLocation] = useState(null)
+  const [canUseLocation, setCanUseLocation] = useState(false)
 
   // load launch data
   useEffect(() => {
@@ -54,6 +58,8 @@ export default function App() {
         setUserData(userData);
         setOrderData(orderData);
         setIsRegistered(isRegistered);
+        const [canUseLocation] = await locationViewModel.getPermission();
+        setCanUseLocation(canUseLocation);
       } catch (error) {
         console.error("Error loading launch data: ", error);
       }
@@ -75,7 +81,7 @@ export default function App() {
   }
 
   return (
-    <UserContextProvider userDataInit={userData} orderDataInit={orderData} isRegisteredInit={isRegistered}>
+    <UserContextProvider userDataInit={userData} orderDataInit={orderData} isRegisteredInit={isRegistered} canUseLocationInit={canUseLocation} userLocationInit={userLocation}>
       <NavigationContainer>
         <Tab.Navigator
           screenOptions={({ route }) => ({

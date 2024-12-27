@@ -13,6 +13,7 @@ import { useNavigation } from "@react-navigation/native";
 
 
 
+
 //Visualizza l'ordine in corso o l'ultimo
 export default function OrderScreen({ route, navigation }) {
 
@@ -99,7 +100,35 @@ const OrderStatus = ({ menu, orderData }) => {
       ) : (orderData.status === "COMPLETED") ? (
         <View>
           <Text style={globalStyle.title}>Your order has been delivered</Text>
+          
+          
+          
           <Text>MAPPA</Text>
+          <View style={styles.container}>
+            <Text>Location Information</Text>
+            {canUseLocation && location ? (
+              <View>
+                <View>
+                  <Text>
+                    Latitude: {location.coords.latitude} - Longitude:{" "}
+                    {location.coords.longitude}
+                  </Text>
+                </View>
+                <View>{render()}</View>
+              </View>
+            ) : !canUseLocation ? (
+              <View>
+                <Text>Nessun accesso a posizione</Text>
+                <Button title="Attiva posizione" onPress={startLocationUpdates} />
+              </View>
+            ) : (
+              <Text>Caricamento...</Text>
+            )}
+            <StatusBar style="auto" />
+          </View>
+
+
+
           <MenuCardPreview menu={menu} />
 
           <TouchableOpacity
@@ -147,3 +176,12 @@ const NotRegister = ({ navigation }) => {
     </View>
   );
 };
+
+
+
+
+
+
+
+
+

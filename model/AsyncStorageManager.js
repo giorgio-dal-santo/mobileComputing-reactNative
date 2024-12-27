@@ -57,4 +57,24 @@ export default class AsyncStorageManager {
       console.error("Errore durante il recupero dello stato di registrazione:", error);
     }
   }
+
+  static async setCanUseLocation(canUseLocation) {
+    try {
+      await AsyncStorage.setItem("canUseLocation", JSON.stringify(canUseLocation));
+    } catch (error) {
+      console.error("Errore durante il salvataggio dello stato di utilizzo della posizione:", error);
+    }
+  }
+
+  static async getCanUseLocation() {
+    try {
+      const canUseLocation = await AsyncStorage.getItem("canUseLocation");
+      return JSON.parse(canUseLocation);
+    } catch (error) {
+      console.error("Errore durante il recupero dello stato di utilizzo della posizione:", error);
+    }
+  }
+
+
+  
 }

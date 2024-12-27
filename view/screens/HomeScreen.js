@@ -13,11 +13,10 @@ export default function HomeScreen({ navigation }) {
   const [nearbyMenus, setNearbyMenus] = useState([]);
 
   // instead of using state we have to use context
-  const { isRegistered } = useContext(UserContext);
+  const { isRegistered, userLocation } = useContext(UserContext);
   //const [isRegistered, setIsRegistered] = useState(null);
 
-  
-  const userLocation = { lat: 45.4642, lng: 9.19 };
+  //const userLocation = { lat: 45.4642, lng: 9.19 };
 
   const loadData = async () => {
     try {
