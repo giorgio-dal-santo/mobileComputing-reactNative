@@ -16,7 +16,7 @@ export default function HomeScreen({ navigation }) {
   const { isRegistered } = useContext(UserContext);
   //const [isRegistered, setIsRegistered] = useState(null);
 
-  // user location is hardcoded for now
+  
   const userLocation = { lat: 45.4642, lng: 9.19 };
 
   const loadData = async () => {
