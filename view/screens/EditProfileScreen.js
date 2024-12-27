@@ -16,25 +16,6 @@ export default function EditProfileScreen({ navigation }) {
 
   const [errors, setErrors] = useState({});
 
-  // instead of using state we have to use context
-  /*
-  const [user, setUser] = useState(() => {
-    return userData instanceof User
-      ? userData
-      : new User(
-          userData.firstName,
-          userData.lastName,
-          userData.cardFullName,
-          userData.cardNumber,
-          userData.cardExpireMonth,
-          userData.cardExpireYear,
-          userData.cardCVV,
-          userData.uid,
-          userData.lastOid,
-          userData.orderStatus
-        );
-  });
-  */
 
   const updateUserField = (fieldName, value) => {
     setUserData(
