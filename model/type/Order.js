@@ -10,7 +10,8 @@ export default class Order {
     deliveryLocation = null,
     deliveryTimestamp = null,
     expectedDeliveryTimestamp = null,
-    currentPosition = null
+    currentPosition = null,
+    menuLocation = null
   ) {
     {
       this.oid = oid;
@@ -22,6 +23,7 @@ export default class Order {
       this.deliveryTimestamp = deliveryTimestamp;
       this.expectedDeliveryTimestamp = expectedDeliveryTimestamp;
       this.currentPosition = currentPosition;
+      this.menuLocation = menuLocation;
     }
   }
 }

@@ -5,6 +5,7 @@ import { TouchableOpacity } from "react-native";
 export default function MenuHomePreview({ menu, navigation }) {
   return (
     <View style={globalStyle.card}>
+      
       <Image
         source={
           typeof menu.image === "string" && menu.image
@@ -19,6 +20,7 @@ export default function MenuHomePreview({ menu, navigation }) {
       <Text style={globalStyle.deliveryTime}>
         Delivery in : {menu.deliveryTime} min
       </Text>
+
       <TouchableOpacity
         style={globalStyle.button}
         onPress={() => navigation.navigate("MenuDetail", { menuid: menu.mid, lat: menu.location.lat, lng: menu.location.lng })}

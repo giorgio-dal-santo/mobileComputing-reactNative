@@ -46,12 +46,18 @@ export default function App() {
         setIsRegistered(isRegistered);
 
         const canUseLocation = await locationViewModel.getPermission();
-        console.log("Can use location App: ", canUseLocation);
         setCanUseLocation(canUseLocation);
 
         if (canUseLocation) {
-          const userLocation = await locationViewModel.getLocation();
-          setUserLocation(userLocation);
+          locationViewModel.startWatchingLocation(
+            (location) => {
+              setUserLocation(location);
+              console.log("User location App: ", location);
+            },
+            (error) => {
+              console.error("Error while watching location: ", error);
+            }
+          );
         }
       } catch (error) {
         console.error("Error loading launch data: ", error);
@@ -59,7 +65,11 @@ export default function App() {
     };
 
     loadLaunchData();
-  }, [canUseLocation]);
+
+    return () => {
+      locationViewModel.stopWatchingLocation();
+    };
+  }, []);
 
   const Tab = createBottomTabNavigator();
 

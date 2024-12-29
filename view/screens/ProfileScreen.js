@@ -30,9 +30,9 @@ export default function ProfileScreen({ navigation }) {
       setOrderData(orderDetails);
       //console.log("Settato order data 3");
       const menu = await viewModel.getMenuDetail(
-        orderData.mid,
-        orderData.deliveryLocation.lat,
-        orderData.deliveryLocation.lng
+        orderDetails.mid,
+        orderDetails.deliveryLocation.lat,
+        orderDetails.deliveryLocation.lng
       );
       setMenu(menu);
     } catch (err) {

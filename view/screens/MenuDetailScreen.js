@@ -50,7 +50,9 @@ export default function MenuDetailScreen({ route, navigation }) {
                 style={globalStyle.button}
                 onPress={() =>
                   navigation.navigate("OrderConfirm", {
-                    menuid: detailedMenu.mid
+                    menuid: detailedMenu.mid,
+                    lat: detailedMenu.location.lat,
+                    lng: detailedMenu.location.lng
                   })
                 }
               >

@@ -46,13 +46,17 @@ export default function HomeScreen({ navigation }) {
   
       const canUseLocation = await locationViewModel.canUseLocation();
       setCanUseLocation(canUseLocation);
-  
-      console.log("Can use location after asking permission: ", canUseLocation);
-  
+    
       if (canUseLocation) {
-        const userLocation = await locationViewModel.getLocation();
-        console.log("User location after granting permission: ", userLocation);
-        setUserLocation(userLocation);
+        locationViewModel.startWatchingLocation(
+          (location) => {
+            setUserLocation(location);
+            console.log("User location App: ", location);
+          },
+          (error) => {
+            console.error("Error while watching location: ", error);
+          }
+        );
       }
     } catch (error) {
       console.error("Error while handling location permission: ", error);

@@ -9,7 +9,7 @@ import AsyncStorage from "../model/AsyncStorageManager";
 
 export default class LocationViewModel {
   static #LocationViewModel = null;
-  //#locationSubscription = null;
+  #locationSubscription = null;
 
   constructor() {
     if (LocationViewModel.#LocationViewModel) {
@@ -59,33 +59,6 @@ export default class LocationViewModel {
     }
   }
 
-  async getLocation() {
-    const canUseLocation = await this.canUseLocation();
-
-    if (!canUseLocation) {
-      console.warn("Permessi per la posizione non concessi.");
-      return null;
-    }
-
-    try {
-      const location = await Location.getCurrentPositionAsync({
-        accuracy: Location.Accuracy.High,
-      });
-      const formattedLocation = {
-        lat: location.coords.latitude,
-        lng: location.coords.longitude,
-      }
-      console.log("User location: ", formattedLocation);
-      return formattedLocation;
-    } catch (error) {
-      console.error("Errore nel recupero della posizione: ", error);
-      return null;
-    }
-  }
-}
-
-
-/*
   async startWatchingLocation(onLocationUpdate, onError) {
     const canUseLocation = await this.canUseLocation();
     if (!canUseLocation) {
@@ -101,10 +74,13 @@ export default class LocationViewModel {
           distanceInterval: 1, // Ogni 1 metro
         },
         (newLocation) => {
-          const { latitude, longitude } = newLocation.coords;
-          console.log("Location aggiornata: ", latitude, longitude);
+          const formattedLocation = {
+            lat: newLocation.coords.latitude,
+            lng: newLocation.coords.longitude,
+          }
+          console.log("Location aggiornata: ", formattedLocation);
           if (onLocationUpdate) {
-            onLocationUpdate(newLocation);
+            onLocationUpdate(formattedLocation);
           }
         }
       );
@@ -123,29 +99,29 @@ export default class LocationViewModel {
       console.log("Monitoraggio posizione interrotto");
     }
   }
+
+  /*
+  async getLocation() {
+    const canUseLocation = await this.canUseLocation();
+
+    if (!canUseLocation) {
+      console.warn("Permessi per la posizione non concessi.");
+      return null;
+    }
+
+    try {
+      const location = await Location.getCurrentPositionAsync({
+        accuracy: Location.Accuracy.High,
+      });
+      const formattedLocation = {
+        lat: location.coords.latitude,
+        lng: location.coords.longitude,
+      }
+      return formattedLocation;
+    } catch (error) {
+      console.error("Errore nel recupero della posizione: ", error);
+      return null;
+    }
+  }
+    */
 }
-  */
-
-/*
-   
-    render = function () {
-        return (
-            <View style={styles.container}>
-                <MapView
-                    style={styles.map}
-                    showsUserLocation={true}
-                    //onRegionChange={handleRegionChanged}
-                    initialRegion={{
-                        latitude: location.coords.latitude,
-                        longitude: location.coords.longitude,
-                        latitudeDelta: 0.01,
-                        longitudeDelta: 0.01,
-                    }}
-                >
-                </MapView>
-            </View>
-        );
-    };
-
-
-*/

@@ -45,17 +45,17 @@ export default class CommunicationController {
     }
   
     static async genericGetRequest(endpoint, queryParams) {
-      console.log("genericGetRequest called");
+      //console.log("genericGetRequest called");
       return await this.genericRequest(endpoint, "GET", queryParams, {});
     }
   
     static async genericPostRequest(endpoint, queryParams={}, bodyParams={}) {
-      console.log("genericPostRequest called");
+      //console.log("genericPostRequest called");
       return await this.genericRequest(endpoint, "POST", queryParams, bodyParams);
     }
   
     static async genericPutRequest(endpoint, bodyParams) {
-      console.log("genericPutRequest called");
+      //console.log("genericPutRequest called");
       return await this.genericRequest(endpoint, "PUT", {}, bodyParams);
     }
   

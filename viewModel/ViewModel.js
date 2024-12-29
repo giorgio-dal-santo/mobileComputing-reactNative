@@ -186,14 +186,17 @@ export default class ViewModel {
     );
   }
 
-  async newOrder(userLocation, mid) {
+  async newOrder(userLocation, mid, lat, lng) {
     try {
       const order = await CommunicationController.buyMenu(
         this.sid,
         userLocation,
         mid
       );
-      ProvaOrdine = new Order(
+
+      const menu = await this.getMenuDetail(mid, lat, lng);
+
+      return new Order(
         order.oid,
         order.status,
         order.mid,
@@ -202,9 +205,9 @@ export default class ViewModel {
         order.deliveryLocation,
         order.deliveryTimestamp,
         order.expectedDeliveryTimestamp,
-        order.currentPosition
+        order.currentPosition,
+        menu.location
       );
-      return ProvaOrdine;
     } catch (error) {
       console.error("Error getting order status:", error);
     }
