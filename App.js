@@ -10,23 +10,12 @@ import * as Font from "expo-font";
 import { useFonts } from "expo-font";
 import { View, ActivityIndicator } from "react-native";
 import { globalStyle } from "./styles/GlobalStyle";
-import { Ionicons } from 'react-native-vector-icons';
+import { Ionicons } from "react-native-vector-icons";
 import LocationViewModel from "./viewModel/LocationViewModel";
 
-
-
 export default function App() {
-
-  // in order to use data in multiple screens, we need to create app context
-  // create app context: user data, order data, isRegistered
-  // app context provider has 4 parameters: user data initial value, order data initial value, isRegistered initial value, children
-  // user data initial value, order data initial value, isRegistered initial value are created by App.js
-
-  //FONTS LOADING
-  // State per il caricamento dei font
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
-  // Carica i font
   useEffect(() => {
     const loadFonts = async () => {
       await Font.loadAsync({
@@ -38,40 +27,42 @@ export default function App() {
     loadFonts();
   }, []);
 
-
-  // create ViewModel instance
   const viewModel = ViewModel.getViewModel();
-  const locationViewModel = LocationViewModel.getViewModel();
+  const locationViewModel = LocationViewModel.getLocationViewModel();
 
-  // create state: user data, order data, isRegistered
-  const [userData, setUserData] = useState(null)
-  const [orderData, setOrderData] = useState(null)
-  const [isRegistered, setIsRegistered] = useState(false)
-  const [userLocation, setUserLocation] = useState(null)
-  const [canUseLocation, setCanUseLocation] = useState(false)
+  const [userData, setUserData] = useState(null);
+  const [orderData, setOrderData] = useState(null);
+  const [isRegistered, setIsRegistered] = useState(false);
+  const [userLocation, setUserLocation] = useState(null);
+  const [canUseLocation, setCanUseLocation] = useState(false);
 
-  // load launch data
   useEffect(() => {
     const loadLaunchData = async () => {
       try {
-        const [userData, orderData, isRegistered] = await viewModel.loadLaunchData();
+        const [userData, orderData, isRegistered] =
+          await viewModel.loadLaunchData();
         setUserData(userData);
         setOrderData(orderData);
         setIsRegistered(isRegistered);
-        const [canUseLocation] = await locationViewModel.getPermission();
+
+        const canUseLocation = await locationViewModel.getPermission();
+        console.log("Can use location App: ", canUseLocation);
         setCanUseLocation(canUseLocation);
+
+        if (canUseLocation) {
+          const userLocation = await locationViewModel.getLocation();
+          setUserLocation(userLocation);
+        }
       } catch (error) {
         console.error("Error loading launch data: ", error);
       }
     };
 
     loadLaunchData();
-  }, []);
-
+  }, [canUseLocation]);
 
   const Tab = createBottomTabNavigator();
 
-  // Rendi il caricamento dei font
   if (!fontsLoaded) {
     return (
       <View style={globalStyle.container}>
@@ -81,34 +72,51 @@ export default function App() {
   }
 
   return (
-    <UserContextProvider userDataInit={userData} orderDataInit={orderData} isRegisteredInit={isRegistered} canUseLocationInit={canUseLocation} userLocationInit={userLocation}>
+    <UserContextProvider
+      userDataInit={userData}
+      orderDataInit={orderData}
+      isRegisteredInit={isRegistered}
+      canUseLocationInit={canUseLocation}
+      userLocationInit={userLocation}
+    >
       <NavigationContainer>
         <Tab.Navigator
           screenOptions={({ route }) => ({
             tabBarIcon: ({ focused, color, size }) => {
               let iconName;
 
-              if (route.name === 'HomeStack') {
-                iconName = focused ? 'home' : 'home-outline';  // Icona per la Home
-              } else if (route.name === 'ProfileStack') {
-                iconName = focused ? 'person' : 'person-outline';  // Icona per il Profilo
-              } else if (route.name === 'Order') {
-                iconName = focused ? 'cart' : 'cart-outline';  // Icona per il Carrello
+              if (route.name === "HomeStack") {
+                iconName = focused ? "home" : "home-outline"; // Icona per la Home
+              } else if (route.name === "ProfileStack") {
+                iconName = focused ? "person" : "person-outline"; // Icona per il Profilo
+              } else if (route.name === "Order") {
+                iconName = focused ? "cart" : "cart-outline"; // Icona per il Carrello
               }
 
               return <Ionicons name={iconName} size={size} color={color} />;
             },
-            tabBarActiveTintColor: 'black',  // Colore per la voce attiva
-            tabBarInactiveTintColor: 'gray',  // Colore per la voce inattiva
-            headerShown: false,  
+            tabBarActiveTintColor: "black", // Colore per la voce attiva
+            tabBarInactiveTintColor: "gray", // Colore per la voce inattiva
+            headerShown: false,
           })}
         >
-          <Tab.Screen name="HomeStack" component={HomeStackNavigator} options={{ title: 'Home' }} />
-          <Tab.Screen name="Order" component={OrderScreen} options={{ title: 'Order', headerShown: true }} />
-          <Tab.Screen name="ProfileStack" component={ProfileStackNavigator} options={{ title: 'Profile' }} />
+          <Tab.Screen
+            name="HomeStack"
+            component={HomeStackNavigator}
+            options={{ title: "Home" }}
+          />
+          <Tab.Screen
+            name="Order"
+            component={OrderScreen}
+            options={{ title: "Order", headerShown: true }}
+          />
+          <Tab.Screen
+            name="ProfileStack"
+            component={ProfileStackNavigator}
+            options={{ title: "Profile" }}
+          />
         </Tab.Navigator>
       </NavigationContainer>
     </UserContextProvider>
   );
-
 }

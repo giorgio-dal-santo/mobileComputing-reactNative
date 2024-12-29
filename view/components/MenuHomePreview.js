@@ -2,9 +2,7 @@ import { Button, Text, View, Image } from "react-native";
 import { globalStyle } from "../../styles/GlobalStyle";
 import { TouchableOpacity } from "react-native";
 
-export default function MenuHomePreview({ userLocation, menu, navigation }) {
-  //const { menu, userLocation} = route.params || {};
-
+export default function MenuHomePreview({ menu, navigation }) {
   return (
     <View style={globalStyle.card}>
       <Image
@@ -23,7 +21,7 @@ export default function MenuHomePreview({ userLocation, menu, navigation }) {
       </Text>
       <TouchableOpacity
         style={globalStyle.button}
-        onPress={() => navigation.navigate("MenuDetail", { menuid: menu.mid, lat: menu.location.lat, lng: menu.location.lng, userLocation: userLocation })}
+        onPress={() => navigation.navigate("MenuDetail", { menuid: menu.mid, lat: menu.location.lat, lng: menu.location.lng })}
       >
         <Text style={globalStyle.buttonText}>Menu Detail</Text>
       </TouchableOpacity>

@@ -7,108 +7,130 @@ import { Linking } from "react-native";
 import MapView from "react-native-maps";
 import AsyncStorage from "../model/AsyncStorageManager";
 
-
-
 export default class LocationViewModel {
-    static #LocationViewModel = null;
+  static #LocationViewModel = null;
+  //#locationSubscription = null;
 
-    constructor() {
-        if (LocationViewModel.#LocationViewModel) {
-            throw new Error("Access should happen via getLocationViewModel()");
-        }
+  constructor() {
+    if (LocationViewModel.#LocationViewModel) {
+      throw new Error("Access should happen via getLocationViewModel()");
+    }
+  }
 
+  static getLocationViewModel() {
+    if (!LocationViewModel.#LocationViewModel) {
+      LocationViewModel.#LocationViewModel = new LocationViewModel();
+    }
+    return LocationViewModel.#LocationViewModel;
+  }
+
+  async canUseLocation() {
+    return await AsyncStorage.getCanUseLocation();
+  }
+
+  async getPermission() {
+    const grantedPermission = await Location.getForegroundPermissionsAsync();
+    console.log("Permission granted: ", grantedPermission.status);
+
+    if (grantedPermission.status === "granted") {
+      await AsyncStorage.setCanUseLocation(true);
+    } else if (!grantedPermission.canAskAgain) {
+      Alert.alert(
+        "Permessi posizione",
+        "I permessi per accedere alla posizione sono stati negati. Per attivarli, vai nelle impostazioni del dispositivo.",
+        [
+          { text: "Impostazioni", onPress: () => Linking.openSettings() },
+          { text: "Annulla" },
+        ]
+      );
+      await AsyncStorage.setCanUseLocation(false);
+    } else {
+      await AsyncStorage.setCanUseLocation(false);
     }
 
-    static getLocationViewModel() {
-        if (!LocationViewModel.#LocationViewModel) {
-            LocationViewModel.#LocationViewModel = new LocationViewModel();
-        }
-        return LocationViewModel.#LocationViewModel;
+    const canUseLocation = await this.canUseLocation();
+
+    console.log("Can use location LocationViewModel: ", canUseLocation);
+
+    return canUseLocation;
+  }
+
+  async askForPermission() {
+    const permission = await Location.requestForegroundPermissionsAsync();
+    if (permission.status === "granted") {
+      await AsyncStorage.setCanUseLocation(true);
+    }
+  }
+
+  async getLocation() {
+    const canUseLocation = await this.canUseLocation();
+
+    if (!canUseLocation) {
+      console.warn("Permessi per la posizione non concessi.");
+      return null;
     }
 
+    try {
+      const location = await Location.getCurrentPositionAsync({
+        accuracy: Location.Accuracy.High,
+      });
+      const formattedLocation = {
+        latitude: parseFloat(location.coords.latitude),
+        longitude: parseFloat(location.coords.longitude),
+      }
+      console.log("User location: ", formattedLocation);
+      return formattedLocation;
+    } catch (error) {
+      console.error("Errore nel recupero della posizione: ", error);
+      return null;
+    }
+  }
+}
 
-    async canUseLocation() {
-        return await AsyncStorage.getCanUseLocation();
+
+/*
+  async startWatchingLocation(onLocationUpdate, onError) {
+    const canUseLocation = await this.canUseLocation();
+    if (!canUseLocation) {
+      console.log("Non posso usare la posizione");
+      return null;
     }
 
-    async getPermission () {
-        const grantedPermission = await Location.getForegroundPermissionsAsync();
-        //const canUseLocation = await AsyncStorage.getCanUseLocation();
-        //console.log("Permission: ", grantedPermission);
-        if (grantedPermission.status === "granted") {
-            await AsyncStorage.setCanUseLocation(true);
-        } else if (!grantedPermission.canAskAgain) {
-            Alert.alert(
-                "Permessi posizione",
-                "I permessi per accedere alla posizione sono stati negati. Per attivarli, vai nelle impostazioni del dispositivo.",
-                [
-                    { text: "Impostazioni", onPress: () => Linking.openSettings() },
-                    { text: "Annulla" },
-                ]
-            );
-           await AsyncStorage.setCanUseLocation(false);
-
-        } else {
-            const permission = await Location.requestForegroundPermissionsAsync();
-            if (permission.status === "granted") {
-                await AsyncStorage.setCanUseLocation(true);
-            }
+    try {
+      this.#locationSubscription = await Location.watchPositionAsync(
+        {
+          accuracy: Location.Accuracy.BestForNavigation,
+          timeInterval: 2000, // Ogni 2 secondi
+          distanceInterval: 1, // Ogni 1 metro
+        },
+        (newLocation) => {
+          const { latitude, longitude } = newLocation.coords;
+          console.log("Location aggiornata: ", latitude, longitude);
+          if (onLocationUpdate) {
+            onLocationUpdate(newLocation);
+          }
         }
+      );
+    } catch (error) {
+      console.error("Errore durante l'aggiornamento della posizione:", error);
+      if (onError) {
+        onError(error);
+      }
+    }
+  }
 
-        const canUseLocation = await this.canUseLocation();
+  stopWatchingLocation() {
+    if (this.#locationSubscription) {
+      this.#locationSubscription.remove();
+      this.#locationSubscription = null;
+      console.log("Monitoraggio posizione interrotto");
+    }
+  }
+}
+  */
 
-        return [canUseLocation];
-    };
-
-
-    async startLocationUpdates () {
-        try {
-            const hasPermission = await getPermission();
-            if (!hasPermission) return;
-
-
-            const subscription = await Location.watchPositionAsync(
-                {
-                    accuracy: Location.Accuracy.BestForNavigation,
-                    timeInterval: 2000, // Ogni 2 secondi
-                    distanceInterval: 1, // Ogni 1 metro
-                },
-                (newLocation) => {
-                    setLocation(newLocation);
-                    console.log("Location aggiornata: ", newLocation);
-                }
-            );
-
-
-            setLocationSubscription(subscription);
-        } catch (error) {
-            console.error("Errore durante l'aggiornamento della posizione:", error);
-        }
-    };
-
-
-    stopLocationUpdates() {
-        if (locationSubscription) {
-            locationSubscription.remove();
-            setLocationSubscription(null);
-            console.log("Location subscription rimossa");
-        }
-    };
-
-    /*
-        useEffect(() => {
-            return () => {
-                stopLocationUpdates();
-            };
-        }, []);
-    */
-
-
-    /*
-    const handleRegionChanged = (region) => {
-      console.log(region);
-    };
-   */
+/*
+   
     render = function () {
         return (
             <View style={styles.container}>
@@ -128,10 +150,6 @@ export default class LocationViewModel {
         );
     };
 
-
-}
-
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -147,5 +165,4 @@ const styles = StyleSheet.create({
         left: 0,
     },
 });
-
-
+*/

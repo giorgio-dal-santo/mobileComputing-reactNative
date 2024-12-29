@@ -7,6 +7,7 @@ export const UserContextProvider = ({
   orderDataInit,
   isRegisteredInit,
   userLocationInit,
+  canUseLocationInit,
   children,
 }) => {
   const [userData, setUserData] = useState(userDataInit);
@@ -33,8 +34,8 @@ export const UserContextProvider = ({
   }, [userLocationInit]);
 
   useEffect(() => {
-    setCanUseLocation(canUseLocation);
-  }, [canUseLocation]);
+    setCanUseLocation(canUseLocationInit);
+  }, [canUseLocationInit]);
 
   return (
     <UserContext.Provider

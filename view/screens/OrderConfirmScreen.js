@@ -9,16 +9,15 @@ import { TouchableOpacity } from "react-native";
 
 export default function OrderConfirmScreen({ route, navigation }) {
 
-  const { menuid, userLocation } = route.params || {};
+  const { menuid } = route.params || {}; // route is neccessary?
 
-  const { orderData, setOrderData } = useContext(UserContext);
+  const { orderData, setOrderData, userLocation } = useContext(UserContext);
 
   useEffect(() => {
     const viewModel = ViewModel.getViewModel();
     const fetchNewOrder = async () => {
       try {
         const newOrder = await viewModel.newOrder(userLocation, menuid);
-        //console.log("newOrder", newOrder);
         setOrderData(newOrder);
       } catch (error) {
         console.error("Errore nel caricamento del nuovo ordine:", error);
@@ -27,7 +26,6 @@ export default function OrderConfirmScreen({ route, navigation }) {
     fetchNewOrder();
   }, [userLocation, menuid])
 
-  //console.log("order data", orderData);
 
   return (
     <SafeAreaView style={globalStyle.container}>

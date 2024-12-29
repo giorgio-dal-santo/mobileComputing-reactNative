@@ -7,13 +7,12 @@ import MenuCardPreview from "../components/MenuCardPreview";
 
 
 export default function MenuDetailScreen({ route, navigation }) {
-    const { menuid, lat, lng, userLocation } = route.params || {};
+    const { menuid, lat, lng } = route.params || {};
 
     const viewModel = ViewModel.getViewModel();
     const [detailedMenu, setDetailedMenu] = useState(null);
 
     useEffect(() => {
-        // Funzione asincrona per ottenere i dettagli del menu
         const fetchMenuDetails = async () => {
             try {
                 const detailedMenu = await viewModel.getMenuDetail(menuid, lat, lng);
@@ -51,8 +50,7 @@ export default function MenuDetailScreen({ route, navigation }) {
                 style={globalStyle.button}
                 onPress={() =>
                   navigation.navigate("OrderConfirm", {
-                    menuid: detailedMenu.mid,
-                    userLocation: userLocation,
+                    menuid: detailedMenu.mid
                   })
                 }
               >

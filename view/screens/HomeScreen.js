@@ -2,6 +2,7 @@ import { Button, SafeAreaView, ScrollView, Text, View } from "react-native";
 import { globalStyle } from "../../styles/GlobalStyle";
 import { useState } from "react";
 import ViewModel from "../../viewModel/ViewModel";
+import LocationViewModel from "../../viewModel/LocationViewModel";
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback } from "react";
 import MenuHomePreview from "../components/MenuHomePreview";
@@ -12,16 +13,14 @@ import { TouchableOpacity } from "react-native";
 export default function HomeScreen({ navigation }) {
   const [nearbyMenus, setNearbyMenus] = useState([]);
 
-  // instead of using state we have to use context
-  const { isRegistered, userLocation } = useContext(UserContext);
-  //const [isRegistered, setIsRegistered] = useState(null);
+  const { isRegistered, userLocation, setUserLocation, canUseLocation } = useContext(UserContext);
 
-  //const userLocation = { lat: 45.4642, lng: 9.19 };
+  const locationViewModel = LocationViewModel.getLocationViewModel();
 
   const loadData = async () => {
     try {
       const viewModel = ViewModel.getViewModel();
-      if (isRegistered) {
+      if (isRegistered && canUseLocation) {
         const nearbyMenus = await viewModel.getNearbyMenus(userLocation);
         setNearbyMenus(nearbyMenus);
       }
@@ -33,16 +32,28 @@ export default function HomeScreen({ navigation }) {
   useFocusEffect(
     useCallback(() => {
       loadData();
-    }, [isRegistered])
+    }, [isRegistered, canUseLocation, userLocation])
   );
+
+  const handleAllowLocation = async () => {
+    await locationViewModel.askForPermission();
+    const userLocation = await locationViewModel.getUserLocation();
+    setUserLocation(userLocation);
+  }
 
   return (
     <SafeAreaView style={globalStyle.container}>
       <ScrollView>
         <View style={globalStyle.container}>
-          {isRegistered ? (
-            <MenuList nearbyMenus={nearbyMenus} userLocation={userLocation} navigation={navigation} />
-          ) : (
+          {isRegistered && canUseLocation ? (
+            <MenuList nearbyMenus={nearbyMenus} navigation={navigation} />
+          ) : isRegistered && !canUseLocation ? (
+            <View>
+              <Text>Location not available</Text>
+              <Button title="Allow location" onPress={handleAllowLocation} />
+            </View>
+          )
+          : (
             <NotRegister navigation={navigation} />
           )}
         </View>
@@ -51,13 +62,12 @@ export default function HomeScreen({ navigation }) {
   );
 }
 
-const MenuList = ({ nearbyMenus, userLocation, navigation }) => {
-
+const MenuList = ({ nearbyMenus, navigation }) => {
   return (
     <View style={globalStyle.container}>
       <Text style={globalStyle.title}>Nearby Menus</Text>
       {nearbyMenus.map((menu) => (
-        <MenuHomePreview key={menu.mid} menu={menu} userLocation={userLocation} navigation={navigation} />
+        <MenuHomePreview key={menu.mid} menu={menu} navigation={navigation} />
       ))}
     </View>
   );
