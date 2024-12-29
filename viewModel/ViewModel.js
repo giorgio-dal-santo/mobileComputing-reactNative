@@ -215,11 +215,30 @@ export default class ViewModel {
   }
 
 
-  async getOrderDetail(oid) {
-    const orderDetail = await CommunicationController.getOrderDetail(
-      oid,
-      this.sid
-    );
-    return orderDetail;
+  async getOrderDetail(oid, mid, lat, lng) {
+    try {
+      const orderDetail = await CommunicationController.getOrderDetail(
+        oid,
+        this.sid
+      );
+  
+      const menu = await this.getMenuDetail(mid, lat, lng);
+  
+      return new Order(
+        orderDetail.oid,
+        orderDetail.status,
+        orderDetail.mid,
+        orderDetail.uid,
+        orderDetail.creationTimestamp,
+        orderDetail.deliveryLocation,
+        orderDetail.deliveryTimestamp,
+        orderDetail.expectedDeliveryTimestamp,
+        orderDetail.currentPosition,
+        menu.location
+      );
+    } catch (error) {
+      console.error("Error getting order details:", error);
+    }
+
   }
 }

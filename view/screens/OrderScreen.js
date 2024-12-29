@@ -27,32 +27,65 @@ export default function OrderScreen({ navigation }) {
   const [lastOrder, setLastOrder] = useState(null);
   const [menu, setMenu] = useState(null);
 
-  useEffect(() => {
-    const fetchLastOrder = async () => {
-      try {
-        const fetchedOrder = await viewModel.getOrderDetail(orderData.oid);
+  const fetchLastOrder = async () => {
+    try {
+      if (!menu && orderData.mid && orderData.menuLocation) {
+        const fetchedMenu = await viewModel.getMenuDetail(
+          orderData.mid,
+          orderData.menuLocation.lat,
+          orderData.menuLocation.lng
+        );
+        setMenu(fetchedMenu);
+      }
+
+      if (menu) {
+        const fetchedOrder = await viewModel.getOrderDetail(
+          orderData.oid,
+          menu.mid,
+          menu.location.lat,
+          menu.location.lng
+        );
         setLastOrder(fetchedOrder);
-
         console.log("Fetched Order: ", fetchedOrder);
+      }
+    } catch (error) {
+      console.error("Error during data initialization:", error);
+    }
+  };
 
-        if (fetchedOrder && fetchedOrder.mid && fetchedOrder.menuLocation) {
-          const fetchedMenu = await viewModel.getMenuDetail(
-            fetchedOrder.mid,
-            fetchedOrder.menuLocation.lat,
-            fetchedOrder.menuLocation.lng
-          );
-          setMenu(fetchedMenu);
+  const fetchData = async () => {
+    if (orderData && orderData.oid) await fetchLastOrder();
+  };
 
-          console.log("Fetched Menu: ", fetchedMenu);
-          
-        }
-      } catch (error) {
-        console.error("Error during data initialization:", error);
+  useEffect(() => {
+    if (orderData && orderData.oid) {
+      fetchLastOrder();
+    }
+  }, [orderData, menu]);
+
+  const isFocused = useIsFocused(); 
+  const intervalId = useRef(null);
+
+  useEffect(() => {
+    if (isFocused) {
+      console.log("Screen is focused, starting timer");
+      fetchData();
+      intervalId.current = setInterval(fetchData, 5000);
+    } else {
+      console.log("Screen is not focused, stopping timer");
+      if (intervalId.current) {
+        clearInterval(intervalId.current);
+        intervalId.current = null;
+      }
+    }
+
+    return () => {
+      if (intervalId.current) {
+        clearInterval(intervalId.current);
+        intervalId.current = null;
       }
     };
-
-    if (orderData && orderData.oid) fetchLastOrder();
-  }, [orderData]);
+  }, [isFocused]);
 
   /*
 
@@ -73,36 +106,6 @@ export default function OrderScreen({ navigation }) {
       console.error("Error fetching the last order details:", err);
     }
   };
-
-  const fetchData = async () => {
-    if (orderData && orderData.oid) await fetchLastOrder();
-  };
-
-  // Auto - Reload every 5 seconds
-  const isFocused = useIsFocused(); // Tracks if the screen is currently focused
-  const intervalId = useRef(null);
-
-  useEffect(() => {
-    if (isFocused) {
-      console.log("Screen is focused, starting timer");
-      fetchData();
-      intervalId.current = setInterval(fetchData, 5000);
-    } else {
-      console.log("Screen is not focused, stopping timer");
-      if (intervalId.current) {
-        clearInterval(intervalId.current);
-        intervalId.current = null;
-      }
-    }
-
-    // Cleanup function to stop the timer when the component unmounts
-    return () => {
-      if (intervalId.current) {
-        clearInterval(intervalId.current);
-        intervalId.current = null;
-      }
-    };
-  }, [isFocused]);
   
   */
 
@@ -124,6 +127,8 @@ export default function OrderScreen({ navigation }) {
 }
 
 const OrderStatus = ({ orderData, menu, navigation }) => {
+  const { userData } = useContext(UserContext);
+
   const render = () => {
     console.log("map render");
     if (!orderData) {
@@ -145,7 +150,7 @@ const OrderStatus = ({ orderData, menu, navigation }) => {
     );
   };
 
-  if (!orderData) {
+  if (!userData.lastOid) {
     return (
       <View>
         <Text style={globalStyle.title}>No order yet</Text>
