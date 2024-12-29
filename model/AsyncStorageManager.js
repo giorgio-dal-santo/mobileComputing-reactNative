@@ -60,7 +60,6 @@ export default class AsyncStorageManager {
 
   static async setCanUseLocation(canUseLocation) {
     try {
-      console.log("Permission to set: ", canUseLocation);
       await AsyncStorage.setItem("canUseLocation", JSON.stringify(canUseLocation));
     } catch (error) {
       console.error("Errore durante il salvataggio dello stato di utilizzo della posizione:", error);

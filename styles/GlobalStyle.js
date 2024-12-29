@@ -149,6 +149,16 @@ picker: {
     color: "#555",
     marginBottom: 10,
   },
+  map: {
+    flex: 1,
+    height: 300,
+},
+mapContainer: {
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+},
 
 
 

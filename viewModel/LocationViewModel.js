@@ -34,6 +34,7 @@ export default class LocationViewModel {
 
     if (grantedPermission.status === "granted") {
       await AsyncStorage.setCanUseLocation(true);
+      return true;
     } else if (!grantedPermission.canAskAgain) {
       Alert.alert(
         "Permessi posizione",
@@ -44,15 +45,11 @@ export default class LocationViewModel {
         ]
       );
       await AsyncStorage.setCanUseLocation(false);
+      return false;
     } else {
       await AsyncStorage.setCanUseLocation(false);
+      return false;
     }
-
-    const canUseLocation = await this.canUseLocation();
-
-    console.log("Can use location LocationViewModel: ", canUseLocation);
-
-    return canUseLocation;
   }
 
   async askForPermission() {
@@ -75,8 +72,8 @@ export default class LocationViewModel {
         accuracy: Location.Accuracy.High,
       });
       const formattedLocation = {
-        latitude: parseFloat(location.coords.latitude),
-        longitude: parseFloat(location.coords.longitude),
+        lat: location.coords.latitude,
+        lng: location.coords.longitude,
       }
       console.log("User location: ", formattedLocation);
       return formattedLocation;
@@ -150,19 +147,5 @@ export default class LocationViewModel {
         );
     };
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: "#fff",
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    map: {
-        position: "absolute",
-        top: 0,
-        right: 0,
-        bottom: 0,
-        left: 0,
-    },
-});
+
 */

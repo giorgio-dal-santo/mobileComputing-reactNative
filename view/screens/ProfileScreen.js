@@ -35,8 +35,6 @@ export default function ProfileScreen({ navigation }) {
         orderData.deliveryLocation.lng
       );
       setMenu(menu);
-      //console.log("Menu", menu);
-      //console.log("Menu Name:", menu.name);
     } catch (err) {
       console.error("Error fetching the last order details:", err);
     }

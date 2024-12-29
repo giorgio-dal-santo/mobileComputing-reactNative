@@ -1,7 +1,15 @@
-import { Text, View, SafeAreaView, ScrollView } from "react-native";
+import {
+  Text,
+  View,
+  SafeAreaView,
+  ScrollView,
+  Button,
+  StatusBar,
+} from "react-native";
 import { useEffect, useState } from "react";
 import { globalStyle } from "../../styles/GlobalStyle";
 import ViewModel from "../../viewModel/ViewModel";
+import LocationViewModel from "../../viewModel/LocationViewModel";
 import { useIsFocused } from "@react-navigation/native";
 import { useRef } from "react";
 import { useContext } from "react";
@@ -9,38 +17,35 @@ import { UserContext } from "../context/UserContext";
 import MenuCardPreview from "../components/MenuCardPreview";
 import { TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-
-
-
-
+import MapView from "react-native-maps";
 
 //Visualizza l'ordine in corso o l'ultimo
-export default function OrderScreen({ route, navigation }) {
-
-  const { isRegistered, userData, orderData, setOrderData } = useContext(UserContext);
+export default function OrderScreen({ navigation }) {
+  const { isRegistered, orderData, setOrderData } = useContext(UserContext);
 
   const viewModel = ViewModel.getViewModel();
   const [menu, setMenu] = useState(null);
 
   const fetchLastOrder = async () => {
-    console.log("Executing Fetch")
+    console.log("Executing Fetch");
     try {
       const orderDetails = await viewModel.getOrderDetail(orderData.oid);
       setOrderData(orderDetails);
-      const menu = await viewModel.getMenuDetail(orderData.mid, orderData.deliveryLocation.lat, orderData.deliveryLocation.lng);
+      console.log("order data", orderData);
+      const menu = await viewModel.getMenuDetail(
+        orderData.mid,
+        orderData.deliveryLocation.lat,
+        orderData.deliveryLocation.lng
+      );
       setMenu(menu);
-      //console.log("Order Details:", orderDetails);
-      //console.log("Order Data Aggiornato:", orderData);
     } catch (err) {
       console.error("Error fetching the last order details:", err);
     }
-  }
-
-  const fetchData = async () => {
-    if (orderData && orderData.oid)
-      await fetchLastOrder();
   };
 
+  const fetchData = async () => {
+    if (orderData && orderData.oid) await fetchLastOrder();
+  };
 
   // Auto - Reload every 5 seconds
   const isFocused = useIsFocused(); // Tracks if the screen is currently focused
@@ -68,13 +73,15 @@ export default function OrderScreen({ route, navigation }) {
     };
   }, [isFocused]);
 
-
-
   return (
     <SafeAreaView style={globalStyle.container}>
       <ScrollView>
         {isRegistered ? (
-          <OrderStatus orderData={orderData} menu={menu} />
+          <OrderStatus
+            orderData={orderData}
+            menu={menu}
+            navigation={navigation}
+          />
         ) : (
           <NotRegister navigation={navigation} />
         )}
@@ -83,69 +90,96 @@ export default function OrderScreen({ route, navigation }) {
   );
 }
 
-const OrderStatus = ({ menu, orderData }) => {
+const OrderStatus = ({ menu, orderData, navigation }) => {
+  const { canUseLocation, userLocation, setUserLocation } =
+    useContext(UserContext);
 
-  //console.log("OrderData:", orderData);
+  const locationViewModel = LocationViewModel.getLocationViewModel();
 
-  const navigation = useNavigation();  // Ottieni l'oggetto navigation
+  const handleAllowLocation = async () => {
+    await locationViewModel.askForPermission();
+    const userLocation = await locationViewModel.getUserLocation();
+    setUserLocation(userLocation);
+  };
+
+  const render = () => {
+    console.log("map render");
+    console.log("userLocation", userLocation);
+    if (!userLocation) {
+      return <Text>Loading...</Text>;
+    }
+
+    return (
+      <View style={globalStyle.mapContainer}>
+        <MapView
+          style={globalStyle.map}
+          showsUserLocation={true}
+          //onRegionChange={handleRegionChanged}
+          initialRegion={{
+            latitude: userLocation.lat,
+            longitude: userLocation.lng,
+            latitudeDelta: 0.01,
+            longitudeDelta: 0.01,
+          }}
+        ></MapView>
+      </View>
+    );
+  };
+
   return (
     <View style={globalStyle.container}>
-      {(orderData.status === "ON_DELIVERY") ? (
+      {orderData.status === "ON_DELIVERY" ? (
         <View>
-          <Text style={globalStyle.title}>Your order will arrive in: {menu?.deliveryTime} min</Text>
-
-          <Text style={globalStyle.title}>MAPPA</Text>
+          <Text style={globalStyle.title}>
+            Your order will arrive in: {menu?.deliveryTime} min
+          </Text>
+          <Text style={globalStyle.title}>MAPPA todo</Text>
           <MenuCardPreview menu={menu} />
         </View>
-      ) : (orderData.status === "COMPLETED") ? (
+      ) : orderData.status === "COMPLETED" ? (
         <View>
           <Text style={globalStyle.title}>Your order has been delivered</Text>
-          
-          
-          
           <Text>MAPPA</Text>
-          <View style={styles.container}>
+          <View style={globalStyle.container}>
             <Text>Location Information</Text>
-            {canUseLocation && location ? (
+            {canUseLocation && userLocation ? (
               <View>
                 <View>
                   <Text>
-                    Latitude: {location.coords.latitude} - Longitude:{" "}
-                    {location.coords.longitude}
+                    Latitude: {userLocation.lat} - Longitude: {userLocation.lng}
                   </Text>
                 </View>
                 <View>{render()}</View>
+                <MenuCardPreview menu={menu} />
+
+                <TouchableOpacity
+                  style={globalStyle.button}
+                  onPress={() =>
+                    navigation.reset({
+                      index: 0, // Index of the route to reset to (0 bc is Home)
+                      routes: [
+                        { name: "HomeStack", params: { screen: "Home" } },
+                      ],
+                    })
+                  }
+                >
+                  <Text style={globalStyle.buttonText}>Order Again</Text>
+                </TouchableOpacity>
               </View>
             ) : !canUseLocation ? (
               <View>
-                <Text>Nessun accesso a posizione</Text>
-                <Button title="Attiva posizione" onPress={startLocationUpdates} />
+                <Text>Location not available</Text>
+                <Button title="Allow location" onPress={handleAllowLocation} />
               </View>
             ) : (
-              <Text>Caricamento...</Text>
+              <View>
+                <Text>Loading...</Text>
+              </View>
             )}
             <StatusBar style="auto" />
           </View>
-
-
-
-          <MenuCardPreview menu={menu} />
-
-          <TouchableOpacity
-            style={globalStyle.button}
-            onPress={() =>
-              navigation.reset({
-                index: 0, // Index of the route to reset to (0 bc is Home)
-                routes: [{ name: "HomeStack", params: { screen: "Home" } }],
-              })
-            }
-          >
-            <Text style={globalStyle.buttonText}>Order Again</Text>
-          </TouchableOpacity>
-
-
         </View>
-      ) : (
+      ) : orderData.status === null ? (
         <View>
           <Text style={globalStyle.title}>No order yet</Text>
 
@@ -156,14 +190,16 @@ const OrderStatus = ({ menu, orderData }) => {
             <Text style={globalStyle.buttonText}>Order</Text>
           </TouchableOpacity>
         </View>
+      ) : (
+        <View>
+          <Text>loading</Text>
+        </View>
       )}
-
     </View>
   );
 };
 
 const NotRegister = ({ navigation }) => {
-
   return (
     <View style={globalStyle.container}>
       <Text style={globalStyle.title}>User not registered</Text>
@@ -176,12 +212,3 @@ const NotRegister = ({ navigation }) => {
     </View>
   );
 };
-
-
-
-
-
-
-
-
-
