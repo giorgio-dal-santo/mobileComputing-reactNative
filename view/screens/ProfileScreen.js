@@ -1,13 +1,6 @@
 import ViewModel from "../../viewModel/ViewModel";
 import { useState } from "react";
-import {
-  Button,
-  Text,
-  View,
-  Image,
-  ScrollView,
-  SafeAreaView,
-} from "react-native";
+import { Text, View, ScrollView, SafeAreaView } from "react-native";
 import { globalStyle } from "../../styles/GlobalStyle";
 import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
@@ -15,75 +8,44 @@ import { useEffect } from "react";
 import { useIsFocused } from "@react-navigation/native";
 import { useRef } from "react";
 import MenuCardPreview from "../components/MenuCardPreview";
-import { userLocation } from "../components/MenuHomePreview";
-
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { TouchableOpacity } from "react-native";
 
 export default function ProfileScreen({ navigation }) {
-  //instead of using state we have to use context
-  const { isRegistered, userData, orderData, userLocation } =
+  const { isRegistered, userData, orderData, setOrderData, userLocation } =
     useContext(UserContext);
 
   const viewModel = ViewModel.getViewModel();
 
-  const [lastOrder, setLastOrder] = useState(null);
   const [menu, setMenu] = useState(null);
-  /*
-  const fetchLastOrder = async () => {
-    try {
-      if (!menu && orderData.mid && orderData.menuLocation) {
-        const fetchedMenu = await viewModel.getMenuDetail(
-          orderData.mid,
-          orderData.menuLocation.lat,
-          orderData.menuLocation.lng
-        );
-        setMenu(fetchedMenu);
-        console.log("Fetched Menu: ", fetchedMenu.mid);
-      }
-      
-      if (menu && orderData) {
-        const fetchedOrder = await viewModel.getOrderDetail(
-          orderData.oid,
-          menu.mid,
-          menu.location.lat,
-          menu.location.lng
-        );
-        setLastOrder(fetchedOrder);
-        console.log("Fetched Order: ", fetchedOrder);
-      }
-    } catch (error) {
-      console.error("Error during data initialization:", error);
-    }
-  };
 
-  const fetchData = async () => {
-    //console.log("Fetching Data 1");
-    if (orderData && orderData.oid) await fetchLastOrder();
-  };
-*/
-  // Auto - Reload every 5 seconds
-  const isFocused = useIsFocused(); 
-  
+  const isFocused = useIsFocused();
+  const intervalId = useRef(null);
+  const isFetching = useRef(false);
+
   useEffect(() => {
-    let timeoutId; // Identificativo del timeout per cancellarlo quando necessario
-  
     const fetchAllData = async () => {
+      if (isFetching.current) return;
+      isFetching.current = true;
+
       try {
         console.log("Fetching data...");
-  
-        // Controllo se il menu è già stato caricato
-        if (!menu && orderData?.mid && orderData?.menuLocation) {
+
+        if (orderData?.mid && orderData?.menuLocation) {
           const fetchedMenu = await viewModel.getMenuDetail(
             orderData.mid,
             orderData.menuLocation.lat,
             orderData.menuLocation.lng
           );
-          setMenu(fetchedMenu);
-          console.log("Fetched Menu: ", fetchedMenu);
+          setMenu((prevMenu) => {
+            if (!prevMenu || prevMenu.mid !== fetchedMenu.mid) {
+              console.log("Fetched Menu mid: ", fetchedMenu.mid);
+              return fetchedMenu;
+            }
+            return prevMenu;
+          });
         }
-  
-        // Controllo se i dettagli dell'ordine sono disponibili
+
         if (menu && orderData?.oid) {
           const fetchedOrder = await viewModel.getOrderDetail(
             orderData.oid,
@@ -91,30 +53,39 @@ export default function ProfileScreen({ navigation }) {
             menu.location.lat,
             menu.location.lng
           );
-          setLastOrder(fetchedOrder);
-          console.log("Fetched Order: ", fetchedOrder);
+          setOrderData({
+            ...orderData,
+            ...fetchedOrder,
+          });
+          console.log(
+            "Updated OrderData oid + status: ",
+            fetchedOrder.oid,
+            fetchedOrder.status
+          );
         }
       } catch (error) {
         console.error("Error fetching data:", error);
-      }
-  
-      // Pianifica il prossimo aggiornamento dopo 5 secondi
-      if (isFocused) {
-        timeoutId = setTimeout(fetchAllData, 5000);
+      } finally {
+        isFetching.current = false;
       }
     };
-  
+
     if (isFocused) {
-      fetchAllData(); // Avvia il ciclo di aggiornamento quando la schermata è focalizzata
+      console.log("Screen profile is focused");
+      fetchAllData();
+      intervalId.current = setInterval(fetchAllData, 5000);
+    } else {
+      console.log("Screen profile is not focused");
+      clearInterval(intervalId.current);
     }
-  
+
     return () => {
-      // Pulisci il timeout quando la schermata non è più focalizzata
-      if (timeoutId) {
-        clearTimeout(timeoutId);
+      if (intervalId.current) {
+        clearInterval(intervalId.current);
+        intervalId.current = null;
       }
     };
-  }, [isFocused, orderData, menu]); // Dipendenze necessarie
+  }, [isFocused]);
 
   if (!isRegistered) {
     return (
@@ -135,16 +106,6 @@ export default function ProfileScreen({ navigation }) {
       </View>
     );
   }
-
-  /*
-    const getMenuName = async () => {
-        console.log("Order Data:", orderData);
-        console.log("delivery location:", orderData.deliveryLocation);
-        const menuName = await viewModel.getMenuDetail(orderData.mid, orderData.deliveryLocation.lat, orderData.deliveryLocation.lng).name;
-        console.log("Menu Name:", menuName);
-        return menuName;
-    };
-    */
 
   return (
     <SafeAreaView style={globalStyle.container}>
@@ -181,8 +142,7 @@ export default function ProfileScreen({ navigation }) {
             </View>
           </View>
 
-          {
-          lastOrder?.oid ? (
+          {userData?.lastOid || orderData.oid ? (
             <View style={globalStyle.container}>
               <View
                 style={{
@@ -206,7 +166,7 @@ export default function ProfileScreen({ navigation }) {
                   ]}
                   onPress={() =>
                     navigation.navigate("HomeStack", {
-                      screen: "MenuDetail", // Specifica la schermata nidificata
+                      screen: "MenuDetail",
                       params: {
                         menuid: menu.mid,
                         lat: menu.location.lat,
@@ -225,7 +185,7 @@ export default function ProfileScreen({ navigation }) {
                 <MenuCardPreview menu={menu} />
               </View>
             </View>
-          ) : !lastOrder ? (
+          ) : !userData.lastOid && !orderData.oid ? (
             <View
               style={{
                 alignItems: "center",
@@ -238,12 +198,9 @@ export default function ProfileScreen({ navigation }) {
             </View>
           ) : (
             <Text>Loading...</Text>
-          )
-        }
+          )}
         </View>
       </ScrollView>
     </SafeAreaView>
   );
 }
-
-//<Text>Order Status: {orderData?.status || "N/A"}</Text>

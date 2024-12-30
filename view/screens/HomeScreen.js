@@ -43,15 +43,14 @@ export default function HomeScreen({ navigation }) {
   const handleAllowLocation = async () => {
     try {
       await locationViewModel.askForPermission();
-  
+
       const canUseLocation = await locationViewModel.canUseLocation();
       setCanUseLocation(canUseLocation);
-    
+
       if (canUseLocation) {
         locationViewModel.startWatchingLocation(
           (location) => {
             setUserLocation(location);
-            console.log("User location App: ", location);
           },
           (error) => {
             console.error("Error while watching location: ", error);
@@ -62,8 +61,6 @@ export default function HomeScreen({ navigation }) {
       console.error("Error while handling location permission: ", error);
     }
   };
-  
-  
 
   useFocusEffect(
     useCallback(() => {
@@ -77,13 +74,17 @@ export default function HomeScreen({ navigation }) {
     <SafeAreaView style={globalStyle.container}>
       <ScrollView>
         <View style={globalStyle.container}>
-          {
-          isRegistered && canUseLocation && userLocation ? (
+          {isRegistered && canUseLocation && userLocation ? (
             <MenuList nearbyMenus={nearbyMenus} navigation={navigation} />
           ) : isRegistered && !canUseLocation ? (
             <View>
               <Text>Location not available</Text>
-              <Button title="Allow location" onPress={async () => {await handleAllowLocation()}} />
+              <Button
+                title="Allow location"
+                onPress={async () => {
+                  await handleAllowLocation();
+                }}
+              />
             </View>
           ) : !isRegistered ? (
             <NotRegister navigation={navigation} />
