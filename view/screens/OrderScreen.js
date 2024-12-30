@@ -26,7 +26,9 @@ export default function OrderScreen({ navigation }) {
 
   const [lastOrder, setLastOrder] = useState(null);
   const [menu, setMenu] = useState(null);
+  //const [isFetching, setIsFetching] = useState(false);
 
+  /*
   const fetchLastOrder = async () => {
     try {
       if (!menu && orderData.mid && orderData.menuLocation) {
@@ -36,9 +38,10 @@ export default function OrderScreen({ navigation }) {
           orderData.menuLocation.lng
         );
         setMenu(fetchedMenu);
+        console.log("Fetched Menu: ", fetchedMenu.mid);
       }
-
-      if (menu) {
+      
+      if (menu && orderData) {
         const fetchedOrder = await viewModel.getOrderDetail(
           orderData.oid,
           menu.mid,
@@ -54,67 +57,94 @@ export default function OrderScreen({ navigation }) {
   };
 
   const fetchData = async () => {
-    if (orderData && orderData.oid) await fetchLastOrder();
-  };
+    if (isFetching) return; // Evita di fare una nuova richiesta se una è in corso
+    setIsFetching(true); // Indica che una richiesta è in corso
+    try {
+      if (orderData && orderData.oid) {
+        await fetchLastOrder();
+      console.log("Fetching last order provaaaa", lastOrder);
 
-  useEffect(() => {
-    if (orderData && orderData.oid) {
-      fetchLastOrder();
-    }
-  }, [orderData, menu]);
-
-  const isFocused = useIsFocused(); 
-  const intervalId = useRef(null);
-
-  useEffect(() => {
-    if (isFocused) {
-      console.log("Screen is focused, starting timer");
-      fetchData();
-      intervalId.current = setInterval(fetchData, 5000);
-    } else {
-      console.log("Screen is not focused, stopping timer");
-      if (intervalId.current) {
-        clearInterval(intervalId.current);
-        intervalId.current = null;
       }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setIsFetching(false); // Ripristina lo stato di richiesta
     }
+  };
+  */
 
-    return () => {
-      if (intervalId.current) {
-        clearInterval(intervalId.current);
-        intervalId.current = null;
+  const isFocused = useIsFocused();
+
+  // questa non si puo fare AIUTO
+  // usare intervalId 
+  function useInterval(callback, delay) {
+    const savedCallback = useRef();
+  
+    // Salva il callback corrente in una ref
+    useEffect(() => {
+      savedCallback.current = callback;
+    }, [callback]);
+  
+    // Imposta l'intervallo
+    useEffect(() => {
+      if (delay !== null) {
+        const id = setInterval(() => savedCallback.current(), delay);
+        return () => clearInterval(id); // Pulizia al dismount o al cambio del delay
+      }
+    }, [delay]);
+  }
+
+  useEffect(() => {
+    if (!isFocused) return; // Interrompi se la schermata non è visibile
+
+    const fetchAllData = async () => {
+      try {
+        console.log("Fetching data...");
+
+        if (!menu && orderData?.mid && orderData?.menuLocation) {
+          const fetchedMenu = await viewModel.getMenuDetail(
+            orderData.mid,
+            orderData.menuLocation.lat,
+            orderData.menuLocation.lng
+          );
+          setMenu(fetchedMenu);
+          console.log("Fetched Menu: ", fetchedMenu);
+        }
+
+        if (menu && orderData?.oid) {
+          const fetchedOrder = await viewModel.getOrderDetail(
+            orderData.oid,
+            menu.mid,
+            menu.location.lat,
+            menu.location.lng
+          );
+          setOrderData({
+            ...orderData,
+            ...fetchedOrder,
+          });
+          console.log("Updated OrderData: ", fetchedOrder);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
       }
     };
-  }, [isFocused]);
 
-  /*
+    // Avvia un intervallo per chiamare `fetchAllData` ogni 5000 ms
+    useInterval(() => {
+      if (isFocused) {
+        fetchAllData();
+      }
+    }, 5000);
 
-  const fetchLastOrder = async () => {
-    console.log("Executing Fetch");
-    try {
-      const lastOrder = await viewModel.getOrderDetail(orderData.oid);
-      setLastOrder(lastOrder);
-
-      const menu = await viewModel.getMenuDetail(
-        orderDetails.mid,
-        orderDetails.menuLocation.lat,
-        orderDetails.menuLocation.lng
-      );
-      setMenu(menu);
-
-    } catch (err) {
-      console.error("Error fetching the last order details:", err);
-    }
-  };
-  
-  */
+    // Nota: Non è necessario alcun cleanup qui, poiché `useInterval` gestisce gli intervalli automaticamente
+  }, [isFocused, orderData, menu]);
 
   return (
     <SafeAreaView style={globalStyle.container}>
       <ScrollView>
         {isRegistered ? (
           <OrderStatus
-            orderData={lastOrder}
+            //lastOrder={lastOrder}
             menu={menu}
             navigation={navigation}
           />
@@ -126,9 +156,7 @@ export default function OrderScreen({ navigation }) {
   );
 }
 
-const OrderStatus = ({ orderData, menu, navigation }) => {
-  const { userData } = useContext(UserContext);
-
+/*
   const render = () => {
     console.log("map render");
     if (!orderData) {
@@ -149,6 +177,10 @@ const OrderStatus = ({ orderData, menu, navigation }) => {
       </View>
     );
   };
+  */
+
+const OrderStatus = ({ menu, navigation }) => {
+  const { userData, orderData } = useContext(UserContext);
 
   if (!userData.lastOid) {
     return (
@@ -166,7 +198,9 @@ const OrderStatus = ({ orderData, menu, navigation }) => {
 
   return (
     <View style={globalStyle.container}>
-      {orderData.status === "ON_DELIVERY" ? (
+      {!orderData || !menu ? (
+        <Text>Loading...</Text>
+      ) : orderData?.status === "ON_DELIVERY" ? (
         <View>
           <Text style={globalStyle.title}>
             Your order will arrive at: {orderData.expectedDeliveryTimestamp}
@@ -181,7 +215,7 @@ const OrderStatus = ({ orderData, menu, navigation }) => {
           </Text>
           <MenuCardPreview menu={menu} />
         </View>
-      ) : orderData.status === "COMPLETED" ? (
+      ) : orderData?.status === "COMPLETED" ? (
         <View>
           <Text style={globalStyle.title}>Your order has been delivered</Text>
           <Text>MAPPA con luogo di consegna</Text>
@@ -196,7 +230,7 @@ const OrderStatus = ({ orderData, menu, navigation }) => {
               style={globalStyle.button}
               onPress={() =>
                 navigation.reset({
-                  index: 0, // Index of the route to reset to (0 bc is Home)
+                  index: 0,
                   routes: [{ name: "HomeStack", params: { screen: "Home" } }],
                 })
               }
