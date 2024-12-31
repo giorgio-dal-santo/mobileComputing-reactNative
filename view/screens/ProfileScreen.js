@@ -24,18 +24,23 @@ export default function ProfileScreen({ navigation }) {
   const isFetching = useRef(false);
 
   useEffect(() => {
-    const fetchAllData = async () => {
+    const loadAndSyncData = async () => {
       if (isFetching.current) return;
       isFetching.current = true;
 
       try {
         console.log("Fetching data...");
+        // 1. Caricamento iniziale dei dati da AsyncStorage
+        const [savedMenu, savedOrderData] = await viewModel.getMenuAndOrderDataFromStorage();
+        if (savedMenu) setMenu(savedMenu);
+        if (savedOrderData) setOrderData(savedOrderData);
 
-        if (orderData?.mid && orderData?.menuLocation) {
+        // 2. Aggiorna i dati con il fetch dal server, se necessario
+        if (savedOrderData?.mid && savedOrderData?.menuLocation) {
           const fetchedMenu = await viewModel.getMenuDetail(
-            orderData.mid,
-            orderData.menuLocation.lat,
-            orderData.menuLocation.lng
+            savedOrderData.mid,
+            savedOrderData.menuLocation.lat,
+            savedOrderData.menuLocation.lng
           );
           setMenu((prevMenu) => {
             if (!prevMenu || prevMenu.mid !== fetchedMenu.mid) {
@@ -46,22 +51,18 @@ export default function ProfileScreen({ navigation }) {
           });
         }
 
-        if (menu && orderData?.oid) {
+        if (menu && savedOrderData.oid) {
           const fetchedOrder = await viewModel.getOrderDetail(
-            orderData.oid,
+            savedOrderData.oid,
             menu.mid,
             menu.location.lat,
             menu.location.lng
           );
           setOrderData({
-            ...orderData,
+            ...savedOrderData,
             ...fetchedOrder,
           });
-          console.log(
-            "Updated OrderData oid + status: ",
-            fetchedOrder.oid,
-            fetchedOrder.status
-          );
+          console.log("Updated OrderData oid + status: ", orderData.oid, orderData.status);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -71,11 +72,11 @@ export default function ProfileScreen({ navigation }) {
     };
 
     if (isFocused) {
-      console.log("Screen profile is focused");
-      fetchAllData();
-      intervalId.current = setInterval(fetchAllData, 5000);
+      console.log("Screen order is focused");
+      loadAndSyncData();
+      intervalId.current = setInterval(loadAndSyncData, 5000);
     } else {
-      console.log("Screen profile is not focused");
+      console.log("Screen order is not focused");
       clearInterval(intervalId.current);
     }
 
@@ -86,6 +87,20 @@ export default function ProfileScreen({ navigation }) {
       }
     };
   }, [isFocused]);
+
+
+  // Salvataggio automatico dei dati aggiornati nello Storage
+  useEffect(() => {
+    const saveDataToStorage = async () => {
+      try {
+        await viewModel.setMenuAndOrderDataToStorage(menu, orderData);
+      } catch (error) {
+        console.error("Error saving data:", error);
+      }
+    };
+
+    if (menu || orderData) saveDataToStorage();
+  }, [menu, orderData]);
 
   if (!isRegistered) {
     return (

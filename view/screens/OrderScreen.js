@@ -57,18 +57,18 @@ export default function OrderScreen({ navigation }) {
           });
         }
 
-        if (fetchedMenu && savedOrderData.oid) {
+        if (menu && savedOrderData.oid) {
           const fetchedOrder = await viewModel.getOrderDetail(
             savedOrderData.oid,
-            fetchedMenu.mid,
-            fetchedMenu.location.lat,
-            fetchedMenu.location.lng
+            menu.mid,
+            menu.location.lat,
+            menu.location.lng
           );
           setOrderData({
             ...savedOrderData,
             ...fetchedOrder,
           });
-          console.log("Updated OrderData oid + status: ", orderData.oid, orderData.status);
+          //console.log("Updated OrderData oid + status: ", orderData.oid, orderData.status);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
