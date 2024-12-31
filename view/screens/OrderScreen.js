@@ -15,6 +15,7 @@ import { UserContext } from "../context/UserContext";
 import MenuCardPreview from "../components/MenuCardPreview";
 import { TouchableOpacity } from "react-native";
 import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
+import MapView from "react-native-maps";
 
 
 export default function OrderScreen({ navigation }) {
@@ -121,7 +122,11 @@ export default function OrderScreen({ navigation }) {
   );
 }
 
-/*
+
+const OrderStatus = ({ menu, navigation }) => {
+  const { userData, orderData } = useContext(UserContext);
+
+  //mappa
   const render = () => {
     console.log("map render");
     if (!orderData) {
@@ -142,10 +147,6 @@ export default function OrderScreen({ navigation }) {
       </View>
     );
   };
-  */
-
-const OrderStatus = ({ menu, navigation }) => {
-  const { userData, orderData } = useContext(UserContext);
 
   if (!userData.lastOid && !orderData.oid) {
     return (
@@ -173,7 +174,9 @@ const OrderStatus = ({ menu, navigation }) => {
           <Text style={globalStyle.title}>
             MAPPA: mostrare luogo di consegna, luogo di partenza, traiettoria
             drone
+
           </Text>
+          <View> {render()} </View>
           <Text>
             menu Latitude: {orderData.menuLocation.lat} - menu Longitude:{" "}
             {orderData.menuLocation.lng}
