@@ -31,7 +31,8 @@ export default function ProfileScreen({ navigation }) {
       try {
         console.log("Fetching data...");
         // 1. Caricamento iniziale dei dati da AsyncStorage
-        const [savedMenu, savedOrderData] = await viewModel.getMenuAndOrderDataFromStorage();
+        const [savedMenu, savedOrderData] =
+          await viewModel.getMenuAndOrderDataFromStorage();
         if (savedMenu) setMenu(savedMenu);
         if (savedOrderData) setOrderData(savedOrderData);
 
@@ -62,7 +63,11 @@ export default function ProfileScreen({ navigation }) {
             ...savedOrderData,
             ...fetchedOrder,
           });
-          console.log("Updated OrderData oid + status: ", orderData.oid, orderData.status);
+          console.log(
+            "Updated OrderData oid + status: ",
+            orderData.oid,
+            orderData.status
+          );
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -88,7 +93,6 @@ export default function ProfileScreen({ navigation }) {
     };
   }, [isFocused]);
 
-
   // Salvataggio automatico dei dati aggiornati nello Storage
   useEffect(() => {
     const saveDataToStorage = async () => {
@@ -104,118 +108,82 @@ export default function ProfileScreen({ navigation }) {
 
   if (!isRegistered) {
     return (
-      <View style={globalStyle.container}>
-        <Text>Profile Screen</Text>
-        <Text>User not registered</Text>
-        <TouchableOpacity
-          style={[
-            globalStyle.button,
-            { backgroundColor: "green", borderColor: "green" },
-          ]}
-          onPress={() => navigation.navigate("EditProfile")}
-        >
-          <Text style={[globalStyle.buttonText, { color: "#fff" }]}>
-            Register
-          </Text>
-        </TouchableOpacity>
-      </View>
+      <SafeAreaView style={{ flex: 1 }}>
+        <ScrollView contentContainerStyle={globalStyle.mainContainer}>
+          <NotRegister navigation={navigation} />
+        </ScrollView>
+      </SafeAreaView>
     );
   }
 
   return (
-    <SafeAreaView style={globalStyle.container}>
-      <ScrollView>
-        <View style={globalStyle.container}>
-          <View style={globalStyle.profileContainer}>
-            <View style={globalStyle.profileImage}>
-              <Ionicons name="person-circle-outline" size={70} color="#444" />
-            </View>
-
-            <Text style={globalStyle.profileName}>
-              {userData.firstName} {userData.lastName}
-            </Text>
-
-            <View style={globalStyle.profileDetails}>
-              <Text style={globalStyle.profileDetailText}>
-                Card Full Name: {userData.cardFullName}
-              </Text>
-              <Text style={globalStyle.profileDetailText}>
-                Card Number: **** **** **** {userData.cardNumber.slice(-4)}
-              </Text>
-              <Text style={globalStyle.profileDetailText}>
-                Expire Date: {userData.cardExpireMonth}/
-                {userData.cardExpireYear}
-              </Text>
-              <Text style={globalStyle.profileDetailText}>CVV: ***</Text>
-
-              <TouchableOpacity
-                style={globalStyle.button}
-                onPress={() => navigation.navigate("EditProfile")}
-              >
-                <Text style={globalStyle.buttonText}>Edit Profile</Text>
-              </TouchableOpacity>
-            </View>
+    <SafeAreaView style={{ flex: 1 }}>
+      <ScrollView contentContainerStyle={globalStyle.mainContainer}>
+        <View style={globalStyle.profileContainer}>
+          <View style={globalStyle.profileImage}>
+            <Ionicons name="person-circle-outline" size={70} color="#444" />
           </View>
 
-          {userData?.lastOid || orderData.oid ? (
-            <View style={globalStyle.container}>
-              <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  width: "100%",
-                }}
-              >
-                <Text style={[globalStyle.title, { marginLeft: 20 }]}>
-                  Last Order:{" "}
-                </Text>
-                <TouchableOpacity
-                  style={[
-                    globalStyle.button,
-                    {
-                      paddingHorizontal: 15,
-                      backgroundColor: "#fff",
-                      marginRight: 20,
-                    },
-                  ]}
-                  onPress={() =>
-                    navigation.navigate("HomeStack", {
-                      screen: "MenuDetail",
-                      params: {
-                        menuid: menu.mid,
-                        lat: menu.location.lat,
-                        lng: menu.location.lng,
-                        userLocation: userLocation,
-                      },
-                    })
-                  }
-                >
-                  <Text style={globalStyle.buttonText}>
-                    Go to the Menu Details
-                  </Text>
-                </TouchableOpacity>
-              </View>
-              <View>
-                <MenuCardPreview menu={menu} />
-              </View>
-            </View>
-          ) : !userData.lastOid && !orderData.oid ? (
-            <View
-              style={{
-                alignItems: "center",
-                justifyContent: "space-between",
-                width: "100%",
-              }}
+          <Text style={globalStyle.profileName}>
+            {userData.firstName} {userData.lastName}
+          </Text>
+
+          <View style={globalStyle.profileDetails}>
+            <Text style={globalStyle.profileDetailText}>
+              Card Full Name: {userData.cardFullName}
+            </Text>
+            <Text style={globalStyle.profileDetailText}>
+              Card Number: **** **** **** {userData.cardNumber.slice(-4)}
+            </Text>
+            <Text style={globalStyle.profileDetailText}>
+              Expire Date: {userData.cardExpireMonth}/{userData.cardExpireYear}
+            </Text>
+            <Text style={globalStyle.profileDetailText}>CVV: ***</Text>
+
+            <TouchableOpacity
+              style={globalStyle.button}
+              onPress={() => navigation.navigate("EditProfile")}
             >
-              <Text style={[{ marginLeft: 20 }]}>No order yet</Text>
-              <Text style={[{ marginRight: 20 }]}>Order Now Bottone</Text>
-            </View>
-          ) : (
-            <Text>Loading...</Text>
-          )}
+              <Text style={globalStyle.buttonText}>Edit Profile</Text>
+            </TouchableOpacity>
+          </View>
         </View>
+
+        {userData?.lastOid || orderData.oid ? (
+          <View style={globalStyle.innerContainer}>
+            <Text style={[globalStyle.title, { marginLeft: 20 }]}>
+              Last Order:{" "}
+            </Text>
+            <MenuCardPreview menu={menu} />
+          </View>
+        ) : !userData.lastOid && !orderData.oid ? (
+          <View style={globalStyle.innerContainer}>
+            <Text style={[{ marginLeft: 20 }]}>No order yet</Text>
+            <Text style={[{ marginRight: 20 }]}>Order Now Bottone</Text>
+          </View>
+        ) : (
+          <Text>Loading...</Text>
+        )}
       </ScrollView>
     </SafeAreaView>
   );
 }
+
+const NotRegister = ({ navigation }) => {
+  return (
+    <View>
+      <Text style={globalStyle.title}>User not registered</Text>
+      <TouchableOpacity
+        style={[
+          globalStyle.button,
+          { backgroundColor: "green", borderColor: "green" },
+        ]}
+        onPress={() => navigation.navigate("EditProfile")}
+      >
+        <Text style={[globalStyle.buttonText, { color: "#fff" }]}>
+          Register
+        </Text>
+      </TouchableOpacity>
+    </View>
+  );
+};

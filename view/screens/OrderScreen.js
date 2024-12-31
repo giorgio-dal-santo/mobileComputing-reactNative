@@ -8,8 +8,7 @@ import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
 import MenuCardPreview from "../components/MenuCardPreview";
 import { TouchableOpacity } from "react-native";
-import MapView from "react-native-maps";
-import { Marker } from "react-native-maps";
+import MapView, { Marker } from "react-native-maps";
 
 export default function OrderScreen({ navigation }) {
   const { isRegistered, orderData, setOrderData } = useContext(UserContext);
@@ -102,13 +101,15 @@ export default function OrderScreen({ navigation }) {
   }, [menu, orderData]);
 
   return (
-    <SafeAreaView style={globalStyle.container}>
+    <SafeAreaView style={{ flex: 1 }}>
       <ScrollView>
-        {isRegistered ? (
-          <OrderStatus menu={menu} navigation={navigation} />
-        ) : (
-          <NotRegister navigation={navigation} />
-        )}
+        <View style={globalStyle.mainContainer}>
+          {isRegistered ? (
+            <OrderStatus menu={menu} navigation={navigation} />
+          ) : (
+            <NotRegister navigation={navigation} />
+          )}
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -116,35 +117,10 @@ export default function OrderScreen({ navigation }) {
 
 const OrderStatus = ({ menu, navigation }) => {
   const { userData, orderData } = useContext(UserContext);
-  //console.log("order data per mappa", orderData);
-
-  //mappa
-  /*
-  const render = () => {
-    console.log("map render");
-    if (!orderData || !orderData.menuLocation) {
-      return <Text>Loading...</Text>;
-    }
-
-    return (
-      <View style={globalStyle.mapContainer}>
-        <MapView
-          style={globalStyle.map}
-          initialRegion={{
-            latitude: orderData.menuLocation.lat,
-            longitude: orderData.menuLocation.lng,
-            latitudeDelta: 0.01,
-            longitudeDelta: 0.01,
-          }}
-        />
-      </View>
-    );
-  };
-  */
 
   if (!userData.lastOid && !orderData.oid) {
     return (
-      <View>
+      <View style={globalStyle.innerContainer}>
         <Text style={globalStyle.title}>No order yet</Text>
         <TouchableOpacity
           style={globalStyle.button}
@@ -157,113 +133,115 @@ const OrderStatus = ({ menu, navigation }) => {
   }
 
   return (
-    <SafeAreaView style={globalStyle.container}>
-      <ScrollView>
-        <View style={globalStyle.container}>
-          {!orderData || !menu ? (
-            <Text>Loading...</Text>
-          ) : orderData?.status === "ON_DELIVERY" ? (
-            <View>
-              <Text style={globalStyle.title}>
-                Your order will arrive at: {orderData.expectedDeliveryTimestamp}
-              </Text>
-              <Text style={globalStyle.title}>
-                MAPPA: mostrare luogo di consegna, luogo di partenza,
-                traiettoria drone
-              </Text>
-
-              {orderData.menuLocation?.lat && orderData.menuLocation?.lng ? (
-                <View style={globalStyle.mapContainer}>
-                  <MapView
-                    style={globalStyle.map}
-                    initialRegion={{
-                      latitude: orderData.menuLocation.lat,
-                      longitude: orderData.menuLocation.lng,
-                      latitudeDelta: 0.01,
-                      longitudeDelta: 0.01,
-                    }}
-                  />
-                  <Marker
-                    coordinate={{ latitude: orderData.menuLocation.lat, longitude: orderData.menuLocation.lng }}
-                    title="Menu Location"
-                    description="This is the menu location"
-                  />
-                  <Text>
-                    menu Latitude: {orderData.menuLocation.lat} - menu
-                    Longitude: {orderData.menuLocation.lng}
-                  </Text>
-                </View>
-              ) : (
-                <Text>Loading map data...</Text>
-              )}
-              <MenuCardPreview menu={menu} />
-            </View>
-          ) : orderData?.status === "COMPLETED" ? (
-            <View>
-              <Text style={globalStyle.title}>
-                Your order has been delivered
-              </Text>
-              <Text>MAPPA con luogo di consegna</Text>
-              <View style={globalStyle.container}>
-                <Text>Delivery Location</Text>
-                <Text>
-                  delivery Latitude: {orderData.deliveryLocation.lat} - delivery
-                  Longitude: {orderData.deliveryLocation.lng}
-                </Text>
-                <View style={globalStyle.mapContainer}>
-                  <MapView
-                    style={globalStyle.map}
-                    initialRegion={{
-                      latitude: orderData.deliveryLocation.lat,
-                      longitude: orderData.deliveryLocation.lng,
-                      latitudeDelta: 0.01,
-                      longitudeDelta: 0.01,
-                    }}
-                  />
-                  <Marker
-                    coordinate={{ latitude: orderData.deliveryLocation.lat, longitude: orderData.deliveryLocation.lng }}
-                    title="Delivery Location"
-                    description="This is the delivery location"
-                  />
-                  <Text>
-                    menu Latitude: {orderData.menuLocation.lat} - menu
-                    Longitude: {orderData.menuLocation.lng}
-                  </Text>
-                </View>
-                <MenuCardPreview menu={menu} />
-                <TouchableOpacity
-                  style={globalStyle.button}
-                  onPress={() =>
-                    navigation.reset({
-                      index: 0,
-                      routes: [
-                        { name: "HomeStack", params: { screen: "Home" } },
-                      ],
-                    })
-                  }
-                >
-                  <Text style={globalStyle.buttonText}>Order Again</Text>
-                </TouchableOpacity>
-                <StatusBar style="auto" />
-              </View>
+    <View>
+      {!orderData || !menu ? (
+        <View style={globalStyle.header}>
+          <Text>Loading...</Text>
+        </View>
+      ) : orderData?.status === "ON_DELIVERY" ? (
+        <View style={globalStyle.innerContainer}>
+          <View style={globalStyle.subContainer}>
+            <Text style={globalStyle.title}>
+              Your order will arrive at: {orderData.expectedDeliveryTimestamp}
+            </Text>
+            <Text style={globalStyle.title}>
+              MAPPA: mostrare luogo di consegna, luogo di partenza, traiettoria
+              drone
+            </Text>
+          </View>
+          {orderData.menuLocation?.lat && orderData.menuLocation?.lng ? (
+            <View style={globalStyle.mapContainer}>
+              <MapView
+                style={globalStyle.map}
+                initialRegion={{
+                  latitude: orderData.menuLocation.lat,
+                  longitude: orderData.menuLocation.lng,
+                  latitudeDelta: 0.01,
+                  longitudeDelta: 0.01,
+                }}
+              />
+              <Marker
+                coordinate={{
+                  latitude: orderData.menuLocation.lat,
+                  longitude: orderData.menuLocation.lng,
+                }}
+                title="Menu Location"
+                description="This is the menu location"
+              />
             </View>
           ) : (
-            <View>
-              <Text>No active order</Text>
+            <View style={globalStyle.subContainer}>
+              <Text>Loading map data...</Text>
             </View>
           )}
+          <MenuCardPreview menu={menu} />
         </View>
-      </ScrollView>
-    </SafeAreaView>
+      ) : orderData?.status === "COMPLETED" ? (
+        <View style={globalStyle.innerContainer}>
+          <View style={globalStyle.subContainer}>
+            <Text style={globalStyle.title}>Your order has been delivered</Text>
+            <Text>MAPPA con luogo di consegna</Text>
+            <Text>Delivery Location</Text>
+            <Text>
+              delivery Latitude: {orderData.deliveryLocation.lat} - delivery
+              Longitude: {orderData.deliveryLocation.lng}
+            </Text>
+            <Text>
+              menu Latitude: {orderData.menuLocation.lat} - menu Longitude:{" "}
+              {orderData.menuLocation.lng}
+            </Text>
+          </View>
+          <View style={globalStyle.mapContainer}>
+            <MapView
+              style={globalStyle.map}
+              initialRegion={{
+                latitude: orderData.deliveryLocation.lat,
+                longitude: orderData.deliveryLocation.lng,
+                latitudeDelta: 0.01,
+                longitudeDelta: 0.01,
+              }}
+            />
+            <Marker
+              coordinate={{
+                latitude: orderData.deliveryLocation.lat,
+                longitude: orderData.deliveryLocation.lng,
+              }}
+              title="Delivery Location"
+              description="This is the delivery location"
+            />
+          </View>
+          <MenuCardPreview menu={menu} />
+          <TouchableOpacity
+            style={globalStyle.button}
+            onPress={() =>
+              navigation.reset({
+                index: 0,
+                routes: [{ name: "HomeStack", params: { screen: "Home" } }],
+              })
+            }
+          >
+            <Text style={globalStyle.buttonText}>Order Again</Text>
+          </TouchableOpacity>
+          <StatusBar style="auto" />
+        </View>
+      ) : (
+        <View style={globalStyle.header}>
+          <Text>No active order</Text>
+        </View>
+      )}
+    </View>
   );
 };
 
 const NotRegister = ({ navigation }) => {
   return (
-    <View style={globalStyle.container}>
+    <View>
       <Text style={globalStyle.title}>User not registered</Text>
       <TouchableOpacity
-        style={globalStyle.button}
+        style={[
+          globalStyle.button,
+          { backgroundColor: "green", borderColor: "green" },
+        ]}
         onPress={() => navigation.navigate("ProfileStack")}
       >
         <Text style={globalStyle.buttonText}>Register</Text>

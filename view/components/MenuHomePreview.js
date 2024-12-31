@@ -5,7 +5,6 @@ import { TouchableOpacity } from "react-native";
 export default function MenuHomePreview({ menu, navigation }) {
   return (
     <View style={globalStyle.card}>
-      
       <Image
         source={
           typeof menu.image === "string" && menu.image
@@ -27,7 +26,6 @@ export default function MenuHomePreview({ menu, navigation }) {
       >
         <Text style={globalStyle.buttonText}>Menu Detail</Text>
       </TouchableOpacity>
-      
     </View>
   );
 }

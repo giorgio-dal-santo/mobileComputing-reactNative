@@ -71,33 +71,34 @@ export default function HomeScreen({ navigation }) {
   );
 
   return (
-    <SafeAreaView style={globalStyle.container}>
-      <ScrollView>
-        <View style={globalStyle.container}>
-          {isRegistered && canUseLocation && userLocation ? (
+    <SafeAreaView style={{ flex: 1 }}>
+      <ScrollView contentContainerStyle={globalStyle.mainContainer}>
+        {isRegistered && canUseLocation && userLocation ? (
+          <View style={globalStyle.innerContainer}>
+            <Text style={globalStyle.title}>Nearby Menus</Text>
             <MenuList nearbyMenus={nearbyMenus} navigation={navigation} />
-          ) : isRegistered && !canUseLocation ? (
-            <View>
-              <Text>Location not available</Text>
-              <Button
-                title="Allow location"
-                onPress={async () => {
-                  await handleAllowLocation();
-                }}
-              />
-            </View>
-          ) : !isRegistered ? (
+          </View>
+        ) : isRegistered && !canUseLocation ? (
+          <View style={globalStyle.innerContainer}>
+            <Text>Location not available</Text>
+            <Button
+              title="Allow location"
+              onPress={async () => {
+                await handleAllowLocation();
+              }}
+            />
+          </View>
+        ) : !isRegistered ? (
             <NotRegister navigation={navigation} />
-          ) : loading ? (
-            <View>
-              <Text>Loading...</Text>
-            </View>
-          ) : (
-            <View>
-              <Text>Error</Text>
-            </View>
-          )}
-        </View>
+        ) : loading ? (
+          <View style={globalStyle.innerContainer}>
+            <Text>Loading...</Text>
+          </View>
+        ) : (
+          <View style={globalStyle.innerContainer}>
+            <Text>Error</Text>
+          </View>
+        )}
       </ScrollView>
     </SafeAreaView>
   );
@@ -105,8 +106,7 @@ export default function HomeScreen({ navigation }) {
 
 const MenuList = ({ nearbyMenus, navigation }) => {
   return (
-    <View style={globalStyle.container}>
-      <Text style={globalStyle.title}>Nearby Menus</Text>
+    <View>
       {nearbyMenus.map((menu) => (
         <MenuHomePreview key={menu.mid} menu={menu} navigation={navigation} />
       ))}
@@ -116,8 +116,8 @@ const MenuList = ({ nearbyMenus, navigation }) => {
 
 const NotRegister = ({ navigation }) => {
   return (
-    <View style={globalStyle.container}>
-      <Text>User not registered</Text>
+    <View>
+      <Text style={globalStyle.title}>User not registered</Text>
       <TouchableOpacity
         style={[
           globalStyle.button,
