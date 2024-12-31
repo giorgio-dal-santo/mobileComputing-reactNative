@@ -14,6 +14,8 @@ import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
 import MenuCardPreview from "../components/MenuCardPreview";
 import { TouchableOpacity } from "react-native";
+import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
+
 
 export default function OrderScreen({ navigation }) {
   const { isRegistered, orderData, setOrderData } = useContext(UserContext);
@@ -26,19 +28,25 @@ export default function OrderScreen({ navigation }) {
   const intervalId = useRef(null);
   const isFetching = useRef(false);
 
+
   useEffect(() => {
-    const fetchAllData = async () => {
+    const loadAndSyncData = async () => {
       if (isFetching.current) return;
       isFetching.current = true;
 
       try {
         console.log("Fetching data...");
+        // 1. Caricamento iniziale dei dati da AsyncStorage
+        const [savedMenu, savedOrderData] = await viewModel.getMenuAndOrderDataFromStorage();
+        if (savedMenu) setMenu(savedMenu);
+        if (savedOrderData) setOrderData(savedOrderData);
 
-        if (orderData?.mid && orderData?.menuLocation) {
+        // 2. Aggiorna i dati con il fetch dal server, se necessario
+        if (savedOrderData?.mid && savedOrderData?.menuLocation) {
           const fetchedMenu = await viewModel.getMenuDetail(
-            orderData.mid,
-            orderData.menuLocation.lat,
-            orderData.menuLocation.lng
+            savedOrderData.mid,
+            savedOrderData.menuLocation.lat,
+            savedOrderData.menuLocation.lng
           );
           setMenu((prevMenu) => {
             if (!prevMenu || prevMenu.mid !== fetchedMenu.mid) {
@@ -49,15 +57,15 @@ export default function OrderScreen({ navigation }) {
           });
         }
 
-        if (menu && orderData?.oid) {
+        if (fetchedMenu && savedOrderData.oid) {
           const fetchedOrder = await viewModel.getOrderDetail(
-            orderData.oid,
-            menu.mid,
-            menu.location.lat,
-            menu.location.lng
+            savedOrderData.oid,
+            fetchedMenu.mid,
+            fetchedMenu.location.lat,
+            fetchedMenu.location.lng
           );
           setOrderData({
-            ...orderData,
+            ...savedOrderData,
             ...fetchedOrder,
           });
           console.log("Updated OrderData oid + status: ", orderData.oid, orderData.status);
@@ -71,8 +79,8 @@ export default function OrderScreen({ navigation }) {
 
     if (isFocused) {
       console.log("Screen order is focused");
-      fetchAllData();
-      intervalId.current = setInterval(fetchAllData, 5000);
+      loadAndSyncData();
+      intervalId.current = setInterval(loadAndSyncData, 5000);
     } else {
       console.log("Screen order is not focused");
       clearInterval(intervalId.current);
@@ -85,6 +93,20 @@ export default function OrderScreen({ navigation }) {
       }
     };
   }, [isFocused]);
+
+
+  // Salvataggio automatico dei dati aggiornati nello Storage
+  useEffect(() => {
+    const saveDataToStorage = async () => {
+      try {
+        await viewModel.setMenuAndOrderDataToStorage(menu, orderData);
+      } catch (error) {
+        console.error("Error saving data:", error);
+      }
+    };
+
+    if (menu || orderData) saveDataToStorage();
+  }, [menu, orderData]);
 
   return (
     <SafeAreaView style={globalStyle.container}>

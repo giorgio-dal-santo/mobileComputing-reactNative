@@ -241,4 +241,23 @@ export default class ViewModel {
     }
 
   }
+
+  async getMenuAndOrderDataFromStorage() {
+    try {
+      const savedMenu = await AsyncStorage.getMenu();
+      const savedOrderData = await AsyncStorage.getOrderData();
+      return [savedMenu, savedOrderData];
+    } catch (error) {
+      console.error('Error loading persisted data:', error);
+    }
+  }
+
+  async setMenuAndOrderDataToStorage(menu, orderData) {
+    try {
+      await AsyncStorage.setMenu(menu);
+      await AsyncStorage.setOrderData(orderData);
+    } catch (error) {
+      console.error('Error saving menu or orderData:', error);
+    }
+  }
 }
