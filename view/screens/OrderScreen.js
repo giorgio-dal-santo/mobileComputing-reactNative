@@ -60,7 +60,7 @@ export default function OrderScreen({ navigation }) {
             ...orderData,
             ...fetchedOrder,
           });
-          console.log("Updated OrderData oid + status: ", fetchedOrder.oid, fetchedOrder.status);
+          console.log("Updated OrderData oid + status: ", orderData.oid, orderData.status);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
