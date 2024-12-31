@@ -150,12 +150,10 @@ export const globalStyle = StyleSheet.create({
     marginBottom: 10,
   },
   map: {
-    ...StyleSheet.absoluteFillObject, // Questo riempie l'intero container
     width: "100%",
     height: "100%",
   },
   mapContainer: {
-    flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",

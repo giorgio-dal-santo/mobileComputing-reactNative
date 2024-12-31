@@ -1,10 +1,4 @@
-import {
-  Text,
-  View,
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-} from "react-native";
+import { Text, View, SafeAreaView, ScrollView, StatusBar } from "react-native";
 import { useEffect, useState } from "react";
 import { globalStyle } from "../../styles/GlobalStyle";
 import ViewModel from "../../viewModel/ViewModel";
@@ -14,11 +8,8 @@ import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
 import MenuCardPreview from "../components/MenuCardPreview";
 import { TouchableOpacity } from "react-native";
-import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 import MapView from "react-native-maps";
-import { loadAsync } from "expo-font";
-
-
+import { Marker } from "react-native-maps";
 
 export default function OrderScreen({ navigation }) {
   const { isRegistered, orderData, setOrderData } = useContext(UserContext);
@@ -31,7 +22,6 @@ export default function OrderScreen({ navigation }) {
   const intervalId = useRef(null);
   const isFetching = useRef(false);
 
-
   useEffect(() => {
     const loadAndSyncData = async () => {
       if (isFetching.current) return;
@@ -40,7 +30,8 @@ export default function OrderScreen({ navigation }) {
       try {
         console.log("Fetching data...");
         // 1. Caricamento iniziale dei dati da AsyncStorage
-        const [savedMenu, savedOrderData] = await viewModel.getMenuAndOrderDataFromStorage();
+        const [savedMenu, savedOrderData] =
+          await viewModel.getMenuAndOrderDataFromStorage();
         if (savedMenu) setMenu(savedMenu);
         if (savedOrderData) setOrderData(savedOrderData);
 
@@ -97,7 +88,6 @@ export default function OrderScreen({ navigation }) {
     };
   }, [isFocused]);
 
-
   // Salvataggio automatico dei dati aggiornati nello Storage
   useEffect(() => {
     const saveDataToStorage = async () => {
@@ -123,7 +113,6 @@ export default function OrderScreen({ navigation }) {
     </SafeAreaView>
   );
 }
-
 
 const OrderStatus = ({ menu, navigation }) => {
   const { userData, orderData } = useContext(UserContext);
@@ -168,72 +157,104 @@ const OrderStatus = ({ menu, navigation }) => {
   }
 
   return (
-    <View style={globalStyle.container}>
-      {!orderData || !menu ? (
-        <Text>Loading...</Text>
-      ) : orderData?.status === "ON_DELIVERY" ? (
-        <View>
-          <Text style={globalStyle.title}>
-            Your order will arrive at: {orderData.expectedDeliveryTimestamp}
-          </Text>
-          <Text style={globalStyle.title}>
-            MAPPA: mostrare luogo di consegna, luogo di partenza, traiettoria
-            drone
-
-          </Text>
-
-          {orderData.menuLocation?.lat && orderData.menuLocation?.lng ?(
-            <View style={globalStyle.mapContainer}>
-              <MapView
-                style={globalStyle.map}
-                initialRegion={{
-                  latitude: orderData.menuLocation.lat,
-                  longitude: orderData.menuLocation.lng,
-                  latitudeDelta: 0.01,
-                  longitudeDelta: 0.01,
-                }}
-              />
-              <Text>
-                menu Latitude: {orderData.menuLocation.lat} - menu Longitude:{" "}
-                {orderData.menuLocation.lng}
+    <SafeAreaView style={globalStyle.container}>
+      <ScrollView>
+        <View style={globalStyle.container}>
+          {!orderData || !menu ? (
+            <Text>Loading...</Text>
+          ) : orderData?.status === "ON_DELIVERY" ? (
+            <View>
+              <Text style={globalStyle.title}>
+                Your order will arrive at: {orderData.expectedDeliveryTimestamp}
               </Text>
+              <Text style={globalStyle.title}>
+                MAPPA: mostrare luogo di consegna, luogo di partenza,
+                traiettoria drone
+              </Text>
+
+              {orderData.menuLocation?.lat && orderData.menuLocation?.lng ? (
+                <View style={globalStyle.mapContainer}>
+                  <MapView
+                    style={globalStyle.map}
+                    initialRegion={{
+                      latitude: orderData.menuLocation.lat,
+                      longitude: orderData.menuLocation.lng,
+                      latitudeDelta: 0.01,
+                      longitudeDelta: 0.01,
+                    }}
+                  />
+                  <Marker
+                    coordinate={{ latitude: orderData.menuLocation.lat, longitude: orderData.menuLocation.lng }}
+                    title="Menu Location"
+                    description="This is the menu location"
+                  />
+                  <Text>
+                    menu Latitude: {orderData.menuLocation.lat} - menu
+                    Longitude: {orderData.menuLocation.lng}
+                  </Text>
+                </View>
+              ) : (
+                <Text>Loading map data...</Text>
+              )}
+              <MenuCardPreview menu={menu} />
+            </View>
+          ) : orderData?.status === "COMPLETED" ? (
+            <View>
+              <Text style={globalStyle.title}>
+                Your order has been delivered
+              </Text>
+              <Text>MAPPA con luogo di consegna</Text>
+              <View style={globalStyle.container}>
+                <Text>Delivery Location</Text>
+                <Text>
+                  delivery Latitude: {orderData.deliveryLocation.lat} - delivery
+                  Longitude: {orderData.deliveryLocation.lng}
+                </Text>
+                <View style={globalStyle.mapContainer}>
+                  <MapView
+                    style={globalStyle.map}
+                    initialRegion={{
+                      latitude: orderData.deliveryLocation.lat,
+                      longitude: orderData.deliveryLocation.lng,
+                      latitudeDelta: 0.01,
+                      longitudeDelta: 0.01,
+                    }}
+                  />
+                  <Marker
+                    coordinate={{ latitude: orderData.deliveryLocation.lat, longitude: orderData.deliveryLocation.lng }}
+                    title="Delivery Location"
+                    description="This is the delivery location"
+                  />
+                  <Text>
+                    menu Latitude: {orderData.menuLocation.lat} - menu
+                    Longitude: {orderData.menuLocation.lng}
+                  </Text>
+                </View>
+                <MenuCardPreview menu={menu} />
+                <TouchableOpacity
+                  style={globalStyle.button}
+                  onPress={() =>
+                    navigation.reset({
+                      index: 0,
+                      routes: [
+                        { name: "HomeStack", params: { screen: "Home" } },
+                      ],
+                    })
+                  }
+                >
+                  <Text style={globalStyle.buttonText}>Order Again</Text>
+                </TouchableOpacity>
+                <StatusBar style="auto" />
+              </View>
             </View>
           ) : (
-            <Text>Loading map data...</Text>
+            <View>
+              <Text>No active order</Text>
+            </View>
           )}
-          <MenuCardPreview menu={menu} />
         </View>
-      ) : orderData?.status === "COMPLETED" ? (
-        <View>
-          <Text style={globalStyle.title}>Your order has been delivered</Text>
-          <Text>MAPPA con luogo di consegna</Text>
-          <View style={globalStyle.container}>
-            <Text>Delivery Location</Text>
-            <Text>
-              delivery Latitude: {orderData.deliveryLocation.lat} - delivery
-              Longitude: {orderData.deliveryLocation.lng}
-            </Text>
-            <MenuCardPreview menu={menu} />
-            <TouchableOpacity
-              style={globalStyle.button}
-              onPress={() =>
-                navigation.reset({
-                  index: 0,
-                  routes: [{ name: "HomeStack", params: { screen: "Home" } }],
-                })
-              }
-            >
-              <Text style={globalStyle.buttonText}>Order Again</Text>
-            </TouchableOpacity>
-            <StatusBar style="auto" />
-          </View>
-        </View>
-      ) : (
-        <View>
-          <Text>No active order</Text>
-        </View>
-      )}
-    </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
