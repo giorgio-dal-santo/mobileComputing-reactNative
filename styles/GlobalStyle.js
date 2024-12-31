@@ -35,15 +35,15 @@ export const globalStyle = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     flexDirection: 'row',
-},
+  },
 
-picker: {
+  picker: {
     width: '100%',
     fontSize: 16,
     color: '#333',
     justifyContent: "center",
     alignItems: "center",
-},
+  },
 
   errorInputContainer: {
     borderColor: 'red',
@@ -114,7 +114,7 @@ picker: {
 
   profileContainer: {
     alignItems: "center",
-    marginVertical: 0,  
+    marginVertical: 0,
     marginBottom: 20,
     justifyContent: "center",
     flex: 1,
@@ -123,9 +123,9 @@ picker: {
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 0,
-    marginTop: 0,  
+    marginTop: 0,
   },
-  
+
   profileName: {
     fontSize: 24,
     fontWeight: "bold",
@@ -150,15 +150,16 @@ picker: {
     marginBottom: 10,
   },
   map: {
-    flex: 1,
-    height: 300,
-},
-mapContainer: {
+    ...StyleSheet.absoluteFillObject, // Questo riempie l'intero container
+    width: "100%",
+    height: "100%",
+  },
+  mapContainer: {
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
-},
+  },
 
 
 

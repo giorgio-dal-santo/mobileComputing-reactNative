@@ -16,6 +16,8 @@ import MenuCardPreview from "../components/MenuCardPreview";
 import { TouchableOpacity } from "react-native";
 import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 import MapView from "react-native-maps";
+import { loadAsync } from "expo-font";
+
 
 
 export default function OrderScreen({ navigation }) {
@@ -125,11 +127,13 @@ export default function OrderScreen({ navigation }) {
 
 const OrderStatus = ({ menu, navigation }) => {
   const { userData, orderData } = useContext(UserContext);
+  //console.log("order data per mappa", orderData);
 
   //mappa
+  /*
   const render = () => {
     console.log("map render");
-    if (!orderData) {
+    if (!orderData || !orderData.menuLocation) {
       return <Text>Loading...</Text>;
     }
 
@@ -147,6 +151,7 @@ const OrderStatus = ({ menu, navigation }) => {
       </View>
     );
   };
+  */
 
   if (!userData.lastOid && !orderData.oid) {
     return (
@@ -176,11 +181,26 @@ const OrderStatus = ({ menu, navigation }) => {
             drone
 
           </Text>
-          <View> {render()} </View>
-          <Text>
-            menu Latitude: {orderData.menuLocation.lat} - menu Longitude:{" "}
-            {orderData.menuLocation.lng}
-          </Text>
+
+          {orderData.menuLocation?.lat && orderData.menuLocation?.lng ?(
+            <View style={globalStyle.mapContainer}>
+              <MapView
+                style={globalStyle.map}
+                initialRegion={{
+                  latitude: orderData.menuLocation.lat,
+                  longitude: orderData.menuLocation.lng,
+                  latitudeDelta: 0.01,
+                  longitudeDelta: 0.01,
+                }}
+              />
+              <Text>
+                menu Latitude: {orderData.menuLocation.lat} - menu Longitude:{" "}
+                {orderData.menuLocation.lng}
+              </Text>
+            </View>
+          ) : (
+            <Text>Loading map data...</Text>
+          )}
           <MenuCardPreview menu={menu} />
         </View>
       ) : orderData?.status === "COMPLETED" ? (
