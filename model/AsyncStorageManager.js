@@ -76,5 +76,40 @@ export default class AsyncStorageManager {
   }
 
 
+  static async setMenu(menu) {
+    try {
+      await AsyncStorage.setItem("menu", JSON.stringify(menu));
+    } catch (error) {
+      console.error("Errore durante il salvataggio del menu:", error);
+    }
+  }
+
+  static async getMenu() { 
+    try {
+      const menu = await AsyncStorage.getItem("menu");
+      return JSON.parse(menu);
+    } catch (error) {
+      console.error("Errore durante il recupero del menu:", error);
+    }
+  } 
+
+  static async setOrderData(orderData) {
+    try {
+      await AsyncStorage.setItem("orderData", JSON.stringify(orderData));
+    } catch (error) {
+      console.error("Errore durante il salvataggio dei dati dell'ordine:", error);
+    }
+  }
+
+  static async getOrderData () {
+    try {
+      const orderData = await AsyncStorage.getItem("orderData");
+      return JSON.parse(orderData);
+    } catch (error) {
+      console.error("Errore durante il recupero dei dati dell'ordine:", error);
+    }
+  }
+
+
   
 }
