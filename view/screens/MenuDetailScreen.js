@@ -4,26 +4,32 @@ import { globalStyle } from "../../styles/GlobalStyle";
 import ViewModel from "../../viewModel/ViewModel";
 import { TouchableOpacity } from "react-native";
 import MenuCardPreview from "../components/MenuCardPreview";
+import { useContext } from "react";
+import { UserContext } from "../context/UserContext";
+
 
 
 export default function MenuDetailScreen({ route, navigation }) {
-    const { menuid, lat, lng } = route.params || {};
+    const { menuid } = route.params || {};
 
     const viewModel = ViewModel.getViewModel();
     const [detailedMenu, setDetailedMenu] = useState(null);
 
+    const { userLocation } = useContext(UserContext);
+
     useEffect(() => {
         const fetchMenuDetails = async () => {
             try {
-                const detailedMenu = await viewModel.getMenuDetail(menuid, lat, lng);
+                const detailedMenu = await viewModel.getMenuDetail(menuid, userLocation.lat, userLocation.lng);
                 setDetailedMenu(detailedMenu);
+                console.log("Dettagli del menu:", detailedMenu.mid, detailedMenu.location, detailedMenu.name, detailedMenu.deliveryTime);
             } catch (error) {
                 console.error("Errore nel caricamento dei dettagli del menu:", error);
             }
         };
 
         fetchMenuDetails();
-    }, [menuid, lat, lng]);
+    }, [menuid]);
 
 
     return (
@@ -41,7 +47,7 @@ export default function MenuDetailScreen({ route, navigation }) {
               />
               <Text style={globalStyle.title}>{detailedMenu.name}</Text>
               <Text style={globalStyle.price}>€{detailedMenu.price.toFixed(2)}</Text>
-              <Text style={globalStyle.description}>{detailedMenu.shortDescription}</Text>
+              <Text style={globalStyle.description}>{detailedMenu.longDescription}</Text>
               <Text style={globalStyle.deliveryTime}>
                 Delivery in : {detailedMenu.deliveryTime} min
               </Text>

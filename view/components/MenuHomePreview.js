@@ -23,7 +23,7 @@ export default function MenuHomePreview({ menu, navigation }) {
 
       <TouchableOpacity
         style={globalStyle.button}
-        onPress={() => navigation.navigate("MenuDetail", { menuid: menu.mid, lat: menu.location.lat, lng: menu.location.lng })}
+        onPress={() => navigation.navigate("MenuDetail", { menuid: menu.mid })}
       >
         <Text style={globalStyle.buttonText}>Menu Detail</Text>
       </TouchableOpacity>
