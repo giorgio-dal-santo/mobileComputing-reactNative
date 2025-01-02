@@ -79,6 +79,7 @@ export default class AsyncStorageManager {
   static async setMenu(menu) {
     try {
       await AsyncStorage.setItem("menu", JSON.stringify(menu));
+      console.log("Menu salvato:", menu.mid);
     } catch (error) {
       console.error("Errore durante il salvataggio del menu:", error);
     }
@@ -96,6 +97,7 @@ export default class AsyncStorageManager {
   static async setOrderData(orderData) {
     try {
       await AsyncStorage.setItem("orderData", JSON.stringify(orderData));
+      console.log("Dati dell'ordine salvati:", orderData.oid);
     } catch (error) {
       console.error("Errore durante il salvataggio dei dati dell'ordine:", error);
     }

@@ -8,6 +8,7 @@ export const UserContextProvider = ({
   isRegisteredInit,
   userLocationInit,
   canUseLocationInit,
+  lastMenuInit,
   children,
 }) => {
   const [userData, setUserData] = useState(userDataInit);
@@ -15,6 +16,7 @@ export const UserContextProvider = ({
   const [isRegistered, setIsRegistered] = useState(isRegisteredInit);
   const [userLocation, setUserLocation] = useState(userLocationInit);
   const [canUseLocation, setCanUseLocation] = useState(canUseLocationInit);
+  const [lastMenu, setLastMenu] = useState(lastMenuInit);
   
 
   useEffect(() => {
@@ -37,9 +39,13 @@ export const UserContextProvider = ({
     setCanUseLocation(canUseLocationInit);
   }, [canUseLocationInit]);
 
+  useEffect(() => {
+    setLastMenu(lastMenuInit);
+  }, [lastMenuInit]);
+
   return (
     <UserContext.Provider
-      value={{ userData, setUserData, orderData, setOrderData, isRegistered, setIsRegistered, userLocation, setUserLocation, canUseLocation, setCanUseLocation }}
+      value={{ userData, setUserData, orderData, setOrderData, isRegistered, setIsRegistered, userLocation, setUserLocation, canUseLocation, setCanUseLocation, lastMenu, setLastMenu }}
     >
       {children}
     </UserContext.Provider>

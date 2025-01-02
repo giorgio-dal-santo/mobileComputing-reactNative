@@ -1,5 +1,5 @@
 import { Text, View, SafeAreaView, ScrollView, StatusBar } from "react-native";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { globalStyle } from "../../styles/GlobalStyle";
 import ViewModel from "../../viewModel/ViewModel";
 import { useIsFocused } from "@react-navigation/native";
@@ -11,119 +11,84 @@ import { TouchableOpacity } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 
 export default function OrderScreen({ navigation }) {
-  const { isRegistered, orderData, setOrderData } = useContext(UserContext);
+  const { isRegistered, orderData, setOrderData, lastMenu, setLastMenu } =
+    useContext(UserContext);
 
   const viewModel = ViewModel.getViewModel();
 
-  const [menu, setMenu] = useState(null);
-
   const isFocused = useIsFocused();
   const intervalId = useRef(null);
-  const isFetching = useRef(false);
 
   useEffect(() => {
-    const loadAndSyncData = async () => {
-      if (isFetching.current) return;
-      isFetching.current = true;
-
+    const getDataFromStorage = async () => {
       try {
-        console.log("Fetching data order...");
-        const [savedMenu, savedOrderData] =
-          await viewModel.getMenuAndOrderDataFromStorage();
-        if (savedMenu)
-          setMenu((prev) => (prev?.mid !== savedMenu.mid ? savedMenu : prev));
-        if (savedOrderData)
-          setOrderData((prev) =>
-            prev?.oid !== savedOrderData.oid ? savedOrderData : prev
-          );
+        const savedMenu = await viewModel.getLastMenu();
+        const savedOrderData = await viewModel.getLastOrderData();
 
-        if (savedOrderData?.mid && savedOrderData?.menuLocation) {
-          const fetchedMenu = await viewModel.getMenuDetail(
-            savedOrderData.mid,
-            savedOrderData.menuLocation.lat,
-            savedOrderData.menuLocation.lng
-          );
-          setMenu((prevMenu) => {
-            if (!prevMenu || prevMenu.mid !== fetchedMenu.mid) {
-              console.log("Fetched Menu mid: ", fetchedMenu.mid);
-              return fetchedMenu;
-            }
-            return prevMenu;
-          });
-        }
+        if (savedMenu) setLastMenu(savedMenu);
+        if (savedOrderData) setOrderData(savedOrderData);
 
-        if (menu && savedOrderData.oid) {
-          const fetchedOrder = await viewModel.getOrderDetail(
-            savedOrderData.oid,
-            menu.mid,
-            menu.location.lat,
-            menu.location.lng
+        console.log("Data successfully loaded from storage.");
+      } catch (error) {
+        console.error("Error loading data:", error);
+      }
+    };
+
+    getDataFromStorage();
+  }, []);
+
+  useEffect(() => {
+    const currentOrderData = async () => {
+      try {
+        if (orderData.oid) {
+          const updatedOrderData = await viewModel.getOrderDetail(
+            orderData.oid
           );
-          setOrderData((prevOrder) => {
-            if (!prevOrder || prevOrder.oid !== fetchedOrder.oid) {
-              console.log("Fetched new order:", fetchedOrder.oid);
-              return {
-                ...savedOrderData,
-                ...fetchedOrder,
-              };
-            }
-            return prevOrder;
-          });
+          setOrderData(updatedOrderData);
+          console.log(
+            "Updated order data: ",
+            updatedOrderData.status,
+            updatedOrderData.currentPosition
+          );
         }
       } catch (error) {
         console.error("Error fetching data:", error);
-      } finally {
-        isFetching.current = false;
       }
     };
 
-    if (isFocused) {
-      console.log("Screen order is focused");
-      loadAndSyncData();
-      intervalId.current = setInterval(loadAndSyncData, 5000);
-    } else {
-      console.log("Screen order is not focused");
-      clearInterval(intervalId.current);
-    }
-
-    return () => {
-      if (intervalId.current) {
-        clearInterval(intervalId.current);
-        intervalId.current = null;
-      }
-    };
-  }, [isFocused, menu]);
-
-  useEffect(() => {
     const saveDataToStorage = async () => {
       try {
-        await viewModel.setMenuAndOrderDataToStorage(menu, orderData);
-        console.log("Data successfully saved to storage.");
+        if (lastMenu && orderData) {
+          await viewModel.setMenuAndOrderDataToStorage(lastMenu, orderData);
+          console.log("Data successfully saved to storage.");
+        }
       } catch (error) {
         console.error("Error saving data:", error);
       }
     };
 
-    console.log("---------");
-    console.log("order screen");
-    console.log("MENU ID", menu?.mid);
-    console.log("ORDER ID", orderData?.oid);
-    console.log("ORDER STATUS", orderData?.status);
-    console.log("ORDER MENU LOCATION", orderData?.menuLocation);
-    console.log("ORDER DELIVERY LOCATION", orderData?.deliveryLocation);
-    console.log("ORDER CURRENT LOCATION", orderData?.currentPosition);
-    console.log("---------");
+    if (isFocused) {
+      console.log("Screen order is focused");
+      currentOrderData();
+      intervalId.current = setInterval(currentOrderData, 5000);
+    }
 
-    console.log("saving data to storage...");
-    if (menu || orderData) saveDataToStorage();
-  }, [menu, orderData]);
+    return () => {
+      console.log("Component unmounted or screen is no longer focused");
+      if (intervalId.current) {
+        clearInterval(intervalId.current);
+        intervalId.current = null;
+      }
+      saveDataToStorage();
+    };
+  }, [isFocused]);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView>
         <View style={globalStyle.mainContainer}>
           {isRegistered ? (
-            <OrderStatus menu={menu} navigation={navigation} />
+            <OrderStatus navigation={navigation} />
           ) : (
             <NotRegister navigation={navigation} />
           )}
@@ -133,8 +98,8 @@ export default function OrderScreen({ navigation }) {
   );
 }
 
-const OrderStatus = ({ menu, navigation }) => {
-  const { userData, orderData } = useContext(UserContext);
+const OrderStatus = ({ navigation }) => {
+  const { userData, orderData, lastMenu } = useContext(UserContext);
 
   if (!userData.lastOid && !orderData.oid) {
     return (
@@ -152,7 +117,7 @@ const OrderStatus = ({ menu, navigation }) => {
 
   return (
     <View>
-      {!orderData || !menu ? (
+      {!orderData || !lastMenu ? (
         <View style={globalStyle.header}>
           <Text>Loading...</Text>
         </View>
@@ -167,21 +132,23 @@ const OrderStatus = ({ menu, navigation }) => {
               drone
             </Text>
           </View>
-          {orderData.menuLocation?.lat && orderData.menuLocation?.lng ? (
+          {lastMenu.location?.lat &&
+          lastMenu.location?.lat &&
+          orderData?.deliveryLocation ? (
             <View style={globalStyle.mapContainer}>
               <MapView
                 style={globalStyle.map}
                 initialRegion={{
-                  latitude: orderData.menuLocation.lat,
-                  longitude: orderData.menuLocation.lng,
+                  latitude: lastMenu.location.lat,
+                  longitude: lastMenu.location.lng,
                   latitudeDelta: 0.01,
                   longitudeDelta: 0.01,
                 }}
               />
               <Marker
                 coordinate={{
-                  latitude: orderData.menuLocation.lat,
-                  longitude: orderData.menuLocation.lng,
+                  latitude: lastMenu.location.lat,
+                  longitude: lastMenu.location.lng,
                 }}
                 title="Menu Location"
                 description="This is the menu location"
@@ -200,43 +167,40 @@ const OrderStatus = ({ menu, navigation }) => {
               <Text>Loading map data...</Text>
             </View>
           )}
-          <MenuCardPreview menu={menu} />
+          <MenuCardPreview />
         </View>
       ) : orderData?.status === "COMPLETED" ? (
         <View style={globalStyle.innerContainer}>
           <View style={globalStyle.subContainer}>
             <Text style={globalStyle.title}>Your order has been delivered</Text>
             <Text>MAPPA con luogo di consegna</Text>
-            <Text>Delivery Location</Text>
-            <Text>
-              delivery Latitude: {orderData.deliveryLocation.lat} - delivery
-              Longitude: {orderData.deliveryLocation.lng}
-            </Text>
-            <Text>
-              menu Latitude: {orderData.menuLocation.lat} - menu Longitude:{" "}
-              {orderData.menuLocation.lng}
-            </Text>
           </View>
-          <View style={globalStyle.mapContainer}>
-            <MapView
-              style={globalStyle.map}
-              initialRegion={{
-                latitude: orderData.deliveryLocation.lat,
-                longitude: orderData.deliveryLocation.lng,
-                latitudeDelta: 0.01,
-                longitudeDelta: 0.01,
-              }}
-            />
-            <Marker
-              coordinate={{
-                latitude: orderData.deliveryLocation.lat,
-                longitude: orderData.deliveryLocation.lng,
-              }}
-              title="Delivery Location"
-              description="This is the delivery location"
-            />
-          </View>
-          <MenuCardPreview menu={menu} />
+          {orderData.deliveryLocation ? (
+            <View style={globalStyle.mapContainer}>
+              <MapView
+                style={globalStyle.map}
+                initialRegion={{
+                  latitude: orderData.deliveryLocation.lat,
+                  longitude: orderData.deliveryLocation.lng,
+                  latitudeDelta: 0.01,
+                  longitudeDelta: 0.01,
+                }}
+              />
+              <Marker
+                coordinate={{
+                  latitude: orderData.deliveryLocation.lat,
+                  longitude: orderData.deliveryLocation.lng,
+                }}
+                title="Delivery Location"
+                description="This is the delivery location"
+              />
+            </View>
+          ) : (
+            <View style={globalStyle.subContainer}>
+              <Text>Loading map data...</Text>
+            </View>
+          )}
+          <MenuCardPreview />
           <TouchableOpacity
             style={globalStyle.button}
             onPress={() =>

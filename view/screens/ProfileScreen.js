@@ -12,113 +12,8 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { TouchableOpacity } from "react-native";
 
 export default function ProfileScreen({ navigation }) {
-  const { isRegistered, userData, orderData, setOrderData } =
+  const { isRegistered, userData, orderData } =
     useContext(UserContext);
-
-  const viewModel = ViewModel.getViewModel();
-
-  const [menu, setMenu] = useState(null);
-
-  const isFocused = useIsFocused();
-  const intervalId = useRef(null);
-  const isFetching = useRef(false);
-
-  useEffect(() => {
-    const loadAndSyncData = async () => {
-      if (isFetching.current) return;
-      isFetching.current = true;
-
-      try {
-        console.log("Fetching data order...");
-        const [savedMenu, savedOrderData] =
-          await viewModel.getMenuAndOrderDataFromStorage();
-        if (savedMenu)
-          setMenu((prev) => (prev?.mid !== savedMenu.mid ? savedMenu : prev));
-        if (savedOrderData)
-          setOrderData((prev) =>
-            prev?.oid !== savedOrderData.oid ? savedOrderData : prev
-          );
-
-        if (savedOrderData?.mid && savedOrderData?.menuLocation) {
-          const fetchedMenu = await viewModel.getMenuDetail(
-            savedOrderData.mid,
-            savedOrderData.menuLocation.lat,
-            savedOrderData.menuLocation.lng
-          );
-          setMenu((prevMenu) => {
-            if (!prevMenu || prevMenu.mid !== fetchedMenu.mid) {
-              console.log("Fetched Menu mid: ", fetchedMenu.mid);
-              return fetchedMenu;
-            }
-            return prevMenu;
-          });
-        }
-
-        if (menu && savedOrderData.oid) {
-          const fetchedOrder = await viewModel.getOrderDetail(
-            savedOrderData.oid,
-            menu.mid,
-            menu.location.lat,
-            menu.location.lng
-          );
-          setOrderData((prevOrder) => {
-            if (!prevOrder || prevOrder.oid !== fetchedOrder.oid) {
-              console.log("Fetched new order:", fetchedOrder.oid);
-              return {
-                ...savedOrderData,
-                ...fetchedOrder,
-              };
-            }
-            return prevOrder;
-          });
-        }
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        isFetching.current = false;
-      }
-    };
-
-    if (isFocused) {
-      console.log("Screen order is focused");
-      loadAndSyncData();
-      intervalId.current = setInterval(loadAndSyncData, 5000);
-    } else {
-      console.log("Screen order is not focused");
-      clearInterval(intervalId.current);
-    }
-
-    return () => {
-      if (intervalId.current) {
-        clearInterval(intervalId.current);
-        intervalId.current = null;
-      }
-    };
-  }, [isFocused, menu]);
-
-  useEffect(() => {
-    const saveDataToStorage = async () => {
-      try {
-        await viewModel.setMenuAndOrderDataToStorage(menu, orderData);
-        console.log("Data successfully saved to storage.");
-      } catch (error) {
-        console.error("Error saving data:", error);
-      }
-    };
-
-    console.log("---------");
-    console.log("profile screen");
-    console.log("MENU ID", menu?.mid);
-    console.log("ORDER ID", orderData?.oid);
-    console.log("ORDER STATUS", orderData?.status);
-    console.log("ORDER MENU LOCATION", orderData?.menuLocation);
-    console.log("ORDER DELIVERY LOCATION", orderData?.deliveryLocation);
-    console.log("ORDER CURRENT LOCATION", orderData?.currentPosition);
-    console.log("---------");
-
-    console.log("saving data to storage...");
-    if (menu || orderData) saveDataToStorage();
-  }, [menu, orderData]);
 
   if (!isRegistered) {
     return (
@@ -168,7 +63,7 @@ export default function ProfileScreen({ navigation }) {
             <Text style={[globalStyle.title, { marginLeft: 20 }]}>
               Last Order:{" "}
             </Text>
-            <MenuCardPreview menu={menu} />
+            <MenuCardPreview />
           </View>
         ) : !userData.lastOid && !orderData.oid ? (
           <View style={globalStyle.innerContainer}>

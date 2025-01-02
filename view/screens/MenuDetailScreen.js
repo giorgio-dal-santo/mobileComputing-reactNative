@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { globalStyle } from "../../styles/GlobalStyle";
 import ViewModel from "../../viewModel/ViewModel";
 import { TouchableOpacity } from "react-native";
-import MenuCardPreview from "../components/MenuCardPreview";
 import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
 

@@ -34,16 +34,19 @@ export default function App() {
   const [isRegistered, setIsRegistered] = useState(false);
   const [userLocation, setUserLocation] = useState(null);
   const [canUseLocation, setCanUseLocation] = useState(false);
+  const [lastMenu, setLastMenu] = useState(null);
 
   useEffect(() => {
     const loadLaunchData = async () => {
       try {
+        // load user data
         const [userData, orderData, isRegistered] =
           await viewModel.loadLaunchData();
         setUserData(userData);
         setOrderData(orderData);
         setIsRegistered(isRegistered);
 
+        // load location data
         const canUseLocation = await locationViewModel.getPermission();
         setCanUseLocation(canUseLocation);
 
@@ -58,6 +61,11 @@ export default function App() {
             }
           );
         }
+
+        // load last menu
+        const lastMenu = await viewModel.getLastMenu();
+        setLastMenu(lastMenu);
+        
       } catch (error) {
         console.error("Error loading launch data: ", error);
       }
@@ -87,6 +95,7 @@ export default function App() {
       isRegisteredInit={isRegistered}
       canUseLocationInit={canUseLocation}
       userLocationInit={userLocation}
+      lastMenuInit={lastMenu}
     >
       <NavigationContainer>
         <Tab.Navigator

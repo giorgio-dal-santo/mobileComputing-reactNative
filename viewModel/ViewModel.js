@@ -211,14 +211,13 @@ export default class ViewModel {
   }
 
 
-  async getOrderDetail(oid, mid, lat, lng) {
+  async getOrderDetail(oid) {
     try {
       const orderDetail = await CommunicationController.getOrderDetail(
         oid,
         this.sid
       );
   
-      const menu = await this.getMenuDetail(mid, lat, lng);
   
       return new Order(
         orderDetail.oid,
@@ -230,7 +229,6 @@ export default class ViewModel {
         orderDetail.deliveryTimestamp,
         orderDetail.expectedDeliveryTimestamp,
         orderDetail.currentPosition,
-        menu.location
       );
     } catch (error) {
       console.error("Error getting order details:", error);
@@ -238,11 +236,19 @@ export default class ViewModel {
 
   }
 
-  async getMenuAndOrderDataFromStorage() {
+  async getLastMenu() {
     try {
       const savedMenu = await AsyncStorageManager.getMenu();
+      return savedMenu;
+    } catch (error) {
+      console.error('Error loading persisted data:', error);
+    }
+  }
+
+  async getLastOrderData() {
+    try {
       const savedOrderData = await AsyncStorageManager.getOrderData();
-      return [savedMenu, savedOrderData];
+      return savedOrderData;
     } catch (error) {
       console.error('Error loading persisted data:', error);
     }

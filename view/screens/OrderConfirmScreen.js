@@ -9,23 +9,45 @@ import MapView, { Marker } from "react-native-maps";
 
 export default function OrderConfirmScreen({ route, navigation }) {
 
-  const { menuid, lat, lng } = route.params || {}; // route is neccessary?
+  const { menuid, lat, lng } = route.params || {};
 
-  const { orderData, setOrderData, userLocation } = useContext(UserContext);
+  const { orderData, setOrderData, userLocation, setLastMenu, lastMenu } = useContext(UserContext);
 
   useEffect(() => {
     const viewModel = ViewModel.getViewModel();
+    
     const fetchNewOrder = async () => {
       try {
         const newOrder = await viewModel.newOrder(userLocation, menuid, lat, lng);
         setOrderData(newOrder);
         console.log("New Order: ", newOrder);
+  
+        const menu = await viewModel.getMenuDetail(menuid, lat, lng);
+        setLastMenu(menu);
       } catch (error) {
         console.error("Errore nel caricamento del nuovo ordine:", error);
       }
     };
+  
     fetchNewOrder();
-  }, [userLocation, menuid])
+  }, [userLocation, menuid]);
+  
+  useEffect(() => {
+    const viewModel = ViewModel.getViewModel();
+  
+    const saveDataToStorage = async () => {
+      try {
+        await viewModel.setMenuAndOrderDataToStorage(lastMenu, orderData);
+        console.log("Data successfully saved to storage.");
+      } catch (error) {
+        console.error("Error saving data:", error);
+      }
+    };
+  
+    if (orderData && lastMenu) {
+      saveDataToStorage();
+    }
+  }, [orderData, lastMenu]);
 
 
   return (
