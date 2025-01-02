@@ -4,10 +4,9 @@ import HomeStackNavigator from "./view/navigation/HomeStackNavigator";
 import ProfileStackNavigator from "./view/navigation/ProfileStackNavigator";
 import OrderScreen from "./view/screens/OrderScreen";
 import ViewModel from "./viewModel/ViewModel";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { UserContextProvider } from "./view/context/UserContext";
 import * as Font from "expo-font";
-import { useFonts } from "expo-font";
 import { View, ActivityIndicator } from "react-native";
 import { globalStyle } from "./styles/GlobalStyle";
 import { Ionicons } from "react-native-vector-icons";
@@ -75,7 +74,7 @@ export default function App() {
 
   if (!fontsLoaded) {
     return (
-      <View style={globalStyle.container}>
+      <View style={globalStyle.mainContainer}>
         <ActivityIndicator size="large" color="#007BFF" />
       </View>
     );

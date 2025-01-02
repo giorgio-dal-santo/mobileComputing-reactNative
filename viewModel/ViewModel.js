@@ -47,10 +47,6 @@ export default class ViewModel {
 
     const isRegistered = await this.isRegistered();
 
-    // if not registered return null, null and isRegistered()
-    //if(!isRegistered) return [null, null, isRegistered];
-
-    // if registered return user data, order data (lastOid, orderStatus) and isRegistered()
     const userData = await this.getUserData();
     const orderData = new Order(
       userData.lastOid,

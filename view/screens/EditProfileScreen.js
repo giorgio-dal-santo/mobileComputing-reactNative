@@ -95,7 +95,7 @@ export default function EditProfileScreen({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, paddingTop: 0 }}>
       <ScrollView>
         <View style={globalStyle.mainContainer}>
           <Text style={globalStyle.title}>
@@ -253,11 +253,10 @@ export default function EditProfileScreen({ navigation }) {
           <TouchableOpacity
             style={[
               globalStyle.button,
-              { backgroundColor: "green", borderColor: "green" },
             ]}
             onPress={handleSubmit}
           >
-            <Text style={[globalStyle.buttonText, { color: "#fff" }]}>
+            <Text style={globalStyle.buttonText}>
               {isRegistered ? "Save" : "Register"}
             </Text>
           </TouchableOpacity>

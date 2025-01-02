@@ -80,16 +80,16 @@ export default function HomeScreen({ navigation }) {
           </View>
         ) : isRegistered && !canUseLocation ? (
           <View style={globalStyle.innerContainer}>
-            <Text>Location not available</Text>
-            <Button
-              title="Allow location"
-              onPress={async () => {
-                await handleAllowLocation();
-              }}
-            />
+            <Text style={globalStyle.title}>Location not available</Text>
+            <TouchableOpacity
+              style={[globalStyle.button]}
+              onPress={async () => await handleAllowLocation()}
+            >
+              <Text style={globalStyle.buttonText}>Allow location</Text>
+            </TouchableOpacity>
           </View>
         ) : !isRegistered ? (
-            <NotRegister navigation={navigation} />
+          <NotRegister navigation={navigation} />
         ) : loading ? (
           <View style={globalStyle.innerContainer}>
             <Text>Loading...</Text>
@@ -119,15 +119,10 @@ const NotRegister = ({ navigation }) => {
     <View>
       <Text style={globalStyle.title}>User not registered</Text>
       <TouchableOpacity
-        style={[
-          globalStyle.button,
-          { backgroundColor: "green", borderColor: "green" },
-        ]}
+        style={[globalStyle.button]}
         onPress={() => navigation.navigate("ProfileStack")}
       >
-        <Text style={[globalStyle.buttonText, { color: "#fff" }]}>
-          Register
-        </Text>
+        <Text style={globalStyle.buttonText}>Register</Text>
       </TouchableOpacity>
     </View>
   );

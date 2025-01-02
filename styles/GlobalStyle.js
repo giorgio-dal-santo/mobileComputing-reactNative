@@ -142,23 +142,17 @@ export const globalStyle = StyleSheet.create({
   },
 
   // container
-  
-
-
-
   mainContainer: {
     borderWidth: 1,
     borderColor: 'red',
     padding: 20,
   },
-
   header: {
     backgroundColor: 'grey',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 10, 
   },
-
   innerContainer: {
     flexDirection: 'column',
     justifyContent: 'space-between',
@@ -180,18 +174,17 @@ export const globalStyle = StyleSheet.create({
   },
   mapContainer: {
     backgroundColor: 'orange',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
     marginVertical: 10,
+    marginHorizontal: 5,
     height: 300,
   },
-
- 
-  
 
   // map
   map: {
     width: "100%",
     height: "100%",
+    marginHorizontal: 5,
   },
 });

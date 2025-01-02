@@ -5,6 +5,7 @@ import ViewModel from "../../viewModel/ViewModel";
 import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
 import { TouchableOpacity } from "react-native";
+import MapView, { Marker } from "react-native-maps";
 
 export default function OrderConfirmScreen({ route, navigation }) {
 
@@ -36,6 +37,28 @@ export default function OrderConfirmScreen({ route, navigation }) {
                 Thank you for your purchase!
               </Text>
               <Text>MAPPA QUI (dove si trova il menu) todo</Text>
+              {
+                lat && lng ? (
+                  <View style={globalStyle.mapContainer}>
+                    <MapView
+                      style={globalStyle.map}
+                      initialRegion={{
+                        latitude: lat,
+                        longitude: lng,
+                        latitudeDelta: 0.0922,
+                        longitudeDelta: 0.0421,
+                      }}
+                    >
+                      <Marker
+                        coordinate={{ latitude: lat, longitude: lng }}
+                        title="Menu Location"
+                      />
+                    </MapView>
+                  </View>
+                ) : (
+                  <Text>Loading map...</Text>
+                )
+              }
               <TouchableOpacity
                 style={globalStyle.button}
                 onPress={() => navigation.navigate("Order")}

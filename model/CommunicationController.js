@@ -61,7 +61,7 @@ export default class CommunicationController {
   
     // User data management
     static async registerUser() {
-      const endpoint = "/user/";
+      const endpoint = "/user";
       console.log("registerUser called with endpoint: ", endpoint);
       return await this.genericPostRequest(endpoint);
     }
@@ -94,7 +94,7 @@ export default class CommunicationController {
   
     // Menu data management
     static async getNearbyMenus(lat, lng, sid) {
-      const endpoint = "/menu/";
+      const endpoint = "/menu";
       queryParams = { lat: lat, lng: lng, sid: sid };
       /*console.log(
         "getNearbyMenus called with endpoint: ",

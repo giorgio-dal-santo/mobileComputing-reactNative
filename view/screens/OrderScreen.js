@@ -27,14 +27,16 @@ export default function OrderScreen({ navigation }) {
       isFetching.current = true;
 
       try {
-        console.log("Fetching data...");
-        // 1. Caricamento iniziale dei dati da AsyncStorage
+        console.log("Fetching data order...");
         const [savedMenu, savedOrderData] =
           await viewModel.getMenuAndOrderDataFromStorage();
-        if (savedMenu) setMenu(savedMenu);
-        if (savedOrderData) setOrderData(savedOrderData);
+        if (savedMenu)
+          setMenu((prev) => (prev?.mid !== savedMenu.mid ? savedMenu : prev));
+        if (savedOrderData)
+          setOrderData((prev) =>
+            prev?.oid !== savedOrderData.oid ? savedOrderData : prev
+          );
 
-        // 2. Aggiorna i dati con il fetch dal server, se necessario
         if (savedOrderData?.mid && savedOrderData?.menuLocation) {
           const fetchedMenu = await viewModel.getMenuDetail(
             savedOrderData.mid,
@@ -57,11 +59,16 @@ export default function OrderScreen({ navigation }) {
             menu.location.lat,
             menu.location.lng
           );
-          setOrderData({
-            ...savedOrderData,
-            ...fetchedOrder,
+          setOrderData((prevOrder) => {
+            if (!prevOrder || prevOrder.oid !== fetchedOrder.oid) {
+              console.log("Fetched new order:", fetchedOrder.oid);
+              return {
+                ...savedOrderData,
+                ...fetchedOrder,
+              };
+            }
+            return prevOrder;
           });
-          //console.log("Updated OrderData oid + status: ", orderData.oid, orderData.status);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -85,18 +92,29 @@ export default function OrderScreen({ navigation }) {
         intervalId.current = null;
       }
     };
-  }, [isFocused]);
+  }, [isFocused, menu]);
 
-  // Salvataggio automatico dei dati aggiornati nello Storage
   useEffect(() => {
     const saveDataToStorage = async () => {
       try {
         await viewModel.setMenuAndOrderDataToStorage(menu, orderData);
+        console.log("Data successfully saved to storage.");
       } catch (error) {
         console.error("Error saving data:", error);
       }
     };
 
+    console.log("---------");
+    console.log("order screen");
+    console.log("MENU ID", menu?.mid);
+    console.log("ORDER ID", orderData?.oid);
+    console.log("ORDER STATUS", orderData?.status);
+    console.log("ORDER MENU LOCATION", orderData?.menuLocation);
+    console.log("ORDER DELIVERY LOCATION", orderData?.deliveryLocation);
+    console.log("ORDER CURRENT LOCATION", orderData?.currentPosition);
+    console.log("---------");
+
+    console.log("saving data to storage...");
     if (menu || orderData) saveDataToStorage();
   }, [menu, orderData]);
 
@@ -168,6 +186,14 @@ const OrderStatus = ({ menu, navigation }) => {
                 title="Menu Location"
                 description="This is the menu location"
               />
+              <Marker
+                coordinate={{
+                  latitude: orderData.deliveryLocation.lat,
+                  longitude: orderData.deliveryLocation.lng,
+                }}
+                title="Delivery Location"
+                description="This is the delivery location"
+              />
             </View>
           ) : (
             <View style={globalStyle.subContainer}>
@@ -222,7 +248,6 @@ const OrderStatus = ({ menu, navigation }) => {
           >
             <Text style={globalStyle.buttonText}>Order Again</Text>
           </TouchableOpacity>
-          <StatusBar style="auto" />
         </View>
       ) : (
         <View style={globalStyle.header}>
@@ -238,10 +263,7 @@ const NotRegister = ({ navigation }) => {
     <View>
       <Text style={globalStyle.title}>User not registered</Text>
       <TouchableOpacity
-        style={[
-          globalStyle.button,
-          { backgroundColor: "green", borderColor: "green" },
-        ]}
+        style={[globalStyle.button]}
         onPress={() => navigation.navigate("ProfileStack")}
       >
         <Text style={globalStyle.buttonText}>Register</Text>
