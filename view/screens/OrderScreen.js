@@ -127,8 +127,13 @@ const OrderStatus = ({ navigation }) => {
         <View style={globalStyle.innerContainer}>
           <View style={globalStyle.subContainer}>
             <Text style={globalStyle.title}>
-              Your order will arrive at: {orderData.expectedDeliveryTimestamp}
+              Your order will arrive at: {new Date(orderData.expectedDeliveryTimestamp).toLocaleString('it-IT', {
+                hour: '2-digit',
+                minute: '2-digit',
+                timeZone: 'UTC'
+              })}
             </Text>
+
           </View>
           {lastMenu.location?.lat &&
             lastMenu.location?.lat &&
@@ -170,8 +175,12 @@ const OrderStatus = ({ navigation }) => {
       ) : orderData?.status === "COMPLETED" ? (
         <View style={globalStyle.innerContainer}>
           <View style={globalStyle.subContainer}>
-            <Text style={globalStyle.title}>Your order has been delivered</Text>
-            <Text>MAPPA con luogo di consegna</Text>
+            <Text style={globalStyle.title}>Your order has been delivered at {new Date(orderData.deliveryTimestamp).toLocaleString('it-IT', {
+                hour: '2-digit',
+                minute: '2-digit',
+                timeZone: 'UTC'
+              })} 
+              </Text>
           </View>
           {orderData.deliveryLocation ? (
             <View style={globalStyle.mapContainer}>
