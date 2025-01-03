@@ -11,8 +11,34 @@ import { View, ActivityIndicator } from "react-native";
 import { globalStyle } from "./styles/GlobalStyle";
 import { Ionicons } from "react-native-vector-icons";
 import LocationViewModel from "./viewModel/LocationViewModel";
+import { useRef } from "react";
+import { AppState } from "react-native";
 
 export default function App() {
+
+  // Salvare la pagina corrente
+  const [currentScreen, setCurrentScreen] = useState('Screen1');
+  const currentScreenRef = useRef(currentScreen);
+
+  function setScreen(value) {
+    currentScreenRef.current = value;
+    setCurrentScreen(value);
+  }
+  useEffect(() => {
+    const handleAppStateChange = (nextAppState) => {
+      console.log("currentScreen", currentScreenRef.current);
+      setScreen(nextAppState);
+    }
+    const subscription = AppState.addEventListener('change', handleAppStateChange);
+    return () => {
+      subscription.remove();
+    };
+  }, []);
+
+
+
+
+
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
   useEffect(() => {
@@ -65,7 +91,7 @@ export default function App() {
         // load last menu
         const lastMenu = await viewModel.getLastMenu();
         setLastMenu(lastMenu);
-        
+
       } catch (error) {
         console.error("Error loading launch data: ", error);
       }
