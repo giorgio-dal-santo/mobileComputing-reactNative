@@ -61,6 +61,8 @@ export default function OrderScreen({ navigation }) {
         if (lastMenu && orderData) {
           await viewModel.setMenuAndOrderDataToStorage(lastMenu, orderData);
           console.log("Data successfully saved to storage.");
+          console.log("Last menu location: ", lastMenu.location.lat, lastMenu.location.lng);
+
         }
       } catch (error) {
         console.error("Error saving data:", error);
@@ -133,16 +135,16 @@ const OrderStatus = ({ navigation }) => {
             </Text>
           </View>
           {lastMenu.location?.lat &&
-          lastMenu.location?.lat &&
-          orderData?.deliveryLocation ? (
+            lastMenu.location?.lat &&
+            orderData?.deliveryLocation ? (
             <View style={globalStyle.mapContainer}>
               <MapView
                 style={globalStyle.map}
                 initialRegion={{
                   latitude: lastMenu.location.lat,
                   longitude: lastMenu.location.lng,
-                  latitudeDelta: 0.01,
-                  longitudeDelta: 0.01,
+                  latitudeDelta: 0.0922,
+                  longitudeDelta: 0.0421,
                 }}
               />
               <Marker
