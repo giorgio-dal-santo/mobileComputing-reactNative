@@ -129,10 +129,6 @@ const OrderStatus = ({ navigation }) => {
             <Text style={globalStyle.title}>
               Your order will arrive at: {orderData.expectedDeliveryTimestamp}
             </Text>
-            <Text style={globalStyle.title}>
-              MAPPA: mostrare luogo di consegna, luogo di partenza, traiettoria
-              drone
-            </Text>
           </View>
           {lastMenu.location?.lat &&
             lastMenu.location?.lat &&

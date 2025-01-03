@@ -13,31 +13,35 @@ import { Ionicons } from "react-native-vector-icons";
 import LocationViewModel from "./viewModel/LocationViewModel";
 import { useRef } from "react";
 import { AppState } from "react-native";
+import React from "react";
+
+const navigationRef = React.createRef();
+
 
 export default function App() {
 
   // Salvare la pagina corrente
-  const [currentScreen, setCurrentScreen] = useState('Screen1');
+  const [currentScreen, setCurrentScreen] = useState('FirstScreen');
   const currentScreenRef = useRef(currentScreen);
 
-  function setScreen(value) {
+  async function setScreen(value) {
     currentScreenRef.current = value;
     setCurrentScreen(value);
+    console.log("Current screen: ", value);
+    await viewModel.setCurrentScreen(value);
   }
+
   useEffect(() => {
-    const handleAppStateChange = (nextAppState) => {
-      console.log("currentScreen", currentScreenRef.current);
-      setScreen(nextAppState);
+    const handleAppStateChange = async (nextAppState) => {
+      if (nextAppState === "background") {
+        console.log("App going to background from:", currentScreenRef.current);
+      }
     }
     const subscription = AppState.addEventListener('change', handleAppStateChange);
     return () => {
       subscription.remove();
     };
   }, []);
-
-
-
-
 
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
@@ -123,7 +127,13 @@ export default function App() {
       userLocationInit={userLocation}
       lastMenuInit={lastMenu}
     >
-      <NavigationContainer>
+      <NavigationContainer 
+      ref={navigationRef}
+      onStateChange={() => {
+        const route = navigationRef.current?.getCurrentRoute();
+        console.log("Current route: ", route);
+        if (route) setScreen(route.name);
+      }}>
         <Tab.Navigator
           screenOptions={({ route }) => ({
             tabBarIcon: ({ focused, color, size }) => {

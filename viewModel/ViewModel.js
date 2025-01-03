@@ -262,4 +262,21 @@ export default class ViewModel {
       console.error('Error saving menu or orderData:', error);
     }
   }
+
+  async setCurrentScreen(screen) {
+    try {
+      await AsyncStorageManager.setCurrentScreen(screen);
+    } catch (error) {
+      console.error('Error saving current screen:', error);
+    }
+  }
+
+  async getCurrentScreen() {
+    try {
+      const screen = await AsyncStorageManager.getCurrentScreen();
+      return screen;
+    } catch (error) {
+      console.error('Error loading current screen:', error);
+    }
+  }
 }

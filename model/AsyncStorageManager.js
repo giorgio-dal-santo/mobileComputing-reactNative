@@ -112,6 +112,25 @@ export default class AsyncStorageManager {
     }
   }
 
+  static async setCurrentScreen(screen) {
+    try {
+      await AsyncStorage.setItem("currentScreen", JSON.stringify(screen));
+      console.log("Schermata corrente salvata:", screen);
+    } catch (error) {
+      console.error("Errore durante il salvataggio della schermata corrente:", error);
+    }
+  }
+
+  static async getCurrentScreen() {
+    try {
+      const screen = await AsyncStorage.getItem("currentScreen");
+      return JSON.parse(screen);
+    }
+    catch (error) {
+      console.error("Errore durante il recupero della schermata corrente:", error);
+    }
+  }
+
 
   
 }

@@ -58,7 +58,6 @@ export default function OrderConfirmScreen({ route, navigation }) {
               <Text style={[globalStyle.title, { textAlign: 'center', width: '100%' }]}>
                 Thank you for your purchase!
               </Text>
-              <Text>MAPPA QUI (dove si trova il menu) todo</Text>
               {
                 lat && lng ? (
                   <View style={globalStyle.mapContainer}>

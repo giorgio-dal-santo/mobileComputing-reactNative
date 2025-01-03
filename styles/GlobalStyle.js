@@ -143,12 +143,12 @@ export const globalStyle = StyleSheet.create({
 
   // container
   mainContainer: {
-    borderWidth: 1,
-    borderColor: 'red',
+    //borderWidth: 1,
+    //borderColor: 'red',
     padding: 20,
   },
   header: {
-    backgroundColor: 'grey',
+    //backgroundColor: 'grey',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 10, 
@@ -156,10 +156,10 @@ export const globalStyle = StyleSheet.create({
   innerContainer: {
     flexDirection: 'column',
     justifyContent: 'space-between',
-    backgroundColor: 'yellow',
+    //backgroundColor: 'yellow',
   },
   subContainer: {
-    backgroundColor: 'green',
+    //backgroundColor: 'green',
     justifyContent: 'center',
     alignItems: 'center',
     marginHorizontal: 5,
@@ -170,10 +170,10 @@ export const globalStyle = StyleSheet.create({
     marginBottom: 20,
     justifyContent: "center",
     flex: 1,
-    backgroundColor: 'purple',
+    //backgroundColor: 'purple',
   },
   mapContainer: {
-    backgroundColor: 'orange',
+    //backgroundColor: 'orange',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginVertical: 10,
