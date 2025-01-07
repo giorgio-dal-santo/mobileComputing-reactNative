@@ -126,12 +126,12 @@ export const globalStyle = StyleSheet.create({
 
   // button
   button: {
-    backgroundColor: "#ffffff", // white background
+    backgroundColor: "#ffffff",
     borderRadius: 15,
-    borderWidth: 1, // aumento lo spessore del bordo
-    borderColor: "#000", // black border
-    paddingVertical: 8, // riduco il padding verticale per meno margine interno
-    paddingHorizontal: 20, // riduco il padding orizzontale per meno margine interno
+    borderWidth: 1,
+    borderColor: "#000",
+    paddingVertical: 8,
+    paddingHorizontal: 20,
     alignItems: "center",
     marginVertical: 10,
   },

@@ -35,8 +35,8 @@ export default class AsyncStorageManager {
     const hasAlreadyRun = await AsyncStorage.getItem("hasAlreadyRun");
     const hasAlreadyRunParsed = JSON.parse(hasAlreadyRun);
     if (hasAlreadyRunParsed === null || hasAlreadyRunParsed === false) {
-        await AsyncStorage.setItem("hasAlreadyRun", JSON.stringify(true));
-        return true;
+      await AsyncStorage.setItem("hasAlreadyRun", JSON.stringify(true));
+      return true;
     }
     return false;
   }
@@ -45,7 +45,10 @@ export default class AsyncStorageManager {
     try {
       await AsyncStorage.setItem("isRegistered", JSON.stringify(isRegistered));
     } catch (error) {
-      console.error("Errore durante il salvataggio dello stato di registrazione:", error);
+      console.error(
+        "Errore durante il salvataggio dello stato di registrazione:",
+        error
+      );
     }
   }
 
@@ -54,15 +57,24 @@ export default class AsyncStorageManager {
       const isRegistered = await AsyncStorage.getItem("isRegistered");
       return JSON.parse(isRegistered);
     } catch (error) {
-      console.error("Errore durante il recupero dello stato di registrazione:", error);
+      console.error(
+        "Errore durante il recupero dello stato di registrazione:",
+        error
+      );
     }
   }
 
   static async setCanUseLocation(canUseLocation) {
     try {
-      await AsyncStorage.setItem("canUseLocation", JSON.stringify(canUseLocation));
+      await AsyncStorage.setItem(
+        "canUseLocation",
+        JSON.stringify(canUseLocation)
+      );
     } catch (error) {
-      console.error("Errore durante il salvataggio dello stato di utilizzo della posizione:", error);
+      console.error(
+        "Errore durante il salvataggio dello stato di utilizzo della posizione:",
+        error
+      );
     }
   }
 
@@ -71,10 +83,12 @@ export default class AsyncStorageManager {
       const canUseLocation = await AsyncStorage.getItem("canUseLocation");
       return JSON.parse(canUseLocation);
     } catch (error) {
-      console.error("Errore durante il recupero dello stato di utilizzo della posizione:", error);
+      console.error(
+        "Errore durante il recupero dello stato di utilizzo della posizione:",
+        error
+      );
     }
   }
-
 
   static async setMenu(menu) {
     try {
@@ -85,25 +99,28 @@ export default class AsyncStorageManager {
     }
   }
 
-  static async getMenu() { 
+  static async getMenu() {
     try {
       const menu = await AsyncStorage.getItem("menu");
       return JSON.parse(menu);
     } catch (error) {
       console.error("Errore durante il recupero del menu:", error);
     }
-  } 
+  }
 
   static async setOrderData(orderData) {
     try {
       await AsyncStorage.setItem("orderData", JSON.stringify(orderData));
       console.log("Dati dell'ordine salvati:", orderData.oid);
     } catch (error) {
-      console.error("Errore durante il salvataggio dei dati dell'ordine:", error);
+      console.error(
+        "Errore durante il salvataggio dei dati dell'ordine:",
+        error
+      );
     }
   }
 
-  static async getOrderData () {
+  static async getOrderData() {
     try {
       const orderData = await AsyncStorage.getItem("orderData");
       return JSON.parse(orderData);
@@ -111,26 +128,4 @@ export default class AsyncStorageManager {
       console.error("Errore durante il recupero dei dati dell'ordine:", error);
     }
   }
-
-  static async setCurrentScreen(screen) {
-    try {
-      await AsyncStorage.setItem("currentScreen", JSON.stringify(screen));
-      console.log("Schermata corrente salvata:", screen);
-    } catch (error) {
-      console.error("Errore durante il salvataggio della schermata corrente:", error);
-    }
-  }
-
-  static async getCurrentScreen() {
-    try {
-      const screen = await AsyncStorage.getItem("currentScreen");
-      return JSON.parse(screen);
-    }
-    catch (error) {
-      console.error("Errore durante il recupero della schermata corrente:", error);
-    }
-  }
-
-
-  
 }

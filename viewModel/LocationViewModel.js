@@ -1,10 +1,6 @@
-import { StatusBar } from "expo-status-bar";
-import { Button, StyleSheet, Text, View } from "react-native";
 import * as Location from "expo-location";
-import { useContext, useEffect, useState } from "react";
 import { Alert } from "react-native";
 import { Linking } from "react-native";
-import MapView from "react-native-maps";
 import AsyncStorage from "../model/AsyncStorageManager";
 
 export default class LocationViewModel {
@@ -77,7 +73,7 @@ export default class LocationViewModel {
           const formattedLocation = {
             lat: newLocation.coords.latitude,
             lng: newLocation.coords.longitude,
-          }
+          };
           console.log("Location aggiornata: ", formattedLocation);
           if (onLocationUpdate) {
             onLocationUpdate(formattedLocation);
@@ -99,29 +95,4 @@ export default class LocationViewModel {
       console.log("Monitoraggio posizione interrotto");
     }
   }
-
-  /*
-  async getLocation() {
-    const canUseLocation = await this.canUseLocation();
-
-    if (!canUseLocation) {
-      console.warn("Permessi per la posizione non concessi.");
-      return null;
-    }
-
-    try {
-      const location = await Location.getCurrentPositionAsync({
-        accuracy: Location.Accuracy.High,
-      });
-      const formattedLocation = {
-        lat: location.coords.latitude,
-        lng: location.coords.longitude,
-      }
-      return formattedLocation;
-    } catch (error) {
-      console.error("Errore nel recupero della posizione: ", error);
-      return null;
-    }
-  }
-    */
 }

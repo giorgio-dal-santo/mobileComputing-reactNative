@@ -1,4 +1,4 @@
-import { Button, SafeAreaView, ScrollView, Text, View } from "react-native";
+import { SafeAreaView, ScrollView, Text, View } from "react-native";
 import { globalStyle } from "../../styles/GlobalStyle";
 import { useState } from "react";
 import ViewModel from "../../viewModel/ViewModel";

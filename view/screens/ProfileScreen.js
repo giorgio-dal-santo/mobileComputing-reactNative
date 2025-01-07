@@ -1,19 +1,13 @@
-import ViewModel from "../../viewModel/ViewModel";
-import { useState } from "react";
 import { Text, View, ScrollView, SafeAreaView } from "react-native";
 import { globalStyle } from "../../styles/GlobalStyle";
 import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
-import { useEffect } from "react";
-import { useIsFocused } from "@react-navigation/native";
-import { useRef } from "react";
 import MenuCardPreview from "../components/MenuCardPreview";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { TouchableOpacity } from "react-native";
 
 export default function ProfileScreen({ navigation }) {
-  const { isRegistered, userData, orderData } =
-    useContext(UserContext);
+  const { isRegistered, userData, orderData } = useContext(UserContext);
 
   if (!isRegistered) {
     return (
@@ -83,14 +77,10 @@ const NotRegister = ({ navigation }) => {
     <View>
       <Text style={globalStyle.title}>User not registered</Text>
       <TouchableOpacity
-        style={[
-          globalStyle.button,
-        ]}
+        style={[globalStyle.button]}
         onPress={() => navigation.navigate("EditProfile")}
       >
-        <Text style={globalStyle.buttonText}>
-          Register
-        </Text>
+        <Text style={globalStyle.buttonText}>Register</Text>
       </TouchableOpacity>
     </View>
   );

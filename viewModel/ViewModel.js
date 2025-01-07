@@ -48,10 +48,7 @@ export default class ViewModel {
     const isRegistered = await this.isRegistered();
 
     const userData = await this.getUserData();
-    const orderData = new Order(
-      userData.lastOid,
-      userData.orderStatus
-    );
+    const orderData = new Order(userData.lastOid, userData.orderStatus);
 
     return [userData, orderData, isRegistered];
   }
@@ -207,9 +204,7 @@ export default class ViewModel {
     } catch (error) {
       console.error("Error getting order status:", error);
     }
-
   }
-
 
   async getOrderDetail(oid) {
     try {
@@ -217,8 +212,7 @@ export default class ViewModel {
         oid,
         this.sid
       );
-  
-  
+
       return new Order(
         orderDetail.oid,
         orderDetail.status,
@@ -228,12 +222,11 @@ export default class ViewModel {
         orderDetail.deliveryLocation,
         orderDetail.deliveryTimestamp,
         orderDetail.expectedDeliveryTimestamp,
-        orderDetail.currentPosition,
+        orderDetail.currentPosition
       );
     } catch (error) {
       console.error("Error getting order details:", error);
     }
-
   }
 
   async getLastMenu() {
@@ -241,7 +234,7 @@ export default class ViewModel {
       const savedMenu = await AsyncStorageManager.getMenu();
       return savedMenu;
     } catch (error) {
-      console.error('Error loading persisted data:', error);
+      console.error("Error loading persisted data:", error);
     }
   }
 
@@ -250,7 +243,7 @@ export default class ViewModel {
       const savedOrderData = await AsyncStorageManager.getOrderData();
       return savedOrderData;
     } catch (error) {
-      console.error('Error loading persisted data:', error);
+      console.error("Error loading persisted data:", error);
     }
   }
 
@@ -259,24 +252,7 @@ export default class ViewModel {
       await AsyncStorageManager.setMenu(menu);
       await AsyncStorageManager.setOrderData(orderData);
     } catch (error) {
-      console.error('Error saving menu or orderData:', error);
-    }
-  }
-
-  async setCurrentScreen(screen) {
-    try {
-      await AsyncStorageManager.setCurrentScreen(screen);
-    } catch (error) {
-      console.error('Error saving current screen:', error);
-    }
-  }
-
-  async getCurrentScreen() {
-    try {
-      const screen = await AsyncStorageManager.getCurrentScreen();
-      return screen;
-    } catch (error) {
-      console.error('Error loading current screen:', error);
+      console.error("Error saving menu or orderData:", error);
     }
   }
 }

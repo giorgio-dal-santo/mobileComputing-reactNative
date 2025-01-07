@@ -17,18 +17,14 @@ import React from "react";
 
 const navigationRef = React.createRef();
 
-
 export default function App() {
-
-  // Salvare la pagina corrente
-  const [currentScreen, setCurrentScreen] = useState('FirstScreen');
+  const [currentScreen, setCurrentScreen] = useState("FirstScreen");
   const currentScreenRef = useRef(currentScreen);
 
   async function setScreen(value) {
     currentScreenRef.current = value;
     setCurrentScreen(value);
     console.log("Current screen: ", value);
-    await viewModel.setCurrentScreen(value);
   }
 
   useEffect(() => {
@@ -36,8 +32,11 @@ export default function App() {
       if (nextAppState === "background") {
         console.log("App going to background from:", currentScreenRef.current);
       }
-    }
-    const subscription = AppState.addEventListener('change', handleAppStateChange);
+    };
+    const subscription = AppState.addEventListener(
+      "change",
+      handleAppStateChange
+    );
     return () => {
       subscription.remove();
     };
@@ -95,7 +94,6 @@ export default function App() {
         // load last menu
         const lastMenu = await viewModel.getLastMenu();
         setLastMenu(lastMenu);
-
       } catch (error) {
         console.error("Error loading launch data: ", error);
       }
@@ -127,30 +125,31 @@ export default function App() {
       userLocationInit={userLocation}
       lastMenuInit={lastMenu}
     >
-      <NavigationContainer 
-      ref={navigationRef}
-      onStateChange={() => {
-        const route = navigationRef.current?.getCurrentRoute();
-        console.log("Current route: ", route);
-        if (route) setScreen(route.name);
-      }}>
+      <NavigationContainer
+        ref={navigationRef}
+        onStateChange={() => {
+          const route = navigationRef.current?.getCurrentRoute();
+          console.log("Current route: ", route);
+          if (route) setScreen(route.name);
+        }}
+      >
         <Tab.Navigator
           screenOptions={({ route }) => ({
             tabBarIcon: ({ focused, color, size }) => {
               let iconName;
 
               if (route.name === "HomeStack") {
-                iconName = focused ? "home" : "home-outline"; // Icona per la Home
+                iconName = focused ? "home" : "home-outline";
               } else if (route.name === "ProfileStack") {
-                iconName = focused ? "person" : "person-outline"; // Icona per il Profilo
+                iconName = focused ? "person" : "person-outline";
               } else if (route.name === "Order") {
-                iconName = focused ? "cart" : "cart-outline"; // Icona per il Carrello
+                iconName = focused ? "cart" : "cart-outline";
               }
 
               return <Ionicons name={iconName} size={size} color={color} />;
             },
-            tabBarActiveTintColor: "black", // Colore per la voce attiva
-            tabBarInactiveTintColor: "gray", // Colore per la voce inattiva
+            tabBarActiveTintColor: "black",
+            tabBarInactiveTintColor: "gray",
             headerShown: false,
           })}
         >

@@ -6,11 +6,11 @@ import OrderConfirmScreen from "../screens/OrderConfirmScreen";
 const HomeStack = createNativeStackNavigator();
 
 export default function HomeStackNavigator() {
-    return (
-        <HomeStack.Navigator initialRouteName="Home">
-            <HomeStack.Screen name="Home" component={HomeScreen} />
-            <HomeStack.Screen name="MenuDetail" component={MenuDetailScreen} />
-            <HomeStack.Screen name="OrderConfirm" component={OrderConfirmScreen} />
-        </HomeStack.Navigator>
-    );
+  return (
+    <HomeStack.Navigator initialRouteName="Home">
+      <HomeStack.Screen name="Home" component={HomeScreen} />
+      <HomeStack.Screen name="MenuDetail" component={MenuDetailScreen} />
+      <HomeStack.Screen name="OrderConfirm" component={OrderConfirmScreen} />
+    </HomeStack.Navigator>
+  );
 }

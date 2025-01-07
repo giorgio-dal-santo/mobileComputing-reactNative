@@ -1,5 +1,5 @@
-import { Text, View, SafeAreaView, ScrollView, StatusBar } from "react-native";
-import { use, useEffect, useState } from "react";
+import { Text, View, SafeAreaView, ScrollView } from "react-native";
+import { useEffect } from "react";
 import { globalStyle } from "../../styles/GlobalStyle";
 import ViewModel from "../../viewModel/ViewModel";
 import { useIsFocused } from "@react-navigation/native";
@@ -61,8 +61,11 @@ export default function OrderScreen({ navigation }) {
         if (lastMenu && orderData) {
           await viewModel.setMenuAndOrderDataToStorage(lastMenu, orderData);
           console.log("Data successfully saved to storage.");
-          console.log("Last menu location: ", lastMenu.location.lat, lastMenu.location.lng);
-
+          console.log(
+            "Last menu location: ",
+            lastMenu.location.lat,
+            lastMenu.location.lng
+          );
         }
       } catch (error) {
         console.error("Error saving data:", error);
@@ -127,17 +130,20 @@ const OrderStatus = ({ navigation }) => {
         <View style={globalStyle.innerContainer}>
           <View style={globalStyle.subContainer}>
             <Text style={globalStyle.title}>
-              Your order will arrive at: {new Date(orderData.expectedDeliveryTimestamp).toLocaleString('it-IT', {
-                hour: '2-digit',
-                minute: '2-digit',
-                timeZone: 'UTC'
-              })}
+              Your order will arrive at:{" "}
+              {new Date(orderData.expectedDeliveryTimestamp).toLocaleString(
+                "it-IT",
+                {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  timeZone: "UTC",
+                }
+              )}
             </Text>
-
           </View>
           {lastMenu.location?.lat &&
-            lastMenu.location?.lat &&
-            orderData?.deliveryLocation ? (
+          lastMenu.location?.lat &&
+          orderData?.deliveryLocation ? (
             <View style={globalStyle.mapContainer}>
               <MapView
                 style={globalStyle.map}
@@ -175,12 +181,14 @@ const OrderStatus = ({ navigation }) => {
       ) : orderData?.status === "COMPLETED" ? (
         <View style={globalStyle.innerContainer}>
           <View style={globalStyle.subContainer}>
-            <Text style={globalStyle.title}>Your order has been delivered at {new Date(orderData.deliveryTimestamp).toLocaleString('it-IT', {
-                hour: '2-digit',
-                minute: '2-digit',
-                timeZone: 'UTC'
-              })} 
-              </Text>
+            <Text style={globalStyle.title}>
+              Your order has been delivered at{" "}
+              {new Date(orderData.deliveryTimestamp).toLocaleString("it-IT", {
+                hour: "2-digit",
+                minute: "2-digit",
+                timeZone: "UTC",
+              })}
+            </Text>
           </View>
           {orderData.deliveryLocation ? (
             <View style={globalStyle.mapContainer}>

@@ -1,4 +1,4 @@
-import { Button, Text, View, Image } from "react-native";
+import { Text, View, Image } from "react-native";
 import { globalStyle } from "../../styles/GlobalStyle";
 import { TouchableOpacity } from "react-native";
 

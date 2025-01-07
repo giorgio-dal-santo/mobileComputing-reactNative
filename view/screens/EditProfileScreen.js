@@ -1,11 +1,10 @@
-import { Text, View, Button, TextInput } from "react-native";
+import { Text, View, TextInput } from "react-native";
 import { globalStyle } from "../../styles/GlobalStyle";
 import { useContext, useState } from "react";
 import ViewModel from "../../viewModel/ViewModel";
 import User from "../../model/type/User";
 import { UserContext } from "../context/UserContext";
 import { TouchableOpacity } from "react-native";
-import { Picker } from "@react-native-picker/picker"; // Importa il Picker
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ScrollView } from "react-native";
 
@@ -173,7 +172,9 @@ export default function EditProfileScreen({ navigation }) {
             value={userData?.cardExpireMonth}
             onChangeText={(text) => updateUserField("cardExpireMonth", text)}
             keyboardType="numeric"
-            onBlur={() => validateField("cardExpireMonth", userData?.cardExpireMonth)}
+            onBlur={() =>
+              validateField("cardExpireMonth", userData?.cardExpireMonth)
+            }
           />
           {errors.cardExpireMonth ? (
             <Text style={globalStyle.errorText}>{errors.cardExpireMonth}</Text>
@@ -189,12 +190,13 @@ export default function EditProfileScreen({ navigation }) {
             value={userData?.cardExpireYear}
             onChangeText={(text) => updateUserField("cardExpireYear", text)}
             keyboardType="numeric"
-            onBlur={() => validateField("cardExpireYear", userData?.cardExpireYear)}
+            onBlur={() =>
+              validateField("cardExpireYear", userData?.cardExpireYear)
+            }
           />
           {errors.cardExpireYear ? (
             <Text style={globalStyle.errorText}>{errors.cardExpireYear}</Text>
           ) : null}
-
 
           <Text style={globalStyle.label}>Card CVV</Text>
           <TextInput
@@ -212,12 +214,7 @@ export default function EditProfileScreen({ navigation }) {
             <Text style={globalStyle.errorText}>{errors.cardCVV}</Text>
           ) : null}
 
-          <TouchableOpacity
-            style={[
-              globalStyle.button,
-            ]}
-            onPress={handleSubmit}
-          >
+          <TouchableOpacity style={[globalStyle.button]} onPress={handleSubmit}>
             <Text style={globalStyle.buttonText}>
               {isRegistered ? "Save" : "Register"}
             </Text>
