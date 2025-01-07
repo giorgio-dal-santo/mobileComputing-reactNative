@@ -8,7 +8,7 @@ export default function ProfileStackNavigator() {
   return (
     <ProfileStack.Navigator>
       <ProfileStack.Screen name="Profile" component={ProfileScreen} />
-      <ProfileStack.Screen name="EditProfile" component={EditProfileScreen} />
+      <ProfileStack.Screen name="EditProfile" component={EditProfileScreen} options={{title: "Edit Profile"}} />
     </ProfileStack.Navigator>
   );
 }

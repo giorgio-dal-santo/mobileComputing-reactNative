@@ -17,7 +17,7 @@ export default function MenuHomePreview({ menu, navigation }) {
       <Text style={globalStyle.price}>€{menu.price.toFixed(2)}</Text>
       <Text style={globalStyle.description}>{menu.shortDescription}</Text>
       <Text style={globalStyle.deliveryTime}>
-        Delivery in : {menu.deliveryTime} min
+        Delivery in: {menu.deliveryTime} min
       </Text>
 
       <TouchableOpacity

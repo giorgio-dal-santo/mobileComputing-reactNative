@@ -61,8 +61,15 @@ export default function ProfileScreen({ navigation }) {
           </View>
         ) : !userData.lastOid && !orderData.oid ? (
           <View style={globalStyle.innerContainer}>
-            <Text style={[{ marginLeft: 20 }]}>No order yet</Text>
-            <Text style={[{ marginRight: 20 }]}>Order Now Bottone</Text>
+            <Text style={[globalStyle.title, { marginLeft: 20 }]}>
+              No order yet
+            </Text>
+            <TouchableOpacity
+              style={globalStyle.button}
+              onPress={() => navigation.navigate("HomeStack")}
+            >
+              <Text style={globalStyle.buttonText}>Order</Text>
+            </TouchableOpacity>
           </View>
         ) : (
           <Text>Loading...</Text>

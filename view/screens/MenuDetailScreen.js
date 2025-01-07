@@ -58,7 +58,7 @@ export default function MenuDetailScreen({ route, navigation }) {
             {detailedMenu.longDescription}
           </Text>
           <Text style={globalStyle.deliveryTime}>
-            Delivery in : {detailedMenu.deliveryTime} min
+            Delivery in: {detailedMenu.deliveryTime} min
           </Text>
 
           <TouchableOpacity

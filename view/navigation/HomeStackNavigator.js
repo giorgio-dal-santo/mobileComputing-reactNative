@@ -9,8 +9,8 @@ export default function HomeStackNavigator() {
   return (
     <HomeStack.Navigator initialRouteName="Home">
       <HomeStack.Screen name="Home" component={HomeScreen} />
-      <HomeStack.Screen name="MenuDetail" component={MenuDetailScreen} />
-      <HomeStack.Screen name="OrderConfirm" component={OrderConfirmScreen} />
+      <HomeStack.Screen name="MenuDetail" component={MenuDetailScreen} options={{title: "Menu Detail"}} />
+      <HomeStack.Screen name="OrderConfirm" component={OrderConfirmScreen} options={{title: "Order Confirm"}} />
     </HomeStack.Navigator>
   );
 }
