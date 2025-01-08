@@ -8,14 +8,21 @@ export const globalStyle = StyleSheet.create({
     color: "#333",
   },
   title: {
-    fontSize: 20,
+    fontSize: 36,
     fontFamily: "PoppinsBold",
     marginBottom: 8,
     color: "#333",
     textAlign: "left",
+    
+  },
+  cardTitle: {
+    fontSize: 24,
+    fontFamily: "PoppinsBold",
+    color: "#333",
+    textAlign: "left",
   },
   subTitle: {
-    fontSize: 18,
+    fontSize: 22,
     fontFamily: "PoppinsRegular",
     fontWeight: "light",
     marginBottom: 8,
@@ -26,24 +33,24 @@ export const globalStyle = StyleSheet.create({
     fontFamily: "Poppins",
   },
   price: {
-    fontSize: 16,
+    fontSize: 22,
     fontWeight: "bold",
     color: "#00A86B",
     marginBottom: 8,
   },
   description: {
-    fontSize: 14,
+    fontSize: 18,
     color: "#000",
     marginBottom: 8,
   },
   deliveryTime: {
-    fontSize: 14,
+    fontSize: 18,
     color: "#888",
+    marginBottom: 8,
   },
   profileName: {
     fontSize: 24,
-    fontWeight: "bold",
-    fontFamily: "PoppinsBlack",
+    fontFamily: "PoppinsBold",
     color: "#333",
     marginBottom: 20,
   },
@@ -58,10 +65,20 @@ export const globalStyle = StyleSheet.create({
     shadowRadius: 5,
     elevation: 2,
   },
+  profileDetailRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  profileDetailTitle: {
+    fontWeight: 'bold',
+    marginRight: 5,
+    fontSize: 16,
+    color: "#555",
+  },
   profileDetailText: {
     fontSize: 16,
     color: "#555",
-    marginBottom: 10,
   },
 
   // form
@@ -100,13 +117,6 @@ export const globalStyle = StyleSheet.create({
     color: "red",
     marginBottom: 10,
   },
-  picker: {
-    width: "100%",
-    fontSize: 16,
-    color: "#333",
-    justifyContent: "center",
-    alignItems: "center",
-  },
 
   // card
   card: {
@@ -119,7 +129,7 @@ export const globalStyle = StyleSheet.create({
     elevation: 3,
     padding: 16,
     marginVertical: 8,
-    marginHorizontal: 16,
+    marginHorizontal: 5,
   },
 
   // image
@@ -129,35 +139,79 @@ export const globalStyle = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 12,
   },
+  imageDetail: {
+    width: "100%",
+    height: 300,
+    borderRadius: 8,
+    marginBottom: 12,
+  },
   profileImage: {
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 0,
-    marginTop: 0,
+    marginTop: 10,
   },
 
   // button
   button: {
     backgroundColor: "#ffffff",
     borderRadius: 15,
-    borderWidth: 1,
     borderColor: "#000",
     paddingVertical: 8,
     paddingHorizontal: 20,
     alignItems: "center",
     marginVertical: 10,
+    width: '50%',
+    alignSelf: 'center',
   },
-  buttonText: {
-    color: "#000",
+  enableLocationButton: {
+    backgroundColor: '#4CAF50',
+    width: '80%',
+    paddingVertical: 14,
+  },
+  signUpButton: {
+    backgroundColor: '#2196F3',
+    width: '80%',
+    paddingVertical: 14,
+  },
+  buyButton: {
+    backgroundColor: '#FF5722',
+    width: '80%',
+    paddingVertical: 14,
+  },
+  registerButton: {
+    backgroundColor: '#007BFF',
+    width: '80%',
+    paddingVertical: 14,
+  },
+  detailButton: {
+    backgroundColor: '#FFC107',
+  },
+  orderButton: {
+    backgroundColor: '#FF5733',
+    paddingVertical: 14,
+    elevation: 3,
+    width: '100%',
+  },
+  editButton: {
+    backgroundColor: '#6C757D',
+  },
+  buttonTextWhite: {
+    color: '#FFFFFF',
     fontSize: 16,
-    fontWeight: "500",
+    fontWeight: "bold",
+  },
+  buttonTextBlack: {
+    color: '#000000',
+    fontSize: 16,
+    fontWeight: "bold",
   },
 
   // container
   mainContainer: {
     //borderWidth: 1,
     //borderColor: 'red',
-    padding: 20,
+    padding: 5,
   },
   header: {
     //backgroundColor: 'grey',
@@ -168,6 +222,7 @@ export const globalStyle = StyleSheet.create({
   innerContainer: {
     flexDirection: 'column',
     justifyContent: 'space-between',
+    padding: 15,
     //backgroundColor: 'yellow',
   },
   subContainer: {
@@ -182,6 +237,8 @@ export const globalStyle = StyleSheet.create({
     marginBottom: 20,
     justifyContent: "center",
     flex: 1,
+    padding: 15,
+
     //backgroundColor: 'purple',
   },
   mapContainer: {

@@ -110,11 +110,16 @@ const OrderStatus = ({ navigation }) => {
     return (
       <View style={globalStyle.innerContainer}>
         <Text style={globalStyle.title}>No order yet</Text>
+        <Text style={globalStyle.subTitle}>
+          You haven’t placed any orders yet. Start by exploring the menus
+          available!
+        </Text>
+
         <TouchableOpacity
-          style={globalStyle.button}
+          style={[globalStyle.button, globalStyle.orderButton]}
           onPress={() => navigation.navigate("HomeStack")}
         >
-          <Text style={globalStyle.buttonText}>Order</Text>
+          <Text style={globalStyle.buttonTextWhite}>Order Now</Text>
         </TouchableOpacity>
       </View>
     );
@@ -239,16 +244,17 @@ const OrderStatus = ({ navigation }) => {
 
 const NotRegister = ({ navigation }) => {
   return (
-    <View>
+    <View style={globalStyle.innerContainer}>
       <Text style={globalStyle.title}>Sign Up to Start Ordering</Text>
       <Text style={globalStyle.subTitle}>
-      You need to sign up or log in to place an order. Get started and enjoy delicious meals delivered quickly to your location.
+        You need to sign up to place an order. Get started and enjoy
+        delicious meals delivered quickly to your location.
       </Text>
       <TouchableOpacity
-        style={[globalStyle.button]}
+        style={[globalStyle.button, globalStyle.signUpButton]}
         onPress={() => navigation.navigate("ProfileStack")}
       >
-        <Text style={globalStyle.buttonText}>Sign Up</Text>
+        <Text style={globalStyle.buttonTextWhite}>Go to Profile</Text>
       </TouchableOpacity>
     </View>
   );

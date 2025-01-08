@@ -9,6 +9,8 @@ import MenuHomePreview from "../components/MenuHomePreview";
 import { UserContext } from "../context/UserContext";
 import { useContext } from "react";
 import { TouchableOpacity } from "react-native";
+import { Alert } from "react-native";
+import { Linking } from "react-native";
 
 export default function HomeScreen({ navigation }) {
   const [nearbyMenus, setNearbyMenus] = useState([]);
@@ -47,7 +49,24 @@ export default function HomeScreen({ navigation }) {
       const canUseLocation = await locationViewModel.canUseLocation();
       setCanUseLocation(canUseLocation);
 
-      if (canUseLocation) {
+      if (canUseLocation.status === "denied") {
+        Alert.alert(
+          "Location services are disabled",
+          "Please enable location services to use this feature.",
+          [
+            {
+              text: "Cancel",
+              style: "cancel",
+            },
+            {
+              text: "Enable",
+              onPress: () => {
+                Linking.openSettings();
+              },
+            },
+          ]
+        );
+      } else if (canUseLocation.status === "granted") {
         locationViewModel.startWatchingLocation(
           (location) => {
             setUserLocation(location);
@@ -64,21 +83,16 @@ export default function HomeScreen({ navigation }) {
 
   useFocusEffect(
     useCallback(() => {
-      if (canUseLocation && userLocation) {
+      if (canUseLocation.status === "granted" && userLocation) {
         loadData();
       }
-    }, [canUseLocation, userLocation, isRegistered])
+    }, [canUseLocation.status, userLocation, isRegistered])
   );
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView contentContainerStyle={globalStyle.mainContainer}>
-        {canUseLocation && userLocation ? (
-          <View style={globalStyle.innerContainer}>
-            <Text style={globalStyle.title}>Nearby Menus</Text>
-            <MenuList nearbyMenus={nearbyMenus} navigation={navigation} />
-          </View>
-        ) : !canUseLocation ? (
+        {canUseLocation.status !== "granted" ? (
           <View style={globalStyle.innerContainer}>
             <Text style={globalStyle.title}>Activate Location Services</Text>
             <Text style={globalStyle.subTitle}>
@@ -87,15 +101,26 @@ export default function HomeScreen({ navigation }) {
               your area.
             </Text>
             <TouchableOpacity
-              style={[globalStyle.button]}
+              style={[globalStyle.button, globalStyle.enableLocationButton]}
               onPress={async () => await handleAllowLocation()}
             >
-              <Text style={globalStyle.buttonText}>Enable Location</Text>
+              <Text style={globalStyle.buttonTextWhite}>Enable Location</Text>
             </TouchableOpacity>
           </View>
-        ) : loading ? (
+        ): loading ? (
           <View style={globalStyle.innerContainer}>
-            <Text>Loading...</Text>
+            <Text style={globalStyle.subTitle}>Loading...</Text>
+          </View>
+        ) : canUseLocation && userLocation ? (
+          <View style={[globalStyle.innerContainer, { alignItems: "center" }]}>
+            <Text style={[globalStyle.title, { textAlign: "center" }]}>
+              Find the Best Menus Around You
+            </Text>
+            <Text style={[globalStyle.subTitle, { textAlign: "center" }]}>
+              Here are the menus offered by restaurants near your location.
+              Choose your favorite and get it delivered in no time!
+            </Text>
+            <MenuList nearbyMenus={nearbyMenus} navigation={navigation} />
           </View>
         ) : (
           <View style={globalStyle.innerContainer}>

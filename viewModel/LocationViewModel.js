@@ -1,6 +1,4 @@
 import * as Location from "expo-location";
-import { Alert } from "react-native";
-import { Linking } from "react-native";
 import AsyncStorage from "../model/AsyncStorageManager";
 
 export default class LocationViewModel {
@@ -28,30 +26,27 @@ export default class LocationViewModel {
     const grantedPermission = await Location.getForegroundPermissionsAsync();
     console.log("Permission granted: ", grantedPermission.status);
 
+    const canUseLocation = { status: "undetermined" };
+
     if (grantedPermission.status === "granted") {
-      await AsyncStorage.setCanUseLocation(true);
-      return true;
-    } else if (!grantedPermission.canAskAgain) {
-      Alert.alert(
-        "Permessi posizione",
-        "I permessi per accedere alla posizione sono stati negati. Per attivarli, vai nelle impostazioni del dispositivo.",
-        [
-          { text: "Impostazioni", onPress: () => Linking.openSettings() },
-          { text: "Annulla" },
-        ]
-      );
-      await AsyncStorage.setCanUseLocation(false);
-      return false;
+      canUseLocation.status = "granted";
+      await AsyncStorage.setCanUseLocation(canUseLocation);
+    } else if (grantedPermission.status === "denied") {
+      canUseLocation.status = "denied";
+      await AsyncStorage.setCanUseLocation(canUseLocation);
     } else {
-      await AsyncStorage.setCanUseLocation(false);
-      return false;
+      canUseLocation.status = "undetermined";
+      await AsyncStorage.setCanUseLocation(canUseLocation);
     }
+
+    return canUseLocation;
+
   }
 
   async askForPermission() {
     const permission = await Location.requestForegroundPermissionsAsync();
     if (permission.status === "granted") {
-      await AsyncStorage.setCanUseLocation(true);
+      await AsyncStorage.setCanUseLocation({ status: "granted" });
     }
   }
 

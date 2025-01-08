@@ -81,7 +81,7 @@ export default function App() {
         const canUseLocation = await locationViewModel.getPermission();
         setCanUseLocation(canUseLocation);
 
-        if (canUseLocation) {
+        if (canUseLocation.status === "granted") {
           locationViewModel.startWatchingLocation(
             (location) => {
               setUserLocation(location);

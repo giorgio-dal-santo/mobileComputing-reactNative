@@ -13,18 +13,18 @@ export default function MenuHomePreview({ menu, navigation }) {
         }
         style={globalStyle.image}
       />
-      <Text style={globalStyle.title}>{menu.name}</Text>
-      <Text style={globalStyle.price}>€{menu.price.toFixed(2)}</Text>
+      <Text style={globalStyle.cardTitle}>{menu.name}</Text>
       <Text style={globalStyle.description}>{menu.shortDescription}</Text>
+      <Text style={globalStyle.price}>€ {menu.price.toFixed(2)}</Text>
       <Text style={globalStyle.deliveryTime}>
         Delivery in: {menu.deliveryTime} min
       </Text>
 
       <TouchableOpacity
-        style={globalStyle.button}
+        style={[globalStyle.button, globalStyle.detailButton]}
         onPress={() => navigation.navigate("MenuDetail", { menuid: menu.mid })}
       >
-        <Text style={globalStyle.buttonText}>Menu Detail</Text>
+        <Text style={globalStyle.buttonTextBlack}>Detail</Text>
       </TouchableOpacity>
     </View>
   );

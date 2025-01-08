@@ -23,6 +23,7 @@ export default function ProfileScreen({ navigation }) {
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView contentContainerStyle={globalStyle.mainContainer}>
         <View style={globalStyle.profileContainer}>
+          <Text style={globalStyle.title}>Welcome to your profile</Text>
           <View style={globalStyle.profileImage}>
             <Ionicons name="person-circle-outline" size={70} color="#444" />
           </View>
@@ -32,22 +33,36 @@ export default function ProfileScreen({ navigation }) {
           </Text>
 
           <View style={globalStyle.profileDetails}>
-            <Text style={globalStyle.profileDetailText}>
-              Card Full Name: {userData.cardFullName}
-            </Text>
-            <Text style={globalStyle.profileDetailText}>
-              Card Number: **** **** **** {userData.cardNumber.slice(-4)}
-            </Text>
-            <Text style={globalStyle.profileDetailText}>
-              Expire Date: {userData.cardExpireMonth}/{userData.cardExpireYear}
-            </Text>
-            <Text style={globalStyle.profileDetailText}>CVV: ***</Text>
+            <View style={globalStyle.profileDetailRow}>
+              <Text style={globalStyle.profileDetailTitle}>
+                Card Full Name:{" "}
+              </Text>
+              <Text style={globalStyle.profileDetailText}>
+                {userData.cardFullName}
+              </Text>
+            </View>
+            <View style={globalStyle.profileDetailRow}>
+              <Text style={globalStyle.profileDetailTitle}>Card Number: </Text>
+              <Text style={globalStyle.profileDetailText}>
+                **** **** **** {userData.cardNumber.slice(-4)}
+              </Text>
+            </View>
+            <View style={globalStyle.profileDetailRow}>
+              <Text style={globalStyle.profileDetailTitle}>Expire Date: </Text>
+              <Text style={globalStyle.profileDetailText}>
+                {userData.cardExpireMonth}/{userData.cardExpireYear}
+              </Text>
+            </View>
+            <View style={globalStyle.profileDetailRow}>
+              <Text style={globalStyle.profileDetailTitle}>CVV: </Text>
+              <Text style={globalStyle.profileDetailText}>***</Text>
+            </View>
 
             <TouchableOpacity
-              style={globalStyle.button}
+              style={[globalStyle.button, globalStyle.editButton]}
               onPress={() => navigation.navigate("EditProfile")}
             >
-              <Text style={globalStyle.buttonText}>Edit Profile</Text>
+              <Text style={globalStyle.buttonTextWhite}>Edit Profile</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -61,14 +76,14 @@ export default function ProfileScreen({ navigation }) {
           </View>
         ) : !userData.lastOid && !orderData.oid ? (
           <View style={globalStyle.innerContainer}>
-            <Text style={[globalStyle.title, { marginLeft: 20 }]}>
-              No order yet
+            <Text style={[globalStyle.subTitle, { textAlign: "center" }]}>
+              It seems like you haven’t placed any orders yet.
             </Text>
             <TouchableOpacity
-              style={globalStyle.button}
+              style={[globalStyle.button, globalStyle.orderButton]}
               onPress={() => navigation.navigate("HomeStack")}
             >
-              <Text style={globalStyle.buttonText}>Order</Text>
+              <Text style={globalStyle.buttonTextWhite}>Order Now</Text>
             </TouchableOpacity>
           </View>
         ) : (
@@ -81,16 +96,16 @@ export default function ProfileScreen({ navigation }) {
 
 const NotRegister = ({ navigation }) => {
   return (
-    <View>
+    <View style={globalStyle.innerContainer}>
       <Text style={globalStyle.title}>Complete Your Profile</Text>
       <Text style={globalStyle.subTitle}>
-      To access your profile and manage your orders, please sign up.
+        To access your profile and manage your orders, please sign up.
       </Text>
       <TouchableOpacity
-        style={[globalStyle.button]}
+        style={[globalStyle.button, globalStyle.signUpButton]}
         onPress={() => navigation.navigate("EditProfile")}
       >
-        <Text style={globalStyle.buttonText}>Sign Up</Text>
+        <Text style={globalStyle.buttonTextWhite}>Sign Up</Text>
       </TouchableOpacity>
     </View>
   );

@@ -1,12 +1,10 @@
-import { Text, View, TextInput } from "react-native";
+import { Text, View, TextInput, SafeAreaView, ScrollView } from "react-native";
 import { globalStyle } from "../../styles/GlobalStyle";
 import { useContext, useState } from "react";
 import ViewModel from "../../viewModel/ViewModel";
 import User from "../../model/type/User";
 import { UserContext } from "../context/UserContext";
 import { TouchableOpacity } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { ScrollView } from "react-native";
 
 export default function EditProfileScreen({ navigation }) {
   const { userData, setUserData, isRegistered, setIsRegistered } =
@@ -94,11 +92,11 @@ export default function EditProfileScreen({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, paddingTop: 0 }}>
-      <ScrollView>
-        <View style={globalStyle.mainContainer}>
+    <SafeAreaView style={{ flex: 1 }}>
+      <ScrollView contentContainerStyle={globalStyle.mainContainer}>
+        <View style={globalStyle.innerContainer}>
           <Text style={globalStyle.title}>
-            {isRegistered ? "Your Profile:" : "New Profile"}
+            {isRegistered ? "Your Profile" : "New Profile"}
           </Text>
 
           <Text style={globalStyle.label}>First Name</Text>
@@ -214,8 +212,11 @@ export default function EditProfileScreen({ navigation }) {
             <Text style={globalStyle.errorText}>{errors.cardCVV}</Text>
           ) : null}
 
-          <TouchableOpacity style={[globalStyle.button]} onPress={handleSubmit}>
-            <Text style={globalStyle.buttonText}>
+          <TouchableOpacity
+            style={[globalStyle.button, globalStyle.registerButton]}
+            onPress={handleSubmit}
+          >
+            <Text style={globalStyle.buttonTextWhite}>
               {isRegistered ? "Save" : "Register"}
             </Text>
           </TouchableOpacity>
