@@ -27,7 +27,7 @@ export default function HomeScreen({ navigation }) {
   const loadData = async () => {
     try {
       const viewModel = ViewModel.getViewModel();
-      if (isRegistered && canUseLocation && userLocation) {
+      if (canUseLocation && userLocation) {
         const nearbyMenus = await viewModel.getNearbyMenus(userLocation);
         setNearbyMenus(nearbyMenus);
       } else {
@@ -64,7 +64,7 @@ export default function HomeScreen({ navigation }) {
 
   useFocusEffect(
     useCallback(() => {
-      if (isRegistered && canUseLocation && userLocation) {
+      if (canUseLocation && userLocation) {
         loadData();
       }
     }, [canUseLocation, userLocation, isRegistered])
@@ -73,23 +73,26 @@ export default function HomeScreen({ navigation }) {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView contentContainerStyle={globalStyle.mainContainer}>
-        {isRegistered && canUseLocation && userLocation ? (
+        {canUseLocation && userLocation ? (
           <View style={globalStyle.innerContainer}>
             <Text style={globalStyle.title}>Nearby Menus</Text>
             <MenuList nearbyMenus={nearbyMenus} navigation={navigation} />
           </View>
-        ) : isRegistered && !canUseLocation ? (
+        ) : !canUseLocation ? (
           <View style={globalStyle.innerContainer}>
-            <Text style={globalStyle.title}>Location not available</Text>
+            <Text style={globalStyle.title}>Activate Location Services</Text>
+            <Text style={globalStyle.subTitle}>
+              To view menus from restaurants near you, please enable location
+              services. This helps us show you the best options available in
+              your area.
+            </Text>
             <TouchableOpacity
               style={[globalStyle.button]}
               onPress={async () => await handleAllowLocation()}
             >
-              <Text style={globalStyle.buttonText}>Allow location</Text>
+              <Text style={globalStyle.buttonText}>Enable Location</Text>
             </TouchableOpacity>
           </View>
-        ) : !isRegistered ? (
-          <NotRegister navigation={navigation} />
         ) : loading ? (
           <View style={globalStyle.innerContainer}>
             <Text>Loading...</Text>
@@ -110,20 +113,6 @@ const MenuList = ({ nearbyMenus, navigation }) => {
       {nearbyMenus.map((menu) => (
         <MenuHomePreview key={menu.mid} menu={menu} navigation={navigation} />
       ))}
-    </View>
-  );
-};
-
-const NotRegister = ({ navigation }) => {
-  return (
-    <View>
-      <Text style={globalStyle.title}>User not registered</Text>
-      <TouchableOpacity
-        style={[globalStyle.button]}
-        onPress={() => navigation.navigate("ProfileStack")}
-      >
-        <Text style={globalStyle.buttonText}>Register</Text>
-      </TouchableOpacity>
     </View>
   );
 };

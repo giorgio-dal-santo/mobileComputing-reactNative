@@ -82,12 +82,15 @@ export default function ProfileScreen({ navigation }) {
 const NotRegister = ({ navigation }) => {
   return (
     <View>
-      <Text style={globalStyle.title}>User not registered</Text>
+      <Text style={globalStyle.title}>Complete Your Profile</Text>
+      <Text style={globalStyle.subTitle}>
+      To access your profile and manage your orders, please sign up.
+      </Text>
       <TouchableOpacity
         style={[globalStyle.button]}
         onPress={() => navigation.navigate("EditProfile")}
       >
-        <Text style={globalStyle.buttonText}>Register</Text>
+        <Text style={globalStyle.buttonText}>Sign Up</Text>
       </TouchableOpacity>
     </View>
   );

@@ -2,16 +2,28 @@ import { StyleSheet } from "react-native";
 
 export const globalStyle = StyleSheet.create({
   // text
-  text: {
-    fontFamily: "Poppins",
+  headerTitleStyle: {
+    fontSize: 24,
+    fontFamily: "PoppinsBlack",
+    color: "#333",
   },
   title: {
     fontSize: 20,
-    fontWeight: "bold",
-    fontFamily: "Poppins",
+    fontFamily: "PoppinsBold",
     marginBottom: 8,
     color: "#333",
     textAlign: "left",
+  },
+  subTitle: {
+    fontSize: 18,
+    fontFamily: "PoppinsRegular",
+    fontWeight: "light",
+    marginBottom: 8,
+    color: "#333",
+    textAlign: "left",
+  },
+  text: {
+    fontFamily: "Poppins",
   },
   price: {
     fontSize: 16,
@@ -31,7 +43,7 @@ export const globalStyle = StyleSheet.create({
   profileName: {
     fontSize: 24,
     fontWeight: "bold",
-    fontFamily: "Poppins",
+    fontFamily: "PoppinsBlack",
     color: "#333",
     marginBottom: 20,
   },

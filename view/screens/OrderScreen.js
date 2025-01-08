@@ -240,12 +240,15 @@ const OrderStatus = ({ navigation }) => {
 const NotRegister = ({ navigation }) => {
   return (
     <View>
-      <Text style={globalStyle.title}>User not registered</Text>
+      <Text style={globalStyle.title}>Sign Up to Start Ordering</Text>
+      <Text style={globalStyle.subTitle}>
+      You need to sign up or log in to place an order. Get started and enjoy delicious meals delivered quickly to your location.
+      </Text>
       <TouchableOpacity
         style={[globalStyle.button]}
         onPress={() => navigation.navigate("ProfileStack")}
       >
-        <Text style={globalStyle.buttonText}>Register</Text>
+        <Text style={globalStyle.buttonText}>Sign Up</Text>
       </TouchableOpacity>
     </View>
   );

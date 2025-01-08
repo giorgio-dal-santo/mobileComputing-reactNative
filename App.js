@@ -47,7 +47,9 @@ export default function App() {
   useEffect(() => {
     const loadFonts = async () => {
       await Font.loadAsync({
-        Poppins: require("./assets/fonts/Poppins-Black.ttf"),
+        PoppinsBlack: require("./assets/fonts/Poppins-Black.ttf"),
+        PoppinsBold: require("./assets/fonts/Poppins-Bold.ttf"),
+        PoppinsRegular: require("./assets/fonts/Poppins-Regular.ttf"),
       });
       setFontsLoaded(true);
     };
@@ -150,6 +152,7 @@ export default function App() {
             },
             tabBarActiveTintColor: "black",
             tabBarInactiveTintColor: "gray",
+            headerTitleStyle: globalStyle.headerTitleStyle,
             headerShown: false,
           })}
         >
@@ -161,7 +164,10 @@ export default function App() {
           <Tab.Screen
             name="Order"
             component={OrderScreen}
-            options={{ title: "Order", headerShown: true }}
+            options={{
+              title: "Order",
+              headerShown: true,
+            }}
           />
           <Tab.Screen
             name="ProfileStack"
