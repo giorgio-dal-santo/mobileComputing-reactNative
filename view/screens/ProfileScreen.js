@@ -69,7 +69,7 @@ export default function ProfileScreen({ navigation }) {
 
         {userData?.lastOid || orderData.oid ? (
           <View style={globalStyle.innerContainer}>
-            <Text style={[globalStyle.title, { marginLeft: 20 }]}>
+            <Text style={[globalStyle.title, { marginBottom: 0 }]}>
               Last Order:{" "}
             </Text>
             <MenuCardPreview />

@@ -16,11 +16,12 @@ export default function MenuCardPreview() {
         }
         style={globalStyle.image}
       />
-      <Text style={globalStyle.title}>
+      <Text style={globalStyle.cardTitle}>
         {lastMenu ? lastMenu.name : "Menu name is null"}
       </Text>
-      <Text style={globalStyle.price}>€{lastMenu?.price.toFixed(2)}</Text>
       <Text style={globalStyle.description}>{lastMenu?.shortDescription}</Text>
+
+      <Text style={globalStyle.price}>€{lastMenu?.price.toFixed(2)}</Text>
     </View>
   );
 }

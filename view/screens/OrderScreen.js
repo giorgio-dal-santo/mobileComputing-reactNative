@@ -222,7 +222,7 @@ const OrderStatus = ({ navigation }) => {
           )}
           <MenuCardPreview />
           <TouchableOpacity
-            style={globalStyle.button}
+            style={[globalStyle.button, globalStyle.orderButton]}
             onPress={() =>
               navigation.reset({
                 index: 0,
@@ -230,7 +230,7 @@ const OrderStatus = ({ navigation }) => {
               })
             }
           >
-            <Text style={globalStyle.buttonText}>Order Again</Text>
+            <Text style={globalStyle.buttonTextWhite}>Order Again</Text>
           </TouchableOpacity>
         </View>
       ) : (

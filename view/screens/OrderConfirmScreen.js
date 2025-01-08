@@ -88,16 +88,18 @@ export default function OrderConfirmScreen({ route, navigation }) {
               <Text>Loading map...</Text>
             )}
             <TouchableOpacity
-              style={globalStyle.button}
+              style={[globalStyle.button, globalStyle.enableLocationButton]}
               onPress={() => navigation.navigate("Order")}
             >
-              <Text style={globalStyle.buttonText}>
+              <Text style={globalStyle.buttonTextWhite}>
                 Go to Your Order Status
               </Text>
             </TouchableOpacity>
           </View>
         ) : (
-          <Text>Loading...</Text>
+          <View style={globalStyle.innerContainer}>
+            <Text style={globalStyle.subTitle}>Loading...</Text>
+          </View>
         )}
       </ScrollView>
     </SafeAreaView>
