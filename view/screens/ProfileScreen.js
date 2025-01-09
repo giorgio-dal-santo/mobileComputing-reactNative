@@ -23,7 +23,6 @@ export default function ProfileScreen({ navigation }) {
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView contentContainerStyle={globalStyle.mainContainer}>
         <View style={globalStyle.profileContainer}>
-          <Text style={globalStyle.title}>Welcome to your profile</Text>
           <View style={globalStyle.profileImage}>
             <Ionicons name="person-circle-outline" size={70} color="#444" />
           </View>

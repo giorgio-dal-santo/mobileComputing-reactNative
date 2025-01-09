@@ -13,9 +13,16 @@ export default function HomeStackNavigator() {
       screenOptions={{
         headerTitleStyle: globalStyle.headerTitleStyle,
         headerTitleAlign: "center",
+        headerShown: true,
+        headerStyle: {
+          height: 120, // Imposta un'altezza maggiore per l'header
+        },
+        headerTitleAlign: "center",
       }}
+      
     >
-      <HomeStack.Screen name="Home" component={HomeScreen} />
+      <HomeStack.Screen name="Home" component={HomeScreen} 
+      options={{title: "Best Menus Around You"}}/>
       <HomeStack.Screen
         name="MenuDetail"
         component={MenuDetailScreen}

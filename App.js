@@ -14,6 +14,7 @@ import LocationViewModel from "./viewModel/LocationViewModel";
 import { useRef } from "react";
 import { AppState } from "react-native";
 import React from "react";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 
 const navigationRef = React.createRef();
 
@@ -119,63 +120,65 @@ export default function App() {
   }
 
   return (
-    <UserContextProvider
-      userDataInit={userData}
-      orderDataInit={orderData}
-      isRegisteredInit={isRegistered}
-      canUseLocationInit={canUseLocation}
-      userLocationInit={userLocation}
-      lastMenuInit={lastMenu}
-    >
-      <NavigationContainer
-        ref={navigationRef}
-        onStateChange={() => {
-          const route = navigationRef.current?.getCurrentRoute();
-          console.log("Current route: ", route);
-          if (route) setScreen(route.name);
-        }}
-      >
-        <Tab.Navigator
-          screenOptions={({ route }) => ({
-            tabBarIcon: ({ focused, color, size }) => {
-              let iconName;
-
-              if (route.name === "HomeStack") {
-                iconName = focused ? "home" : "home-outline";
-              } else if (route.name === "ProfileStack") {
-                iconName = focused ? "person" : "person-outline";
-              } else if (route.name === "Order") {
-                iconName = focused ? "cart" : "cart-outline";
-              }
-
-              return <Ionicons name={iconName} size={size} color={color} />;
-            },
-            tabBarActiveTintColor: "black",
-            tabBarInactiveTintColor: "gray",
-            headerTitleStyle: globalStyle.headerTitleStyle,
-            headerShown: false,
-          })}
+        <UserContextProvider
+          userDataInit={userData}
+          orderDataInit={orderData}
+          isRegisteredInit={isRegistered}
+          canUseLocationInit={canUseLocation}
+          userLocationInit={userLocation}
+          lastMenuInit={lastMenu}
         >
-          <Tab.Screen
-            name="HomeStack"
-            component={HomeStackNavigator}
-            options={{ title: "Home" }}
-          />
-          <Tab.Screen
-            name="Order"
-            component={OrderScreen}
-            options={{
-              title: "Order",
-              headerShown: true,
+          <NavigationContainer
+            ref={navigationRef}
+            onStateChange={() => {
+              const route = navigationRef.current?.getCurrentRoute();
+              console.log("Current route: ", route);
+              if (route) setScreen(route.name);
             }}
-          />
-          <Tab.Screen
-            name="ProfileStack"
-            component={ProfileStackNavigator}
-            options={{ title: "Profile" }}
-          />
-        </Tab.Navigator>
-      </NavigationContainer>
-    </UserContextProvider>
+          >
+            <Tab.Navigator
+              screenOptions={({ route }) => ({
+                tabBarIcon: ({ focused, color, size }) => {
+                  let iconName;
+
+                  if (route.name === "HomeStack") {
+                    iconName = focused ? "home" : "home-outline";
+                  } else if (route.name === "ProfileStack") {
+                    iconName = focused ? "person" : "person-outline";
+                  } else if (route.name === "Order") {
+                    iconName = focused ? "cart" : "cart-outline";
+                  }
+
+                  return <Ionicons name={iconName} size={size} color={color} />;
+                },
+                tabBarActiveTintColor: "black",
+                tabBarInactiveTintColor: "gray",
+                headerTitleStyle: globalStyle.headerTitleStyle,
+                headerShown: false,
+              })}
+            >
+              <Tab.Screen
+                name="HomeStack"
+                component={HomeStackNavigator}
+                options={{ 
+                  title: "Home",
+                }}
+              />
+              <Tab.Screen
+                name="Order"
+                component={OrderScreen}
+                options={{
+                  title: "Order",
+                  headerShown: true,
+                }}
+              />
+              <Tab.Screen
+                name="ProfileStack"
+                component={ProfileStackNavigator}
+                options={{ title: "Profile" }}
+              />
+            </Tab.Navigator>
+          </NavigationContainer>
+        </UserContextProvider>
   );
 }

@@ -13,7 +13,7 @@ export default function ProfileStackNavigator() {
         headerTitleAlign: "center",
       }}
     >
-      <ProfileStack.Screen name="Profile" component={ProfileScreen} />
+      <ProfileStack.Screen name="Profile" component={ProfileScreen} options ={ {title: "Welcome to your Profile"}} />
       <ProfileStack.Screen
         name="EditProfile"
         component={EditProfileScreen}

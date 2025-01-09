@@ -113,13 +113,6 @@ export default function HomeScreen({ navigation }) {
           </View>
         ) : canUseLocation && userLocation ? (
           <View style={[globalStyle.innerContainer, { alignItems: "center" }]}>
-            <Text style={[globalStyle.title, { textAlign: "center" }]}>
-              Find the Best Menus Around You
-            </Text>
-            <Text style={[globalStyle.subTitle, { textAlign: "center" }]}>
-              Here are the menus offered by restaurants near your location.
-              Choose your favorite and get it delivered in no time!
-            </Text>
             <MenuList nearbyMenus={nearbyMenus} navigation={navigation} />
           </View>
         ) : (

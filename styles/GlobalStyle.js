@@ -3,12 +3,15 @@ import { StyleSheet } from "react-native";
 export const globalStyle = StyleSheet.create({
   // text
   headerTitleStyle: {
-    fontSize: 24,
+    fontSize: 28,
     fontFamily: "PoppinsBlack",
     color: "#333",
+    textAlign: "center",
+    width: "100%",
+
   },
   title: {
-    fontSize: 36,
+    fontSize: 30,
     fontFamily: "PoppinsBold",
     marginBottom: 8,
     color: "#333",
@@ -22,7 +25,7 @@ export const globalStyle = StyleSheet.create({
     textAlign: "left",
   },
   subTitle: {
-    fontSize: 22,
+    fontSize: 20,
     fontFamily: "PoppinsRegular",
     fontWeight: "light",
     marginBottom: 8,
@@ -186,6 +189,8 @@ export const globalStyle = StyleSheet.create({
   },
   detailButton: {
     backgroundColor: '#FFC107',
+    width: '80%',
+    paddingVertical: 10,
   },
   orderButton: {
     backgroundColor: '#FF5733',
@@ -198,12 +203,12 @@ export const globalStyle = StyleSheet.create({
   },
   buttonTextWhite: {
     color: '#FFFFFF',
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "bold",
   },
   buttonTextBlack: {
     color: '#000000',
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "bold",
   },
 
