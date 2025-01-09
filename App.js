@@ -149,13 +149,16 @@ export default function App() {
                     iconName = focused ? "cart" : "cart-outline";
                   }
 
-                  return <Ionicons name={iconName} size={size} color={color} />;
+                  const iconSize = focused ? size + 5 : size + 5;
+
+                  return <Ionicons name={iconName} size={iconSize} color={color} />;
                 },
                 tabBarShowLabel: false,
                 tabBarActiveTintColor: "black",
                 tabBarInactiveTintColor: "gray",
                 headerTitleStyle: globalStyle.headerTitleStyle,
-                tabBarIconStyle: { alignSelf: 'center', marginTop: 5 },
+                tabBarIconStyle: { alignSelf: 'center', marginTop: 10 },
+                tabBarStyle: { height: 60 },
               })}
             >
               <Tab.Screen
