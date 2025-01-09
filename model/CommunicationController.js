@@ -36,9 +36,9 @@ export default class CommunicationController {
         return {};
       }
     } else {
-      const message = await httpResponse.text();
+      const message = await httpResponse.json();
       let error = new Error(
-        "Error message from the server. HTTP status: " + status + " " + message
+        message.message
       );
       throw error;
     }

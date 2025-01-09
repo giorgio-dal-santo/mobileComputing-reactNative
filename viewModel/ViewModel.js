@@ -72,7 +72,7 @@ export default class ViewModel {
         userData.orderStatus
       );
     } catch (error) {
-      console.error("Error during getUserData:", error);
+      console.warn("Error during getUserData:", error);
     }
   }
 
@@ -96,7 +96,7 @@ export default class ViewModel {
       await AsyncStorageManager.setIsRegistered(true);
       console.log("Data saved successfully:", userData);
     } catch (error) {
-      console.error("Error saving data:", error);
+      console.warn("Error saving data:", error);
     }
   }
 
@@ -127,7 +127,7 @@ export default class ViewModel {
       );
       return imageFromServer.base64;
     } catch (error) {
-      console.error("Error fetching image:", error);
+      console.warn("Error fetching image:", error);
     }
   }
 
@@ -180,30 +180,26 @@ export default class ViewModel {
   }
 
   async newOrder(userLocation, mid, lat, lng) {
-    try {
-      const order = await CommunicationController.buyMenu(
-        this.sid,
-        userLocation,
-        mid
-      );
+    const order = await CommunicationController.buyMenu(
+      this.sid,
+      userLocation,
+      mid
+    );
 
-      const menu = await this.getMenuDetail(mid, lat, lng);
+    const menu = await this.getMenuDetail(mid, lat, lng);
 
-      return new Order(
-        order.oid,
-        order.status,
-        order.mid,
-        order.uid,
-        order.creationTimestamp,
-        order.deliveryLocation,
-        order.deliveryTimestamp,
-        order.expectedDeliveryTimestamp,
-        order.currentPosition,
-        menu.location
-      );
-    } catch (error) {
-      console.error("Error getting order status:", error);
-    }
+    return new Order(
+      order.oid,
+      order.status,
+      order.mid,
+      order.uid,
+      order.creationTimestamp,
+      order.deliveryLocation,
+      order.deliveryTimestamp,
+      order.expectedDeliveryTimestamp,
+      order.currentPosition,
+      menu.location
+    );
   }
 
   async getOrderDetail(oid) {
@@ -225,7 +221,7 @@ export default class ViewModel {
         orderDetail.currentPosition
       );
     } catch (error) {
-      console.error("Error getting order details:", error);
+      console.warn("Error getting order details:", error);
     }
   }
 
@@ -234,7 +230,7 @@ export default class ViewModel {
       const savedMenu = await AsyncStorageManager.getMenu();
       return savedMenu;
     } catch (error) {
-      console.error("Error loading persisted data:", error);
+      console.warn("Error loading persisted data:", error);
     }
   }
 
@@ -243,7 +239,7 @@ export default class ViewModel {
       const savedOrderData = await AsyncStorageManager.getOrderData();
       return savedOrderData;
     } catch (error) {
-      console.error("Error loading persisted data:", error);
+      console.warn("Error loading persisted data:", error);
     }
   }
 
@@ -252,7 +248,7 @@ export default class ViewModel {
       await AsyncStorageManager.setMenu(menu);
       await AsyncStorageManager.setOrderData(orderData);
     } catch (error) {
-      console.error("Error saving menu or orderData:", error);
+      console.warn("Error saving menu or orderData:", error);
     }
   }
 }

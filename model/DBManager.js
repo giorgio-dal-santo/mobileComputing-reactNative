@@ -18,7 +18,7 @@ export default class DBManager {
                 );`;
       await this.db.execAsync(query);
     } catch (error) {
-      console.error("Error in openDB: ", error);
+      console.warn("Error in openDB: ", error);
     }
   }
 
@@ -30,7 +30,7 @@ export default class DBManager {
             `;
       await this.db.runAsync(query, [mid, imageVersion, image]);
     } catch (error) {
-      console.error("Error in insertMenuImage: ", error);
+      console.warn("Error in insertMenuImage: ", error);
     }
   }
 
@@ -44,7 +44,7 @@ export default class DBManager {
       }
       return null;
     } catch (error) {
-      console.error("Error in getImageVersion: ", error);
+      console.warn("Error in getImageVersion: ", error);
       return null;
     }
   }

@@ -9,7 +9,7 @@ export default class AsyncStorageManager {
       await AsyncStorage.setItem("sid", JSON.stringify(sid));
       console.log("Dati salvati:", { uid: uid, sid: sid });
     } catch (error) {
-      console.error("Errore durante il salvataggio dei dati utente:", error);
+      console.warn("Errore durante il salvataggio dei dati utente:", error);
     }
   }
 
@@ -18,7 +18,7 @@ export default class AsyncStorageManager {
       const uid = await AsyncStorage.getItem("uid");
       return JSON.parse(uid);
     } catch (error) {
-      console.error("Errore durante il recupero dell'UID:", error);
+      console.warn("Errore durante il recupero dell'UID:", error);
     }
   }
 
@@ -27,7 +27,7 @@ export default class AsyncStorageManager {
       const sid = await AsyncStorage.getItem("sid");
       return JSON.parse(sid);
     } catch (error) {
-      console.error("Errore durante il recupero del SID:", error);
+      console.warn("Errore durante il recupero del SID:", error);
     }
   }
 
@@ -45,7 +45,7 @@ export default class AsyncStorageManager {
     try {
       await AsyncStorage.setItem("isRegistered", JSON.stringify(isRegistered));
     } catch (error) {
-      console.error(
+      console.warn(
         "Errore durante il salvataggio dello stato di registrazione:",
         error
       );
@@ -57,7 +57,7 @@ export default class AsyncStorageManager {
       const isRegistered = await AsyncStorage.getItem("isRegistered");
       return JSON.parse(isRegistered);
     } catch (error) {
-      console.error(
+      console.warn(
         "Errore durante il recupero dello stato di registrazione:",
         error
       );
@@ -71,7 +71,7 @@ export default class AsyncStorageManager {
         JSON.stringify(canUseLocation)
       );
     } catch (error) {
-      console.error(
+      console.warn(
         "Errore durante il salvataggio dello stato di utilizzo della posizione:",
         error
       );
@@ -83,7 +83,7 @@ export default class AsyncStorageManager {
       const canUseLocation = await AsyncStorage.getItem("canUseLocation");
       return JSON.parse(canUseLocation);
     } catch (error) {
-      console.error(
+      console.warn(
         "Errore durante il recupero dello stato di utilizzo della posizione:",
         error
       );
@@ -95,7 +95,7 @@ export default class AsyncStorageManager {
       await AsyncStorage.setItem("menu", JSON.stringify(menu));
       console.log("Menu salvato:", menu.mid);
     } catch (error) {
-      console.error("Errore durante il salvataggio del menu:", error);
+      console.warn("Errore durante il salvataggio del menu:", error);
     }
   }
 
@@ -104,7 +104,7 @@ export default class AsyncStorageManager {
       const menu = await AsyncStorage.getItem("menu");
       return JSON.parse(menu);
     } catch (error) {
-      console.error("Errore durante il recupero del menu:", error);
+      console.warn("Errore durante il recupero del menu:", error);
     }
   }
 
@@ -113,7 +113,7 @@ export default class AsyncStorageManager {
       await AsyncStorage.setItem("orderData", JSON.stringify(orderData));
       console.log("Dati dell'ordine salvati:", orderData.oid);
     } catch (error) {
-      console.error(
+      console.warn(
         "Errore durante il salvataggio dei dati dell'ordine:",
         error
       );
@@ -125,7 +125,7 @@ export default class AsyncStorageManager {
       const orderData = await AsyncStorage.getItem("orderData");
       return JSON.parse(orderData);
     } catch (error) {
-      console.error("Errore durante il recupero dei dati dell'ordine:", error);
+      console.warn("Errore durante il recupero dei dati dell'ordine:", error);
     }
   }
 }

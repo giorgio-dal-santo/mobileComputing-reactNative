@@ -76,7 +76,7 @@ export default class LocationViewModel {
         }
       );
     } catch (error) {
-      console.error("Errore durante l'aggiornamento della posizione:", error);
+      console.warn("Errore durante l'aggiornamento della posizione:", error);
       if (onError) {
         onError(error);
       }

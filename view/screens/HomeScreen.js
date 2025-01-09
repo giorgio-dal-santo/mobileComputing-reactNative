@@ -36,7 +36,7 @@ export default function HomeScreen({ navigation }) {
         console.log("User not registered or location not available");
       }
     } catch (error) {
-      console.error("Error during data initialization:", error);
+      console.warn("Error during data initialization:", error);
     } finally {
       setLoading(false);
     }
@@ -72,12 +72,12 @@ export default function HomeScreen({ navigation }) {
             setUserLocation(location);
           },
           (error) => {
-            console.error("Error while watching location: ", error);
+            console.warn("Error while watching location: ", error);
           }
         );
       }
     } catch (error) {
-      console.error("Error while handling location permission: ", error);
+      console.warn("Error while handling location permission: ", error);
     }
   };
 

@@ -32,7 +32,7 @@ export default function MenuDetailScreen({ route, navigation }) {
           detailedMenu.deliveryTime
         );
       } catch (error) {
-        console.error("Errore nel caricamento dei dettagli del menu:", error);
+        console.warn("Errore nel caricamento dei dettagli del menu:", error);
       }
     };
 

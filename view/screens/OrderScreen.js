@@ -30,7 +30,7 @@ export default function OrderScreen({ navigation }) {
 
         console.log("Data successfully loaded from storage.");
       } catch (error) {
-        console.error("Error loading data:", error);
+        console.warn("Error loading data:", error);
       }
     };
 
@@ -52,7 +52,7 @@ export default function OrderScreen({ navigation }) {
           );
         }
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.warn("Error fetching data:", error);
       }
     };
 
@@ -68,7 +68,7 @@ export default function OrderScreen({ navigation }) {
           );
         }
       } catch (error) {
-        console.error("Error saving data:", error);
+        console.warn("Error saving data:", error);
       }
     };
 

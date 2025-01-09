@@ -6,12 +6,15 @@ import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
 import { TouchableOpacity } from "react-native";
 import MapView, { Marker } from "react-native-maps";
+import { useState } from "react";
 
 export default function OrderConfirmScreen({ route, navigation }) {
   const { menuid, lat, lng } = route.params || {};
 
   const { orderData, setOrderData, userLocation, setLastMenu, lastMenu } =
     useContext(UserContext);
+
+  const [orderError, setOrderError] = useState(null);
 
   useEffect(() => {
     const viewModel = ViewModel.getViewModel();
@@ -30,7 +33,8 @@ export default function OrderConfirmScreen({ route, navigation }) {
         const menu = await viewModel.getMenuDetail(menuid, lat, lng);
         setLastMenu(menu);
       } catch (error) {
-        console.error("Errore nel caricamento del nuovo ordine:", error);
+        console.warn("Errore nel caricamento del nuovo ordine:", error);
+        setOrderError(error.message);
       }
     };
 
@@ -45,7 +49,7 @@ export default function OrderConfirmScreen({ route, navigation }) {
         await viewModel.setMenuAndOrderDataToStorage(lastMenu, orderData);
         console.log("Data successfully saved to storage.");
       } catch (error) {
-        console.error("Error saving data:", error);
+        console.warn("Error saving data:", error);
       }
     };
 
@@ -54,20 +58,37 @@ export default function OrderConfirmScreen({ route, navigation }) {
     }
   }, [orderData, lastMenu]);
 
+  if (orderError) {
+    return (
+      <Text style={globalStyle.subTitle}>Error: {orderError}</Text>
+    )
+  }
+
+  if (!orderData || !orderData.creationTimestamp) {
+    return (
+      <View style={globalStyle.innerContainer}>
+        <Text style={globalStyle.subTitle}>Loading...</Text>
+      </View>
+    )
+  }
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView contentContainerStyle={globalStyle.mainContainer}>
-        {orderData?.creationTimestamp ? (
-          <View style={globalStyle.innerContainer}>
-            <Text
-              style={[
-                globalStyle.title,
-                { textAlign: "center", width: "100%" },
-              ]}
-            >
-              Thank you for your purchase!
-            </Text>
-            {lat && lng ? (
+        <View style={globalStyle.innerContainer}>
+
+          <Text
+            style={[
+              globalStyle.title,
+              { textAlign: "center", width: "100%" },
+            ]}
+          >
+            Thank you for your purchase!
+          </Text>
+
+          {
+          (lat && lng) 
+            ? (
               <View style={globalStyle.mapContainer}>
                 <MapView
                   style={globalStyle.map}
@@ -83,24 +104,24 @@ export default function OrderConfirmScreen({ route, navigation }) {
                     title="Menu Location"
                   />
                 </MapView>
-              </View>
-            ) : (
+            </View>
+            )
+            : (
               <Text>Loading map...</Text>
-            )}
-            <TouchableOpacity
-              style={[globalStyle.button, globalStyle.enableLocationButton]}
-              onPress={() => navigation.navigate("Order")}
-            >
-              <Text style={globalStyle.buttonTextWhite}>
-                Go to Your Order Status
-              </Text>
-            </TouchableOpacity>
-          </View>
-        ) : (
-          <View style={globalStyle.innerContainer}>
-            <Text style={globalStyle.subTitle}>Loading...</Text>
-          </View>
-        )}
+            )
+          }
+          
+          <TouchableOpacity
+            style={[globalStyle.button, globalStyle.enableLocationButton]}
+            onPress={() => navigation.navigate("Order")}
+          >
+            <Text style={globalStyle.buttonTextWhite}>
+              Go to Your Order Status
+            </Text>
+          </TouchableOpacity>
+
+
+        </View>
       </ScrollView>
     </SafeAreaView>
   );

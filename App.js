@@ -89,7 +89,7 @@ export default function App() {
               console.log("User location App: ", location);
             },
             (error) => {
-              console.error("Error while watching location: ", error);
+              console.warn("Error while watching location: ", error);
             }
           );
         }
@@ -98,7 +98,7 @@ export default function App() {
         const lastMenu = await viewModel.getLastMenu();
         setLastMenu(lastMenu);
       } catch (error) {
-        console.error("Error loading launch data: ", error);
+        console.warn("Error loading launch data: ", error);
       }
     };
 
