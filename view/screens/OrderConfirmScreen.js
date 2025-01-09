@@ -60,8 +60,10 @@ export default function OrderConfirmScreen({ route, navigation }) {
 
   if (orderError) {
     return (
-      <Text style={globalStyle.subTitle}>Error: {orderError}</Text>
-    )
+      <View style={globalStyle.innerContainer}>
+        <Text style={globalStyle.subTitle}>Error: {orderError}</Text>
+      </View>
+    );
   }
 
   if (!orderData || !orderData.creationTimestamp) {
@@ -69,48 +71,40 @@ export default function OrderConfirmScreen({ route, navigation }) {
       <View style={globalStyle.innerContainer}>
         <Text style={globalStyle.subTitle}>Loading...</Text>
       </View>
-    )
+    );
   }
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView contentContainerStyle={globalStyle.mainContainer}>
         <View style={globalStyle.innerContainer}>
-
           <Text
-            style={[
-              globalStyle.title,
-              { textAlign: "center", width: "100%" },
-            ]}
+            style={[globalStyle.title, { textAlign: "center", width: "100%" }]}
           >
             Thank you for your purchase!
           </Text>
 
-          {
-          (lat && lng) 
-            ? (
-              <View style={globalStyle.mapContainer}>
-                <MapView
-                  style={globalStyle.map}
-                  initialRegion={{
-                    latitude: lat,
-                    longitude: lng,
-                    latitudeDelta: 0.0922,
-                    longitudeDelta: 0.0421,
-                  }}
-                >
-                  <Marker
-                    coordinate={{ latitude: lat, longitude: lng }}
-                    title="Menu Location"
-                  />
-                </MapView>
+          {lat && lng ? (
+            <View style={globalStyle.mapContainer}>
+              <MapView
+                style={globalStyle.map}
+                initialRegion={{
+                  latitude: lat,
+                  longitude: lng,
+                  latitudeDelta: 0.0922,
+                  longitudeDelta: 0.0421,
+                }}
+              >
+                <Marker
+                  coordinate={{ latitude: lat, longitude: lng }}
+                  title="Menu Location"
+                />
+              </MapView>
             </View>
-            )
-            : (
-              <Text>Loading map...</Text>
-            )
-          }
-          
+          ) : (
+            <Text>Loading map...</Text>
+          )}
+
           <TouchableOpacity
             style={[globalStyle.button, globalStyle.enableLocationButton]}
             onPress={() => navigation.navigate("Order")}
@@ -119,8 +113,6 @@ export default function OrderConfirmScreen({ route, navigation }) {
               Go to Your Order Status
             </Text>
           </TouchableOpacity>
-
-
         </View>
       </ScrollView>
     </SafeAreaView>
