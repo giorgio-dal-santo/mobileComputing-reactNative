@@ -9,16 +9,11 @@ export default function ProfileStackNavigator() {
   return (
     <ProfileStack.Navigator
       screenOptions={{
-        headerTitleStyle: globalStyle.headerTitleStyle,
-        headerTitleAlign: "center",
+        headerShown: false,
       }}
     >
-      <ProfileStack.Screen name="Profile" component={ProfileScreen} options ={ {title: "Welcome to your Profile"}} />
-      <ProfileStack.Screen
-        name="EditProfile"
-        component={EditProfileScreen}
-        options={{ title: "Edit Profile" }}
-      />
+      <ProfileStack.Screen name="Profile" component={ProfileScreen} />
+      <ProfileStack.Screen name="EditProfile" component={EditProfileScreen} />
     </ProfileStack.Navigator>
   );
 }

@@ -96,7 +96,7 @@ export default function EditProfileScreen({ navigation }) {
       <ScrollView contentContainerStyle={globalStyle.mainContainer}>
         <View style={globalStyle.innerContainer}>
           <Text style={globalStyle.title}>
-            {isRegistered ? "Your Profile" : "New Profile"}
+            {isRegistered ? "Edit Profile" : "New Profile"}
           </Text>
 
           <Text style={globalStyle.label}>First Name</Text>
@@ -219,6 +219,12 @@ export default function EditProfileScreen({ navigation }) {
             <Text style={globalStyle.buttonTextWhite}>
               {isRegistered ? "Save" : "Register"}
             </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[globalStyle.button, globalStyle.goBackButton]}
+            onPress={() => navigation.goBack()}
+          >
+            <Text style={globalStyle.buttonText}>Back</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

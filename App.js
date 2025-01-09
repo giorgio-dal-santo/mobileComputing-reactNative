@@ -151,17 +151,18 @@ export default function App() {
 
                   return <Ionicons name={iconName} size={size} color={color} />;
                 },
+                tabBarShowLabel: false,
                 tabBarActiveTintColor: "black",
                 tabBarInactiveTintColor: "gray",
                 headerTitleStyle: globalStyle.headerTitleStyle,
-                headerShown: false,
+                tabBarIconStyle: { alignSelf: 'center', marginTop: 5 },
               })}
             >
               <Tab.Screen
                 name="HomeStack"
                 component={HomeStackNavigator}
                 options={{ 
-                  title: "Home",
+                  title: "Mangia e Basta",
                 }}
               />
               <Tab.Screen
@@ -169,7 +170,6 @@ export default function App() {
                 component={OrderScreen}
                 options={{
                   title: "Order",
-                  headerShown: true,
                 }}
               />
               <Tab.Screen

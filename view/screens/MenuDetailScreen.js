@@ -59,7 +59,7 @@ export default function MenuDetailScreen({ route, navigation }) {
                 <Text style={globalStyle.description}>
                   {detailedMenu.longDescription}
                 </Text>
-                
+
                 <Text style={globalStyle.price}>
                   €{detailedMenu.price.toFixed(2)}
                 </Text>
@@ -69,18 +69,26 @@ export default function MenuDetailScreen({ route, navigation }) {
                 </Text>
 
                 {userData.firstName ? (
-                  <TouchableOpacity
-                    style={[globalStyle.button, globalStyle.buyButton]}
-                    onPress={() =>
-                      navigation.navigate("OrderConfirm", {
-                        menuid: detailedMenu.mid,
-                        lat: detailedMenu.location.lat,
-                        lng: detailedMenu.location.lng,
-                      })
-                    }
-                  >
-                    <Text style={globalStyle.buttonTextWhite}>Buy Now</Text>
-                  </TouchableOpacity>
+                  <View>
+                    <TouchableOpacity
+                      style={[globalStyle.button, globalStyle.buyButton]}
+                      onPress={() =>
+                        navigation.navigate("OrderConfirm", {
+                          menuid: detailedMenu.mid,
+                          lat: detailedMenu.location.lat,
+                          lng: detailedMenu.location.lng,
+                        })
+                      }
+                    >
+                      <Text style={globalStyle.buttonTextWhite}>Buy Now</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={[globalStyle.button, globalStyle.goBackButton]}
+                      onPress={() => navigation.goBack()}
+                    >
+                      <Text style={globalStyle.buttonText}>Back</Text>
+                    </TouchableOpacity>
+                  </View>
                 ) : (
                   <View>
                     <Text style={globalStyle.subTitle}>
@@ -90,13 +98,24 @@ export default function MenuDetailScreen({ route, navigation }) {
                       style={[globalStyle.button, globalStyle.signUpButton]}
                       onPress={() => navigation.navigate("ProfileStack")}
                     >
-                      <Text style={globalStyle.buttonTextWhite}>Go to Profile</Text>
+                      <Text style={globalStyle.buttonTextWhite}>
+                        Go to Profile
+                      </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      style={[globalStyle.button, globalStyle.goBackButton]}
+                      onPress={() => navigation.goBack()}
+                    >
+                      <Text style={globalStyle.buttonText}>Back</Text>
                     </TouchableOpacity>
                   </View>
                 )}
               </>
             ) : (
-              <Text>Loading...</Text>
+              <View style={globalStyle.innerContainer}>
+                <Text style={globalStyle.subTitle}>Loading...</Text>
+              </View>
             )}
           </View>
         </View>
