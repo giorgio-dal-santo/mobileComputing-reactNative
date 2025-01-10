@@ -128,4 +128,25 @@ export default class AsyncStorageManager {
       console.warn("Errore durante il recupero dei dati dell'ordine:", error);
     }
   }
+
+  static async setCurrentScreen(currentScreen) {
+    try {
+      await AsyncStorage.setItem("currentScreen", JSON.stringify(currentScreen));
+      console.log("Schermata corrente salvata:", currentScreen);
+    } catch (error) {
+      console.warn(
+        "Errore durante il salvataggio della schermata corrente:",
+        error
+      );
+    }
+  }
+
+  static async getCurrentScreen() {
+    try {
+      const currentScreen = await AsyncStorage.getItem("currentScreen");
+      return JSON.parse(currentScreen);
+    } catch (error) {
+      console.warn("Errore durante il recupero della schermata corrente:", error);
+    }
+  }
 }

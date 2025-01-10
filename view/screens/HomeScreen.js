@@ -11,10 +11,37 @@ import { useContext } from "react";
 import { TouchableOpacity } from "react-native";
 import { Alert } from "react-native";
 import { Linking } from "react-native";
+import { useEffect } from "react";
 
 export default function HomeScreen({ navigation }) {
+
+  
+  const viewModel = ViewModel.getViewModel();
+
+   
+
+
   const [nearbyMenus, setNearbyMenus] = useState([]);
   const [loading, setLoading] = useState(true);
+
+   //load screen
+   useEffect(() => { 
+    const loadScreen = async () => {
+      try {
+        const currentScreen = await viewModel.getCurrentScreen();
+        console.log("Current screen 1: ", currentScreen);
+
+        if (currentScreen) {
+          navigation.navigate(currentScreen.name, currentScreen.params);
+        }
+      } catch (error) {
+        console.error('Error navigating to the current screen:', error);
+      }
+    
+    }
+    if (!loading)
+      loadScreen();
+  }, [loading]);
 
   const {
     isRegistered,

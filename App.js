@@ -4,7 +4,7 @@ import HomeStackNavigator from "./view/navigation/HomeStackNavigator";
 import ProfileStackNavigator from "./view/navigation/ProfileStackNavigator";
 import OrderScreen from "./view/screens/OrderScreen";
 import ViewModel from "./viewModel/ViewModel";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { UserContextProvider } from "./view/context/UserContext";
 import * as Font from "expo-font";
 import { View, ActivityIndicator } from "react-native";
@@ -19,29 +19,9 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 const navigationRef = React.createRef();
 
 export default function App() {
-  const [currentScreen, setCurrentScreen] = useState("FirstScreen");
-  const currentScreenRef = useRef(currentScreen);
 
-  async function setScreen(value) {
-    currentScreenRef.current = value;
-    setCurrentScreen(value);
-    console.log("Current screen: ", value);
-  }
 
-  useEffect(() => {
-    const handleAppStateChange = async (nextAppState) => {
-      if (nextAppState === "background") {
-        console.log("App going to background from:", currentScreenRef.current);
-      }
-    };
-    const subscription = AppState.addEventListener(
-      "change",
-      handleAppStateChange
-    );
-    return () => {
-      subscription.remove();
-    };
-  }, []);
+
 
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
@@ -90,7 +70,7 @@ export default function App() {
             },
             (error) => {
               console.warn("Error while watching location: ", error);
-            }
+            },
           );
         }
 
@@ -100,6 +80,7 @@ export default function App() {
       } catch (error) {
         console.warn("Error loading launch data: ", error);
       }
+
     };
 
     loadLaunchData();
@@ -130,10 +111,10 @@ export default function App() {
         >
           <NavigationContainer
             ref={navigationRef}
-            onStateChange={() => {
-              const route = navigationRef.current?.getCurrentRoute();
+            onStateChange={ async () => {
+              const route = await navigationRef.current.getCurrentRoute();
               console.log("Current route: ", route);
-              if (route) setScreen(route.name);
+              if (route) await viewModel.setCurrentScreen(route);
             }}
           >
             <Tab.Navigator

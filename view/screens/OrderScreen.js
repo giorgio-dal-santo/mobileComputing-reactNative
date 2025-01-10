@@ -125,6 +125,7 @@ const OrderStatus = ({ navigation }) => {
     );
   }
 
+
   return (
     <View>
       {!orderData || !lastMenu ? (
@@ -206,6 +207,7 @@ const OrderStatus = ({ navigation }) => {
                   longitudeDelta: 0.01,
                 }}
               />
+              
               <Marker
                 coordinate={{
                   latitude: orderData.deliveryLocation.lat,
