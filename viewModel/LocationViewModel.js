@@ -24,7 +24,7 @@ export default class LocationViewModel {
 
   async getPermission() {
     const grantedPermission = await Location.getForegroundPermissionsAsync();
-    console.log("Permission granted: ", grantedPermission.status);
+    console.log("Location permission granted: ", grantedPermission.status);
 
     const canUseLocation = { status: "undetermined" };
 
@@ -40,7 +40,6 @@ export default class LocationViewModel {
     }
 
     return canUseLocation;
-
   }
 
   async askForPermission() {
@@ -53,7 +52,7 @@ export default class LocationViewModel {
   async startWatchingLocation(onLocationUpdate, onError) {
     const canUseLocation = await this.canUseLocation();
     if (!canUseLocation) {
-      console.log("Non posso usare la posizione");
+      console.log("Location not available");
       return null;
     }
 
@@ -61,22 +60,22 @@ export default class LocationViewModel {
       this.#locationSubscription = await Location.watchPositionAsync(
         {
           accuracy: Location.Accuracy.BestForNavigation,
-          timeInterval: 2000, // Ogni 2 secondi
-          distanceInterval: 1, // Ogni 1 metro
+          timeInterval: 2000,
+          distanceInterval: 1,
         },
         (newLocation) => {
           const formattedLocation = {
             lat: newLocation.coords.latitude,
             lng: newLocation.coords.longitude,
           };
-          console.log("Location aggiornata: ", formattedLocation);
+          console.log("Updated location: ", formattedLocation);
           if (onLocationUpdate) {
             onLocationUpdate(formattedLocation);
           }
         }
       );
     } catch (error) {
-      console.warn("Errore durante l'aggiornamento della posizione:", error);
+      console.warn("Error during location update:", error);
       if (onError) {
         onError(error);
       }
@@ -87,7 +86,7 @@ export default class LocationViewModel {
     if (this.#locationSubscription) {
       this.#locationSubscription.remove();
       this.#locationSubscription = null;
-      console.log("Monitoraggio posizione interrotto");
+      console.log("Location watching stopped");
     }
   }
 }

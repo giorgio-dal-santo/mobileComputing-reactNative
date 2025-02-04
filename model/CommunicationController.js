@@ -1,15 +1,11 @@
-// COMMUNICATION CONTROLLER
-
 export default class CommunicationController {
-  // URL base per le chiamate
   static BASE_URL = "https://develop.ewlab.di.unimi.it/mc/2425";
 
-  // funzioni generiche per chiamate al server
   static async genericRequest(endpoint, verb, queryParams, bodyParams) {
-    console.log("genericRequest called");
+    console.log("GenericRequest called");
     const queryParamsFormatted = new URLSearchParams(queryParams).toString();
     const url = this.BASE_URL + endpoint + "?" + queryParamsFormatted;
-    console.log("sending " + verb + " request to: " + url);
+    console.log("Sending " + verb + " request to: " + url);
 
     let fetchData = {
       method: verb,
@@ -37,9 +33,7 @@ export default class CommunicationController {
       }
     } else {
       const message = await httpResponse.json();
-      let error = new Error(
-        message.message
-      );
+      let error = new Error(message.message);
       throw error;
     }
   }
@@ -59,7 +53,6 @@ export default class CommunicationController {
   // User data management
   static async registerUser() {
     const endpoint = "/user";
-    console.log("registerUser called with endpoint: ", endpoint);
     return await this.genericPostRequest(endpoint);
   }
 
@@ -94,7 +87,7 @@ export default class CommunicationController {
     return await this.genericGetRequest(endpoint, queryParams);
   }
 
-  //Comunicare al server che abbiamo acquistato un menu
+  // Order data management
   static async buyMenu(sid, userLocation, mid) {
     const endpoint = "/menu/" + mid + "/buy";
     const bodyParams = { sid: sid, deliveryLocation: userLocation };
@@ -102,10 +95,18 @@ export default class CommunicationController {
     return await this.genericPostRequest(endpoint, queryParams, bodyParams);
   }
 
-  //Ottenere lo stato di un ordine
   static async getOrderDetail(oid, sid) {
     const endpoint = "/order/" + oid;
     const queryParams = { oid: oid, sid: sid };
     return await this.genericGetRequest(endpoint, queryParams);
   }
+
+  // modified
+  /*
+  static async getIngredients(mid, sid) {
+    const endpoint = "/menu/" + mid + "/ingredients";
+    const queryParams = { mid: mid, sid: sid };
+    return await this.genericGetRequest(endpoint, queryParams);
+  }
+  */
 }

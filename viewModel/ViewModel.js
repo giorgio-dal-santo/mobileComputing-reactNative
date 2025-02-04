@@ -1,5 +1,3 @@
-// VIEW MODEL
-
 import AsyncStorageManager from "../model/AsyncStorageManager.js";
 import DBManager from "../model/DBManager.js";
 import CommunicationController from "../model/CommunicationController.js";
@@ -267,5 +265,17 @@ export default class ViewModel {
     } catch (error) {
       console.warn("Error loading current screen:", error);
     }
-  } 
+  }
+
+  // modified
+  /*
+  async getIngredients(mid) {
+    try {
+      const ingredients = await CommunicationController.getIngredients(mid, this.sid);
+      return ingredients;
+    } catch (error) {
+      console.warn("Error getting ingredients:", error);
+    }
+  }
+  */
 }

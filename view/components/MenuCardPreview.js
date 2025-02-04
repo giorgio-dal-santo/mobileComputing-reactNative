@@ -1,6 +1,6 @@
 import { Text, View, Image } from "react-native";
-import { globalStyle } from "../../styles/GlobalStyle";
 import { useContext } from "react";
+import { globalStyle } from "../../styles/GlobalStyle";
 import { UserContext } from "../context/UserContext";
 
 export default function MenuCardPreview() {

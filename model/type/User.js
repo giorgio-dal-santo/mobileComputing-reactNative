@@ -1,5 +1,3 @@
-// USER
-
 export default class User {
   constructor(
     firstName,
@@ -27,6 +25,8 @@ export default class User {
 
   validateFirstName(firstName) {
     if (!firstName) return "The first name field is required.";
+    if (!/^[a-zA-Z]+$/.test(firstName))
+      return "The first name must contain only letters.";
     if (firstName.length <= 0 || firstName.length > 15) {
       return "The first name must be between 1 and 15 characters.";
     }
@@ -35,6 +35,8 @@ export default class User {
 
   validateLastName(lastName) {
     if (!lastName) return "The last name field is required.";
+    if (!/^[a-zA-Z]+$/.test(lastName))
+      return "The last name must contain only letters.";
     if (lastName.length <= 0 || lastName.length > 15) {
       return "The last name must be between 1 and 15 characters.";
     }
@@ -43,6 +45,8 @@ export default class User {
 
   validateCardFullName(cardFullName) {
     if (!cardFullName) return "The card full name field is required.";
+    if (!/^[a-zA-Z\s]+$/.test(cardFullName))
+      return "The card full name must contain only letters and spaces.";
     if (cardFullName.length <= 0 || cardFullName.length > 31) {
       return "The card full name must be between 1 and 31 characters.";
     }
@@ -51,6 +55,7 @@ export default class User {
 
   validateCardNumber(cardNumber) {
     if (!cardNumber) return "The card number field is required.";
+    if (!/^\d+$/.test(cardNumber)) return "The card number must be numeric.";
     if (cardNumber.length !== 16) {
       return "The card number must be 16 digits.";
     }
@@ -59,6 +64,8 @@ export default class User {
 
   validateCardExpireMonth(cardExpireMonth) {
     if (!cardExpireMonth) return "The card expire month field is required.";
+    if (!/^\d+$/.test(cardExpireMonth))
+      return "The card expire month must be numeric.";
     if (parseInt(cardExpireMonth) < 1 || parseInt(cardExpireMonth) > 12) {
       return "The card expire month must be between 1 and 12.";
     }
@@ -67,6 +74,8 @@ export default class User {
 
   validateCardExpireYear(cardExpireYear) {
     if (!cardExpireYear) return "The card expire year field is required.";
+    if (!/^\d+$/.test(cardExpireYear))
+      return "The card expire year must be numeric.";
     if (cardExpireYear.toString().length !== 4) {
       return "The card expire year must be 4 digits";
     }
@@ -78,6 +87,7 @@ export default class User {
 
   validateCardCVV(cardCVV) {
     if (!cardCVV) return "The card CVV field is required.";
+    if (!/^\d+$/.test(cardCVV)) return "The card CVV must be numeric.";
     if (cardCVV.length !== 3) {
       return "The card CVV must be 3 digits.";
     }

@@ -1,5 +1,3 @@
-//ORDER CLASS
-
 export default class Order {
   constructor(
     oid,

@@ -1,12 +1,16 @@
-import { Text, View, SafeAreaView, ScrollView } from "react-native";
-import { useEffect } from "react";
+import { useEffect, useContext, useState } from "react";
+import {
+  Text,
+  View,
+  SafeAreaView,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
+import MapView, { Marker } from "react-native-maps";
 import { globalStyle } from "../../styles/GlobalStyle";
 import ViewModel from "../../viewModel/ViewModel";
-import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
-import { TouchableOpacity } from "react-native";
-import MapView, { Marker } from "react-native-maps";
-import { useState } from "react";
+import LoadingView from "../components/LoadingView";
 
 export default function OrderConfirmScreen({ route, navigation }) {
   const { menuid, lat, lng } = route.params || {};
@@ -33,7 +37,7 @@ export default function OrderConfirmScreen({ route, navigation }) {
         const menu = await viewModel.getMenuDetail(menuid, lat, lng);
         setLastMenu(menu);
       } catch (error) {
-        console.warn("Errore nel caricamento del nuovo ordine:", error);
+        console.warn("Error during fetch new order:", error);
         setOrderError(error.message);
       }
     };
@@ -58,63 +62,67 @@ export default function OrderConfirmScreen({ route, navigation }) {
     }
   }, [orderData, lastMenu]);
 
-  if (orderError) {
-    return (
-      <View style={globalStyle.innerContainer}>
-        <Text style={globalStyle.subTitle}>Error: {orderError}</Text>
-      </View>
-    );
-  }
-
-  if (!orderData || !orderData.creationTimestamp) {
-    return (
-      <View style={globalStyle.innerContainer}>
-        <Text style={globalStyle.subTitle}>Loading...</Text>
-      </View>
-    );
-  }
-
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView contentContainerStyle={globalStyle.mainContainer}>
-        <View style={globalStyle.innerContainer}>
-          <Text
-            style={[globalStyle.title, { textAlign: "center", width: "100%" }]}
-          >
-            Thank you for your purchase!
-          </Text>
-
-          {lat && lng ? (
-            <View style={globalStyle.mapContainer}>
-              <MapView
-                style={globalStyle.map}
-                initialRegion={{
-                  latitude: lat,
-                  longitude: lng,
-                  latitudeDelta: 0.0922,
-                  longitudeDelta: 0.0421,
-                }}
-              >
-                <Marker
-                  coordinate={{ latitude: lat, longitude: lng }}
-                  title="Menu Location"
-                />
-              </MapView>
-            </View>
-          ) : (
-            <Text>Loading map...</Text>
-          )}
-
-          <TouchableOpacity
-            style={[globalStyle.button, globalStyle.enableLocationButton]}
-            onPress={() => navigation.navigate("Order")}
-          >
-            <Text style={globalStyle.buttonTextWhite}>
-              Go to Your Order Status
-            </Text>
-          </TouchableOpacity>
-        </View>
+        {renderContent()}
       </ScrollView>
     </SafeAreaView>
   );
+
+  function renderContent() {
+    if (!orderData || !orderData.creationTimestamp) {
+      return <LoadingView />;
+    }
+
+    if (orderError) {
+      return (
+        <View style={globalStyle.innerContainer}>
+          <Text style={globalStyle.subTitle}>Error: {orderError}</Text>
+          <TouchableOpacity
+            style={[globalStyle.button, globalStyle.goBackButton]}
+            onPress={() => navigation.goBack()}
+          >
+            <Text style={globalStyle.buttonText}>Back</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    }
+
+    return <OrderConfirmView lat={lat} lng={lng} navigation={navigation} />;
+  }
 }
+
+const OrderConfirmView = ({ lat, lng, navigation }) => {
+  return (
+    <View style={globalStyle.innerContainer}>
+      <Text style={[globalStyle.title, { textAlign: "center", width: "100%" }]}>
+        Thank you for your purchase!
+      </Text>
+
+      <View style={globalStyle.mapContainer}>
+        <MapView
+          style={globalStyle.map}
+          initialRegion={{
+            latitude: lat,
+            longitude: lng,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
+        >
+          <Marker
+            coordinate={{ latitude: lat, longitude: lng }}
+            title="Menu Location"
+          />
+        </MapView>
+      </View>
+
+      <TouchableOpacity
+        style={[globalStyle.button, globalStyle.enableLocationButton]}
+        onPress={() => navigation.navigate("Order")}
+      >
+        <Text style={globalStyle.buttonTextWhite}>Go to Your Order Status</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};

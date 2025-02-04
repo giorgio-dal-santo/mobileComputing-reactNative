@@ -1,10 +1,16 @@
-import { Text, View, TextInput, SafeAreaView, ScrollView } from "react-native";
-import { globalStyle } from "../../styles/GlobalStyle";
 import { useContext, useState } from "react";
+import {
+  Text,
+  View,
+  TextInput,
+  SafeAreaView,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
+import { globalStyle } from "../../styles/GlobalStyle";
 import ViewModel from "../../viewModel/ViewModel";
 import User from "../../model/type/User";
 import { UserContext } from "../context/UserContext";
-import { TouchableOpacity } from "react-native";
 
 export default function EditProfileScreen({ navigation }) {
   const { userData, setUserData, isRegistered, setIsRegistered } =
@@ -87,7 +93,10 @@ export default function EditProfileScreen({ navigation }) {
     if (Object.values(newErrors).every((err) => err === null)) {
       await viewModel.saveUserData(userData);
       setIsRegistered(true);
-      navigation.goBack();
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Profile' }],
+      });
     }
   };
 
@@ -222,7 +231,12 @@ export default function EditProfileScreen({ navigation }) {
           </TouchableOpacity>
           <TouchableOpacity
             style={[globalStyle.button, globalStyle.goBackButton]}
-            onPress={() => navigation.goBack()}
+            onPress={() => {
+              navigation.reset({
+                index: 0,
+                routes: [{ name: 'Profile' }],
+              });
+            }}
           >
             <Text style={globalStyle.buttonText}>Back</Text>
           </TouchableOpacity>

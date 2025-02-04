@@ -83,7 +83,7 @@ export const globalStyle = StyleSheet.create({
 
   // form
   label: {
-    fontSize: 16,
+    fontSize: 20,
     marginBottom: 8,
     color: "#333",
     fontWeight: "bold",

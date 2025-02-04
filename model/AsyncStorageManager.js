@@ -1,5 +1,3 @@
-// ASYNC STORAGE MANAGER
-
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default class AsyncStorageManager {
@@ -7,9 +5,8 @@ export default class AsyncStorageManager {
     try {
       await AsyncStorage.setItem("uid", JSON.stringify(uid));
       await AsyncStorage.setItem("sid", JSON.stringify(sid));
-      console.log("Dati salvati:", { uid: uid, sid: sid });
     } catch (error) {
-      console.warn("Errore durante il salvataggio dei dati utente:", error);
+      console.warn("Error during save user data to storage:", error);
     }
   }
 
@@ -18,7 +15,7 @@ export default class AsyncStorageManager {
       const uid = await AsyncStorage.getItem("uid");
       return JSON.parse(uid);
     } catch (error) {
-      console.warn("Errore durante il recupero dell'UID:", error);
+      console.warn("Error during get UID from storage:", error);
     }
   }
 
@@ -27,7 +24,7 @@ export default class AsyncStorageManager {
       const sid = await AsyncStorage.getItem("sid");
       return JSON.parse(sid);
     } catch (error) {
-      console.warn("Errore durante il recupero del SID:", error);
+      console.warn("Error during get SID from storage:", error);
     }
   }
 
@@ -45,10 +42,7 @@ export default class AsyncStorageManager {
     try {
       await AsyncStorage.setItem("isRegistered", JSON.stringify(isRegistered));
     } catch (error) {
-      console.warn(
-        "Errore durante il salvataggio dello stato di registrazione:",
-        error
-      );
+      console.warn("Error during save is registered to storage:", error);
     }
   }
 
@@ -57,10 +51,7 @@ export default class AsyncStorageManager {
       const isRegistered = await AsyncStorage.getItem("isRegistered");
       return JSON.parse(isRegistered);
     } catch (error) {
-      console.warn(
-        "Errore durante il recupero dello stato di registrazione:",
-        error
-      );
+      console.warn("Error during get is registered from storage:", error);
     }
   }
 
@@ -71,10 +62,7 @@ export default class AsyncStorageManager {
         JSON.stringify(canUseLocation)
       );
     } catch (error) {
-      console.warn(
-        "Errore durante il salvataggio dello stato di utilizzo della posizione:",
-        error
-      );
+      console.warn("Error during save can use location to storage:", error);
     }
   }
 
@@ -83,19 +71,15 @@ export default class AsyncStorageManager {
       const canUseLocation = await AsyncStorage.getItem("canUseLocation");
       return JSON.parse(canUseLocation);
     } catch (error) {
-      console.warn(
-        "Errore durante il recupero dello stato di utilizzo della posizione:",
-        error
-      );
+      console.warn("Error during get can use location from storage:", error);
     }
   }
 
   static async setMenu(menu) {
     try {
       await AsyncStorage.setItem("menu", JSON.stringify(menu));
-      console.log("Menu salvato:", menu.mid);
     } catch (error) {
-      console.warn("Errore durante il salvataggio del menu:", error);
+      console.warn("Error during save menu to storage:", error);
     }
   }
 
@@ -104,19 +88,15 @@ export default class AsyncStorageManager {
       const menu = await AsyncStorage.getItem("menu");
       return JSON.parse(menu);
     } catch (error) {
-      console.warn("Errore durante il recupero del menu:", error);
+      console.warn("Error during get menu from storage:", error);
     }
   }
 
   static async setOrderData(orderData) {
     try {
       await AsyncStorage.setItem("orderData", JSON.stringify(orderData));
-      console.log("Dati dell'ordine salvati:", orderData.oid);
     } catch (error) {
-      console.warn(
-        "Errore durante il salvataggio dei dati dell'ordine:",
-        error
-      );
+      console.warn("Error during save order data to storage:", error);
     }
   }
 
@@ -125,19 +105,19 @@ export default class AsyncStorageManager {
       const orderData = await AsyncStorage.getItem("orderData");
       return JSON.parse(orderData);
     } catch (error) {
-      console.warn("Errore durante il recupero dei dati dell'ordine:", error);
+      console.warn("Error during get order data from storage:", error);
     }
   }
 
   static async setCurrentScreen(currentScreen) {
     try {
-      await AsyncStorage.setItem("currentScreen", JSON.stringify(currentScreen));
-      console.log("Schermata corrente salvata:", currentScreen);
-    } catch (error) {
-      console.warn(
-        "Errore durante il salvataggio della schermata corrente:",
-        error
+      await AsyncStorage.setItem(
+        "currentScreen",
+        JSON.stringify(currentScreen)
       );
+      console.log("Current screen saved:", currentScreen);
+    } catch (error) {
+      console.warn("Error during save current screen to storage:", error);
     }
   }
 
@@ -146,7 +126,7 @@ export default class AsyncStorageManager {
       const currentScreen = await AsyncStorage.getItem("currentScreen");
       return JSON.parse(currentScreen);
     } catch (error) {
-      console.warn("Errore durante il recupero della schermata corrente:", error);
+      console.warn("Error during get current screen from storage:", error);
     }
   }
 }

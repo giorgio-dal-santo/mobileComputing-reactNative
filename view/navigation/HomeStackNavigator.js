@@ -24,6 +24,15 @@ export default function HomeStackNavigator() {
         component={OrderConfirmScreen}
         options={{ title: "Order Confirm" }}
       />
+      
+      {/* modified 
+      <HomeStack.Screen
+        name="MenuIngredients"
+        component={MenuIngredientsScreen}
+        options={{ title: "Menu Ingredients" }}
+      />
+      */}
+
     </HomeStack.Navigator>
   );
 }

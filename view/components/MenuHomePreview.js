@@ -1,6 +1,5 @@
-import { Text, View, Image } from "react-native";
+import { Text, View, Image, TouchableOpacity } from "react-native";
 import { globalStyle } from "../../styles/GlobalStyle";
-import { TouchableOpacity } from "react-native";
 
 export default function MenuHomePreview({ menu, navigation }) {
   return (
@@ -12,6 +11,7 @@ export default function MenuHomePreview({ menu, navigation }) {
             : require("../../assets/icon.png")
         }
         style={globalStyle.image}
+        onError={() => console.warn(`Failed to load image: ${menu.image}`)}
       />
       <Text style={globalStyle.cardTitle}>{menu.name}</Text>
       <Text style={globalStyle.description}>{menu.shortDescription}</Text>

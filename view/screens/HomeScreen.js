@@ -1,47 +1,25 @@
-import { SafeAreaView, ScrollView, Text, View } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
+import { useState, useEffect, useCallback, useContext } from "react";
+import {
+  SafeAreaView,
+  ScrollView,
+  Text,
+  View,
+  TouchableOpacity,
+  Alert,
+  Linking,
+} from "react-native";
+
 import { globalStyle } from "../../styles/GlobalStyle";
-import { useState } from "react";
 import ViewModel from "../../viewModel/ViewModel";
 import LocationViewModel from "../../viewModel/LocationViewModel";
-import { useFocusEffect } from "@react-navigation/native";
-import { useCallback } from "react";
 import MenuHomePreview from "../components/MenuHomePreview";
+import LoadingView from "../components/LoadingView";
 import { UserContext } from "../context/UserContext";
-import { useContext } from "react";
-import { TouchableOpacity } from "react-native";
-import { Alert } from "react-native";
-import { Linking } from "react-native";
-import { useEffect } from "react";
 
 export default function HomeScreen({ navigation }) {
-
-  
-  const viewModel = ViewModel.getViewModel();
-
-   
-
-
   const [nearbyMenus, setNearbyMenus] = useState([]);
   const [loading, setLoading] = useState(true);
-
-   //load screen
-   useEffect(() => { 
-    const loadScreen = async () => {
-      try {
-        const currentScreen = await viewModel.getCurrentScreen();
-        console.log("Current screen 1: ", currentScreen);
-
-        if (currentScreen) {
-          navigation.navigate(currentScreen.name, currentScreen.params);
-        }
-      } catch (error) {
-        console.error('Error navigating to the current screen:', error);
-      }
-    
-    }
-    if (!loading)
-      loadScreen();
-  }, [loading]);
 
   const {
     isRegistered,
@@ -52,6 +30,42 @@ export default function HomeScreen({ navigation }) {
   } = useContext(UserContext);
 
   const locationViewModel = LocationViewModel.getLocationViewModel();
+  const viewModel = ViewModel.getViewModel();
+
+  useEffect(() => {
+    const loadScreen = async () => {
+      try {
+        const currentScreen = await viewModel.getCurrentScreen();
+        console.log("Current screen: ", currentScreen);
+
+        if(!currentScreen) {
+          return;
+        }
+
+        if (currentScreen.name === "Profile") {
+          navigation.navigate("ProfileStack", {
+            screen: "Profile",
+            params: currentScreen.params,
+          });
+        } else if (currentScreen.name === "EditProfile") {
+          navigation.navigate("ProfileStack", {
+            screen: "EditProfile",
+            params: currentScreen.params,
+          });
+        } else if (currentScreen.name === "Order") {
+          navigation.navigate("Order", {
+            screen: "Order",
+            params: currentScreen.params,
+          });
+        } else {
+          navigation.navigate("HomeStack", currentScreen.params);
+        }
+      } catch (error) {
+        console.error("Error navigating to the current screen:", error);
+      }
+    };
+    if (!loading) loadScreen();
+  }, [loading]);
 
   const loadData = async () => {
     try {
@@ -119,46 +133,51 @@ export default function HomeScreen({ navigation }) {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ScrollView contentContainerStyle={globalStyle.mainContainer}>
-        {canUseLocation.status !== "granted" ? (
-          <View style={globalStyle.innerContainer}>
-            <Text style={globalStyle.title}>Activate Location Services</Text>
-            <Text style={globalStyle.subTitle}>
-              To view menus from restaurants near you, please enable location
-              services. This helps us show you the best options available in
-              your area.
-            </Text>
-            <TouchableOpacity
-              style={[globalStyle.button, globalStyle.enableLocationButton]}
-              onPress={async () => await handleAllowLocation()}
-            >
-              <Text style={globalStyle.buttonTextWhite}>Enable Location</Text>
-            </TouchableOpacity>
-          </View>
-        ): loading ? (
-          <View style={globalStyle.innerContainer}>
-            <Text style={globalStyle.subTitle}>Loading...</Text>
-          </View>
-        ) : canUseLocation && userLocation ? (
-          <View style={[globalStyle.innerContainer, { alignItems: "center" }]}>
-            <Text style={globalStyle.title}>Best Menus Around You</Text>
-            <MenuList nearbyMenus={nearbyMenus} navigation={navigation} />
-          </View>
-        ) : (
-          <View style={globalStyle.innerContainer}>
-            <Text>Error</Text>
-          </View>
-        )}
+        {renderContent()}
       </ScrollView>
     </SafeAreaView>
   );
+
+  function renderContent() {
+    if (canUseLocation.status !== "granted") {
+      return <ActivateLocationView onAllowLocation={handleAllowLocation} />;
+    }
+
+    if (loading) {
+      return <LoadingView />;
+    }
+
+    if (canUseLocation && userLocation) {
+      return <MenuListView menus={nearbyMenus} navigation={navigation} />;
+    }
+
+    return null;
+  }
 }
 
-const MenuList = ({ nearbyMenus, navigation }) => {
-  return (
+const ActivateLocationView = ({ onAllowLocation }) => (
+  <View style={globalStyle.innerContainer}>
+    <Text style={globalStyle.title}>Activate Location Services</Text>
+    <Text style={globalStyle.subTitle}>
+      To view menus from restaurants near you, please enable location services.
+      This helps us show you the best options available in your area.
+    </Text>
+    <TouchableOpacity
+      style={[globalStyle.button, globalStyle.enableLocationButton]}
+      onPress={onAllowLocation}
+    >
+      <Text style={globalStyle.buttonTextWhite}>Enable Location</Text>
+    </TouchableOpacity>
+  </View>
+);
+
+const MenuListView = ({ menus, navigation }) => (
+  <View style={[globalStyle.innerContainer, { alignItems: "center" }]}>
+    <Text style={globalStyle.title}>Best Menus Around You</Text>
     <View>
-      {nearbyMenus.map((menu) => (
+      {menus.map((menu) => (
         <MenuHomePreview key={menu.mid} menu={menu} navigation={navigation} />
       ))}
     </View>
-  );
-};
+  </View>
+);

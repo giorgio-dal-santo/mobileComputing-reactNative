@@ -1,5 +1,3 @@
-// DB MANAGER
-
 import * as SQLite from "expo-sqlite";
 
 export default class DBManager {

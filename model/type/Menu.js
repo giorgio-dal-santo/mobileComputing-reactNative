@@ -1,5 +1,3 @@
-// MENU
-
 export default class Menu {
   constructor(
     mid,
